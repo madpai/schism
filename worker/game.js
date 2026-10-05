@@ -1,30 +1,31 @@
 import { encountersFor, personalState, resolveEncounter } from './stories.js';
+import { forceProfile, citizenForces } from './forces.js';
 const EPOCH = Date.UTC(2026,9,5);
 const clamp = (n, min=0, max=100) => Math.max(min,Math.min(max,n));
 export const goods = {
-  bread:{name:'Ration bread',price:3,stock:36,description:'Dense, gray, technically food.',effect:'+24 fullness',icon:'bread'},
-  soup:{name:'Hot soup',price:5,stock:24,description:'Something warm. Don’t ask what.',effect:'+35 fullness · +18 warmth',icon:'soup'},
-  coat:{name:'Patched coat',price:18,stock:8,description:'A little less winter gets through.',effect:'Slows cold exposure',icon:'coat'},
-  medicine:{name:'Clinic tablets',price:10,stock:12,description:'Off-brand. Better than nothing.',effect:'+30 health',icon:'health'},
-  scrap:{name:'Metal scrap',price:4,stock:25,description:'Someone always needs spare parts.',effect:'Tradable material',icon:'box'},
+  bread:{name:'Vat-grown ration',price:3,stock:36,description:'Your daily biomass allowance. It has no previous owner.',effect:'+24 fullness',icon:'bread'},
+  soup:{name:'Heated nutrient broth',price:5,stock:24,description:'Warm enough to silence the tremor in your hands.',effect:'+35 fullness · +18 warmth',icon:'soup'},
+  coat:{name:'Insulated shroud',price:18,stock:8,description:'Conductive lining. Previous occupant unknown.',effect:'Slows cold exposure',icon:'coat'},
+  medicine:{name:'Somatic stabilizer',price:10,stock:12,description:'The seal bears a clinic sigil. The ingredients are classified.',effect:'+30 health',icon:'health'},
+  scrap:{name:'Relay fragments',price:4,stock:25,description:'Dead neural hardware. Some fragments still retain an echo.',effect:'Trade, repair, or seal a breach',icon:'box'},
 };
 export const jobs = {
-  sorting:{name:'Factory sorter',employer:'Kessler Heavy Industries',pay:8,energy:18,hours:2,rep:1,description:'Separate useful metal from everything else. Keep your hands clear.',risk:'Low risk',requires:0},
-  hauling:{name:'Dock hauler',employer:'Municipal Freight Authority',pay:13,energy:28,hours:3,rep:2,description:'Unload the barges. The lifting equipment is out of service.',risk:'Heavy labor',requires:0},
-  cleaning:{name:'Street cleaner',employer:'Department of Sanitation',pay:5,energy:10,hours:1,rep:1,description:'The streets won’t stay clean. Neither will your boots.',risk:'Low risk',requires:0},
-  maintenance:{name:'Maintenance technician',employer:'Kessler Heavy Industries',pay:22,energy:20,hours:3,rep:3,description:'A trusted badge gets you better pay. And more responsibility.',risk:'Trusted worker',requires:8},
+  sorting:{name:'Memory sorter',employer:'Canon Mnemonic Works',pay:8,energy:18,hours:2,rep:1,description:'Separate intact memory wafers from the ones still speaking. Do not listen.',risk:'Routine exposure',requires:0},
+  hauling:{name:'Reliquary carrier',employer:'Vestibule Transit Office',pay:13,energy:28,hours:3,rep:2,description:'Move sealed reliquaries between the transit pylons. Their weight changes after midnight.',risk:'Heavy load',requires:0},
+  cleaning:{name:'Residue custodian',employer:'Canon Order Maintenance',pay:5,energy:10,hours:1,rep:1,description:'Scrape the black residue from public prayer terminals. It grows back when the speakers go silent.',risk:'Routine exposure',requires:0},
+  maintenance:{name:'Lattice technician',employer:'Canon Mnemonic Works',pay:22,energy:20,hours:3,rep:3,description:'Repair the neural lattice from inside its maintenance coffin. Your badge permits you to leave.',risk:'Trusted operative',requires:8},
 };
 export function world(now=Date.now()) {
   const day=Math.max(1,Math.floor((now-EPOCH)/21600000)+1);
   const hour=Math.floor(((now-EPOCH)%21600000+21600000)%21600000/900000);
   const phase=day%4;
-  return {day,hour,temperature:phase===1?-4:phase===2?-7:phase===3?-2:1,weather:phase===0?'Acid drizzle':phase===1?'Heavy smog':phase===2?'Cold front':'Overcast',shortage:phase===2,inspection:phase===3,event:phase===2?'Cold front. Fuel rationing is in effect.':phase===3?'Factory inspections. Security is searching every third worker.':phase===0?'Supply convoy arrived. Market stalls are restocking.':'District heating remains offline. The Authority advises extra layers.'};
+  return {day,hour,temperature:phase===1?-4:phase===2?-7:phase===3?-2:1,weather:phase===0?'Static rain':phase===1?'Signal fog':phase===2?'Null front':'Ash fall',shortage:phase===2,inspection:phase===3,event:phase===2?'Null front. The ration printers are producing empty wrappers.':phase===3?'The Canon is reading citizen implants at every checkpoint.':phase===0?'A transit reliquary has arrived. The Exchange reports new biomass.':'The thermal lattice is offline. The walls are reciting numbers again.'};
 }
 export function initial(now=Date.now()) {
   return {credits:9,health:78,energy:58,fullness:32,warmth:24,rep:0,heat:0,scrap:0,bread:0,medicine:0,coat:false,housing:'bunk',role:'Worker',union:false,shifts:0,clock:7,nextRent:24,rentDebt:12,rentCycles:1,joined:now,lastTick:now,evicted:false,business:false,property:false};
 }
 export function settle(data, now=Date.now()) {
-  const p={...data};
+  const p=citizenForces({...data});
   const hours=Math.min(168,Math.floor((now-p.lastTick)/3600000));
   if(hours>0){p.fullness=clamp(p.fullness-hours*2);p.warmth=clamp(p.warmth-hours*(p.coat?.3:1));p.energy=clamp(p.energy+hours*3);p.heat=clamp(p.heat-hours);p.clock+=hours;p.lastTick=now-((now-p.lastTick)%3600000);}
   while(p.clock>=p.nextRent){p.rentDebt+=(p.housing==='room'?20:12);p.rentCycles++;p.nextRent+=24;}
@@ -35,7 +36,7 @@ function need(condition,message){if(!condition)throw Object.assign(new Error(mes
 const uid=()=>crypto.randomUUID();
 function stmt(db,sql,...args){return db.prepare(sql).bind(...args);}
 async function all(db,sql,...args){return (await stmt(db,sql,...args).all()).results;}
-function price(item,w){return goods[item].price+(w.shortage&&['bread','soup','coat'].includes(item)?2:0);}
+function price(item,w){return goods[item].price+(w.shortage&&['bread','soup','coat'].includes(item)?2:0)+(['bread','soup'].includes(item)?w.rationModifier||0:0);}
 export async function ensureCitizen(db,owner,now=Date.now()){
   const id=uid();
   await stmt(db,'INSERT OR IGNORE INTO citizens (id,owner,name,data,updated) VALUES (?,?,?,?,?)',id,owner,'Citizen '+id.slice(0,4).toUpperCase(),JSON.stringify(initial(now)),now).run();
@@ -51,9 +52,16 @@ async function cityProject(db,w){
   w.heating=row.progress>=12;
   return {...row,target:12,complete:w.heating};
 }
+async function cityForces(db,w){
+  const id='signal-'+w.day;
+  await stmt(db,'INSERT OR IGNORE INTO forces (id,day,balance,interventions) VALUES (?,?,0,0)',id,w.day).run();
+  const row=await stmt(db,'SELECT * FROM forces WHERE id=?',id).first();
+  const force={...row,...forceProfile(row)};Object.assign(w,forceProfile(row));return force;
+}
 export async function snapshot(db,owner,now=Date.now()){
   const c=await ensureCitizen(db,owner,now),w=world(now);
   await ensureMarket(db,w);
+  const force=await cityForces(db,w);
   const project=await cityProject(db,w),citizen=settle(JSON.parse(c.data),now);personalState(citizen);
   const [stock,log,board,people,offers,totals]=await Promise.all([
     all(db,'SELECT * FROM market'),all(db,'SELECT body,created FROM journal WHERE citizen=? ORDER BY created DESC LIMIT 12',c.id),
@@ -62,7 +70,7 @@ export async function snapshot(db,owner,now=Date.now()){
     all(db,'SELECT l.*,c.name FROM listings l JOIN citizens c ON c.id=l.seller WHERE l.sold=0 ORDER BY l.created DESC LIMIT 30'),
     stmt(db,"SELECT count(*) AS citizens, sum(CASE WHEN json_extract(data,'$.union')=1 THEN 1 ELSE 0 END) AS members FROM citizens").first(),
   ]);
-  return {citizen:{id:c.id,name:c.name,...citizen},world:w,project,encounters:encountersFor(citizen),
+  return {citizen:{id:c.id,name:c.name,...citizen},world:w,project,forces:force,encounters:encountersFor(citizen),
     goods:stock.map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j})),
     log,board:board.map(p=>({id:p.id,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
     citizens:people.map(p=>{const d=JSON.parse(p.data);return {id:p.id,name:p.name,role:d.role,rep:d.rep,shifts:d.shifts,union:d.union,online:now-p.updated<120000};}),listings:offers,totals};
@@ -73,17 +81,26 @@ export async function act(db,owner,input,now=Date.now()){
   const c=await ensureCitizen(db,owner,now),p=settle(JSON.parse(c.data),now),w=world(now);
   need(now-c.last_action>=650,'Give the city a moment before your next action.');
   await ensureMarket(db,w);
+  const force=await cityForces(db,w);
   const project=await cityProject(db,w);personalState(p);
   const extra=[],checks=[],op=uid();let message='',hours=0,energy=0;
   const credit=n=>need(p.credits>=n,`You need ${n} credits. You have ${p.credits}.`);
   const job=typeof input.id==='string'&&Object.hasOwn(jobs,input.id)?jobs[input.id]:null;
   switch(input.action){
-    case 'encounter':{const resolved=resolveEncounter(p,input,now);message=resolved.message;hours=resolved.hours;energy=resolved.energy;break;}
+    case 'encounter':{const resolved=resolveEncounter(p,input,now);message=resolved.message;hours=resolved.hours;energy=resolved.energy;if(resolved.force)extra.push(stmt(db,'UPDATE forces SET balance=max(-100,min(100,balance+?)),interventions=interventions+1 WHERE id=?',resolved.force,force.id));break;}
+    case 'rite':{
+      need(['order','chaos'].includes(input.id),'Choose Order or Chaos.');need(p.lastRiteDay!==w.day,'You have already performed a rite this city day.');
+      hours=1;energy=6;const direction=input.id==='order'?12:-12;
+      if(input.id==='order'){need(p.scrap>=1,'The Canon requires one relay fragment to seal a breach.');p.scrap--;p.rep++;p.coherence=clamp(p.coherence+8);message='You seal a breach with a relay fragment. The Canon broadcasts your compliance. Another doorway stops whispering.';}
+      else {p.credits+=4;p.heat=clamp(p.heat+8);p.coherence=clamp(p.coherence-8);message='You interrupt the Canon signal. Four untraceable credits arrive in your implant. The Wound speaks in your own voice.';}
+      p.alignment=clamp(p.alignment+direction,-100,100);p.lastRiteDay=w.day;
+      extra.push(stmt(db,'UPDATE forces SET balance=max(-100,min(100,balance+?)),interventions=interventions+1 WHERE id=?',direction,force.id));break;
+    }
     case 'contribute':{
-      need(p.scrap>0,'You need one piece of scrap to repair the generator.');need(!project.complete,'The district generator is already repaired for this city day.');
+      need(p.scrap>0,'You need one relay fragment to repair the thermal lattice.');need(!project.complete,'The thermal lattice is already repaired for this city day.');
       checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM projects WHERE id=? AND progress<12),0))',op+'project',project.id));
       extra.push(stmt(db,'UPDATE projects SET progress=progress+1 WHERE id=?',project.id));p.scrap--;p.rep++;p.story.flags.helpedDistrict=true;
-      message='You add a spare part to the district generator. One less freezing room, if enough citizens join you.';break;
+      message='You add a relay fragment to the thermal lattice. One less freezing habitation cell, if enough citizens join you.';break;
     }
     case 'work':{
       need(job,'That job is no longer available.');need(p.rep>=job.requires,`You need ${job.requires} trust for this job.`);need(p.health>=15,'Visit the clinic or find medicine before another shift.');
@@ -93,41 +110,41 @@ export async function act(db,owner,input,now=Date.now()){
     }
     case 'buy':{
       const g=typeof input.id==='string'&&Object.hasOwn(goods,input.id)?goods[input.id]:null;need(g,'Unknown item.');const cost=price(input.id,w);credit(cost);
-      if(input.id==='coat')need(!p.coat,'You already have a coat.');
+      if(input.id==='coat')need(!p.coat,'You already have an insulated shroud.');
       checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM market WHERE id=? AND stock>0),0))',op+'stock',input.id));
       extra.push(stmt(db,'UPDATE market SET stock=stock-1 WHERE id=?',input.id));p.credits-=cost;
-      if(input.id==='soup'){p.fullness=clamp(p.fullness+35);p.warmth=clamp(p.warmth+18);message='A bowl of hot soup. For a moment, things feel almost normal.';}
-      else if(input.id==='coat'){p.coat=true;p.warmth=clamp(p.warmth+12);message='The coat has three different owners’ initials. It’s yours now.';}
+      if(input.id==='soup'){p.fullness=clamp(p.fullness+35);p.warmth=clamp(p.warmth+18);message='Heated nutrient broth. Your implant marks the body as fed. For a moment, it is correct.';}
+      else if(input.id==='coat'){p.coat=true;p.warmth=clamp(p.warmth+12);message='The shroud carries three erased civic signatures. Your implant adds a fourth.';}
       else {p[input.id]=(p[input.id]||0)+1;message=`Bought ${g.name.toLowerCase()} for ${cost} credits. It’s in your bag.`;}break;
     }
     case 'consume':{
       need(['bread','medicine'].includes(input.id),'That item cannot be used.');need(p[input.id]>0,'You don’t have that item.');p[input.id]--;
-      if(input.id==='bread'){p.fullness=clamp(p.fullness+24);message='You eat the ration bread. Every crumb.';}else {p.health=clamp(p.health+30);message='The tablets help. You can breathe a little easier.';}break;
+      if(input.id==='bread'){p.fullness=clamp(p.fullness+24);message='You consume the vat-grown ration. The printer thanks you for returning its biomass.';}else {p.health=clamp(p.health+30);message='The stabilizer silences an unfamiliar voice in your pulse. You can breathe a little easier.';}break;
     }
-    case 'rest':hours=6;p.energy=clamp(p.energy+48);p.warmth=clamp(p.warmth+(p.evicted?0:28));p.health=clamp(p.health+8);message=p.evicted?'You sleep under the viaduct. At least it’s dry.':'Six hours in your bunk. The pipes knock all night.';break;
+    case 'rest':hours=6;p.energy=clamp(p.energy+48);p.warmth=clamp(p.warmth+(p.evicted?0:28));p.health=clamp(p.health+8);message=p.evicted?'You sleep beneath the transit lattice. The masked commuters step around you.':'Six hours in your habitation cell. The wall terminal repeats a prayer in a voice you used to know.';break;
     case 'rent':credit(p.rentDebt);need(p.rentDebt>0,'Your rent is already paid.');p.credits-=p.rentDebt;message=`Paid ${p.rentDebt} credits in rent. You can stay another day.`;p.rentDebt=0;p.rentCycles=0;p.evicted=false;if(p.housing==='street')p.housing='bunk';break;
     case 'upgrade':credit(45);need(!p.evicted,'Settle your rent debt first.');need(p.housing!=='room','You already have a room.');p.credits-=45;p.housing='room';p.warmth=clamp(p.warmth+25);message='A room with a lock. Forty-five credits never bought so little freedom.';break;
     case 'crime':{
       need(['steal','smuggle'].includes(input.id),'Unknown opportunity.');hours=input.id==='steal'?1:3;energy=input.id==='steal'?12:22;
-      const risk=(input.id==='steal'?.3:.4)+(p.heat/200)+(w.inspection?.15:0);
+      const risk=clamp((input.id==='steal'?.3:.4)+(p.heat/200)+(w.inspection?.15:0)+(w.securityModifier||0),0,1);
       const random=crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
       if(random<risk){const fine=Math.min(p.credits,input.id==='steal'?7:15);p.credits-=fine;p.rep=Math.max(0,p.rep-2);p.heat=clamp(p.heat+20);p.health=clamp(p.health-8);message=`Security caught you. ${fine} credits confiscated. They remember your face.`;}
-      else {p.heat=clamp(p.heat+12);if(input.id==='steal'){p.scrap+=3;message='Three pieces of factory scrap slip under your coat. Nobody looks up.';}else {p.credits+=24;p.role='Smuggler';message='The package reaches the other side of the checkpoint. Twenty-four credits, no questions.';}}break;
+      else {p.heat=clamp(p.heat+12);if(input.id==='steal'){p.scrap+=3;message='Three relay fragments slip into your shroud. The mnemonic sentinel keeps reciting its prayer.';}else {p.credits+=w.contrabandPay||24;p.role='Smuggler';message=`The sealed mnemonic package reaches the other side. ${w.contrabandPay||24} credits enter your implant.`;}}break;
     }
-    case 'sell':need(p.scrap>0,'You don’t have any scrap.');p.scrap--;p.credits+=3;message='Sold a piece of scrap to the fence for 3 credits.';break;
+    case 'sell':need(p.scrap>0,'You don’t have any relay fragments.');p.scrap--;p.credits+=3;message='Sold a relay fragment to the broker for 3 credits. It is still broadcasting when you leave.';break;
     case 'union':credit(4);need(!p.union,'You’re already a union member.');p.credits-=4;p.union=true;message='You pay 4 credits into the mutual-aid fund. You’re no longer alone.';break;
-    case 'organize':need(p.union,'Join the union first.');hours=2;energy=12;p.rep+=2;p.role='Union organizer';p.heat=clamp(p.heat+5);message='You organize the next shift. Trust grows. So does the Authority’s interest.';break;
-    case 'clinic':credit(8);p.credits-=8;p.health=clamp(p.health+40);hours=1;message='The clinic treats you after a long wait. Eight credits. Keep the receipt.';break;
+    case 'organize':need(p.union,'Join the union first.');hours=2;energy=12;p.rep+=2;p.role='Union organizer';p.heat=clamp(p.heat+5);message='You organize the Uncounted for the next shift. Trust grows. So does the Canon’s interest.';break;
+    case 'clinic':credit(8);p.credits-=8;p.health=clamp(p.health+40);p.coherence=clamp(p.coherence+15);hours=1;message='The Somatic Ward resets your implant and treats the body attached to it. Eight credits.';break;
     case 'bribe':credit(12);need(p.heat>0,'You don’t have a security record to clear.');p.credits-=12;p.heat=Math.max(0,p.heat-35);message='The clerk misfiles your record. Twelve credits disappear with it.';break;
     case 'official':credit(60);need(p.rep>=20,'You need 20 trust to apply for a municipal post.');need(!p.official,'You already hold a municipal post.');p.credits-=60;p.official=true;p.role='Municipal official';message='Your application is approved. The processing fee was non-refundable.';break;
     case 'official_work':need(p.official,'You don’t hold a municipal post.');hours=2;energy=8;p.credits+=17;p.rep++;message='You process a stack of work permits. Seventeen credits for deciding who gets to wait.';break;
-    case 'business':credit(90);need(p.rep>=10,'You need 10 trust for a trading license.');need(!p.business,'You already own a stall.');p.credits-=90;p.business=true;p.role='Shop owner';message='The market stall is yours. No guarantee of customers.';break;
-    case 'business_work':need(p.business,'You don’t own a market stall.');need(p.bread>0||p.scrap>0,'Stock your stall with bread or scrap first.');hours=2;energy=8;{const item=p.bread?'bread':'scrap';p[item]--;p.credits+=item==='bread'?7:8;message=`You sell ${goods[item].name.toLowerCase()} at your stall. ${item==='bread'?7:8} credits from the morning foot traffic.`;}break;
+    case 'business':credit(90);need(p.rep>=10,'You need 10 trust for a trading license.');need(!p.business,'You already own a stall.');p.credits-=90;p.business=true;p.role='Shop owner';message='The exchange terminal accepts your signature. No guarantee of customers.';break;
+    case 'business_work':need(p.business,'You don’t own a market stall.');need(p.bread>0||p.scrap>0,'Stock your terminal with rations or relay fragments first.');hours=2;energy=8;{const item=p.bread?'bread':'scrap';p[item]--;p.credits+=item==='bread'?7:8;message=`You sell ${goods[item].name.toLowerCase()} at your stall. ${item==='bread'?7:8} credits from the morning foot traffic.`;}break;
     case 'property':credit(180);need(!p.property,'You already hold a lease.');need(p.rep>=15,'You need 15 trust to acquire a property lease.');p.credits-=180;p.property=true;p.role='Landlord';message='You acquire a district lease. The city takes its cut first.';break;
     case 'collect':need(p.property,'You don’t have a property lease.');need(p.lastCollect!==w.day,'You already collected this city day.');p.credits+=9;p.lastCollect=w.day;message='Nine credits from your lease. Somewhere, someone works another shift.';break;
     case 'post':{
       need(typeof input.body==='string'&&input.body.trim().length>=3&&input.body.trim().length<=240,'Write between 3 and 240 characters.');
-      extra.push(stmt(db,'INSERT INTO posts (id,citizen,body,created) VALUES (?,?,?,?)',uid(),c.id,input.body.trim(),now));message='Your notice is pinned to the neighborhood board.';break;
+      extra.push(stmt(db,'INSERT INTO posts (id,citizen,body,created) VALUES (?,?,?,?)',uid(),c.id,input.body.trim(),now));message='Your notice enters the neighborhood signal.';break;
     }
     case 'rename':{
       need(typeof input.name==='string'&&/^[\p{L}\p{N} ._-]{2,24}$/u.test(input.name.trim()),'Use 2–24 letters, numbers, spaces, or basic punctuation.');

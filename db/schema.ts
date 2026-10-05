@@ -24,3 +24,7 @@ export const guards = sqliteTable('action_guards', {
 export const projects = sqliteTable('projects', {
   id: text('id').primaryKey(), day: integer('day').notNull(), progress: integer('progress').notNull().default(0),
 }, t => [check('project_progress_bounds', sql`${t.progress} >= 0 AND ${t.progress} <= 12`)]);
+export const forces = sqliteTable('forces', {
+  id: text('id').primaryKey(), day: integer('day').notNull(), balance: integer('balance').notNull().default(0),
+  interventions: integer('interventions').notNull().default(0),
+}, t => [check('force_balance_bounds', sql`${t.balance} >= -100 AND ${t.balance} <= 100`)]);
