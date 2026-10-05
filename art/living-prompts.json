@@ -1,0 +1,44 @@
+[
+  {
+    "id": "contact-neri",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-4cceb6c5-b698-4000-9571-495e1dcc1a29.png",
+    "prompt": "Use case: stylized-concept. Asset type: original SCHISM RPG contact portrait. Primary request: Neri, a tired but resolute female factory resident in her late 40s, warm brown skin, silver-streaked dark hair tied back, mended rough gray coat and faded woven scarf. She lives in the unheated bunkhouse and knows her neighbors. Square close head-and-shoulders portrait, clear readable face. Scene/backdrop: Soft focus drafty municipal bunkhouse, cold cyan window light and a faint amber lamp. Style/medium: detailed painted cinematic concept art, textured brushwork, grounded anatomy, rainy industrial noir, restrained cyan, charcoal, muted crimson and warm amber, consistent with a harsh asynchronous city RPG. No text, no typography, no logos, no watermark. Single distinct person, full head and shoulders visible, face centered, no other faces. Opaque background.",
+    "mode": "built-in image_gen",
+    "usage": "NPC contact portrait"
+  },
+  {
+    "id": "contact-esra",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-cfaaf1d3-fe78-4e39-b76a-6b2c2c4ac51f.png",
+    "prompt": "Use case: stylized-concept. Asset type: original SCHISM RPG contact portrait. Primary request: Esra, a practical female boiler mechanic in her mid 30s, medium olive skin, cropped black hair, grease marks on cheek, worn dark work jacket with a small copper-colored repair badge, determined expression. Square close head-and-shoulders portrait, clear readable face. Scene/backdrop: Soft focus pipes and workshop, warm task lamp and cold teal highlights. Style/medium: detailed painted cinematic concept art, textured brushwork, grounded anatomy, rainy industrial noir, restrained cyan, charcoal, muted crimson and warm amber, consistent with a harsh asynchronous city RPG. No text, no typography, no logos, no watermark. Single distinct person, full head and shoulders visible, face centered, no other faces. Opaque background.",
+    "mode": "built-in image_gen",
+    "usage": "NPC contact portrait"
+  },
+  {
+    "id": "contact-voss",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-5b8e9b7b-8df8-4f5c-92ca-61fe189c565a.png",
+    "prompt": "Use case: stylized-concept. Asset type: original SCHISM RPG contact portrait. Primary request: Clerk Voss, a weary male municipal identity clerk in his early 50s, pale skin, receding neatly combed silver hair, close-trimmed beard, high-collared charcoal administrative uniform with a narrow crimson seam, guarded humane expression. Square close head-and-shoulders portrait, clear readable face. Scene/backdrop: Soft focus Registry terminal lights and shadowed concrete, cold cyan illumination. Style/medium: detailed painted cinematic concept art, textured brushwork, grounded anatomy, rainy industrial noir, restrained cyan, charcoal, muted crimson and warm amber, consistent with a harsh asynchronous city RPG. No text, no typography, no logos, no watermark. Single distinct person, full head and shoulders visible, face centered, no other faces. Opaque background.",
+    "mode": "built-in image_gen",
+    "usage": "NPC contact portrait"
+  },
+  {
+    "id": "contact-rook",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-7ea7a18b-8a7f-4e52-ac0a-807aa18ec971.png",
+    "prompt": "Use case: stylized-concept. Asset type: original SCHISM RPG contact portrait. Primary request: Rook, an androgynous unlicensed courier in their late 20s, dark brown skin, short dark textured hair, battered black courier coat, subtle scar through one eyebrow, alert calculating expression. Square close head-and-shoulders portrait, clear readable face. Scene/backdrop: Soft focus rainy neon alley with muted amber and crimson light. Style/medium: detailed painted cinematic concept art, textured brushwork, grounded anatomy, rainy industrial noir, restrained cyan, charcoal, muted crimson and warm amber, consistent with a harsh asynchronous city RPG. No text, no typography, no logos, no watermark. Single distinct person, full head and shoulders visible, face centered, no other faces. Opaque background.",
+    "mode": "built-in image_gen",
+    "usage": "NPC contact portrait"
+  },
+  {
+    "id": "bunkhouse",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-67a1c0dc-7faf-49fb-993a-97639af1770e.png",
+    "prompt": "Use case: stylized-concept. Asset type: original SCHISM RPG city scene. Primary request: A miserable but rent-free municipal bunkhouse in a dystopian industrial city: rows of narrow steel bunks, thin patched blankets, concrete walls wet with condensation, broken unheated radiators, worn civilian coats hung on hooks, a few exhausted clothed residents resting. No comfortable amenities. Scene/backdrop: Wide cinematic interior, cold blue dawn through tall dirty windows, faint amber corridor light. Harsh yet habitable, a place to rest rather than freeze on the pavement. Style/medium: detailed painted cinematic concept art, textured brushwork, grounded anatomy, rainy industrial noir, restrained cyan, charcoal, muted crimson and warm amber, consistent with a harsh asynchronous city RPG. No text, no typography, no logos, no watermark. Landscape composition with readable central subject. Opaque background.",
+    "mode": "built-in image_gen",
+    "usage": "housing scene"
+  },
+  {
+    "id": "barrel-fire",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-7938086f-8d32-4a63-97a7-3cb56fdc49f6.png",
+    "prompt": "Use case: stylized-concept. Asset type: original SCHISM RPG city scene. Primary request: A street corner beneath a dystopian city transit viaduct: a few clothed exhausted residents warm their hands around a small contained barrel fire, cardboard sleeping mats beneath the dry concrete shelter, rain beyond the overhang, vast surveilled towers receding behind them. Ordinary survival, no violence. Scene/backdrop: Wide cinematic scene, orange firelight against cold cyan rain, soot, patched coats and wet pavement. Style/medium: detailed painted cinematic concept art, textured brushwork, grounded anatomy, rainy industrial noir, restrained cyan, charcoal, muted crimson and warm amber, consistent with a harsh asynchronous city RPG. No text, no typography, no logos, no watermark. Landscape composition with readable central subject. Opaque background.",
+    "mode": "built-in image_gen",
+    "usage": "housing scene"
+  }
+]

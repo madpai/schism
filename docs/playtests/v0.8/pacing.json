@@ -1,0 +1,261 @@
+{
+  "mode": "ordinary characters, same persistent Tailscale city, no grants/accelerated clocks; corrective test resumes preserve resources",
+  "verified": "2026-10-05T21:45:45.096Z",
+  "citizens": [
+    {
+      "name": "Sera 50949",
+      "arrival": "2026-10-05T21:22:50.191Z",
+      "verified": "2026-10-05T21:45:15.491Z",
+      "credits": 0,
+      "grossIncome": 6,
+      "energy": 14,
+      "health": 78,
+      "food": 39,
+      "warmth": 43,
+      "bread": 0,
+      "shifts": 1,
+      "clothingWear": 4,
+      "rentDebt": 0,
+      "taxHeld": 0,
+      "taxDebt": 0,
+      "shortStarts": 9,
+      "contact": 3,
+      "building": {
+        "id": "6d1b1fe4-6c3a-486c-a5e9-88f7bf1be4b9",
+        "name": "Rainline 452ad1",
+        "founder": "804e16d4-301f-4db0-a60b-5fca6f57a26e",
+        "stock": {
+          "wire": 0,
+          "cloth": 2,
+          "bread": 0
+        },
+        "progress": 6,
+        "reserved": 6,
+        "target": 6,
+        "heatUntil": 1791322222002,
+        "round": 1
+      },
+      "messages": [
+        {
+          "body": "The line is sealed and a ration is waiting for the next arrival.",
+          "created": 1791236628136,
+          "name": "Vale 11519"
+        },
+        {
+          "body": "Checking the collection bins. Let us seal these windows.",
+          "created": 1791235522031,
+          "name": "Vale 11519"
+        },
+        {
+          "body": "I will bring fabric. Can you check the copper?",
+          "created": 1791235520699,
+          "name": "Sera 50949"
+        }
+      ],
+      "transfers": [
+        {
+          "item": "bread",
+          "quantity": 1,
+          "kind": "take",
+          "created": 1791236627087,
+          "name": "Vale 11519"
+        },
+        {
+          "item": "bread",
+          "quantity": 1,
+          "kind": "donate",
+          "created": 1791236625470,
+          "name": "Sera 50949"
+        },
+        {
+          "item": "cloth",
+          "quantity": 1,
+          "kind": "donate",
+          "created": 1791235717073,
+          "name": "Vale 11519"
+        },
+        {
+          "item": "cloth",
+          "quantity": 5,
+          "kind": "donate",
+          "created": 1791235715773,
+          "name": "Vale 11519"
+        },
+        {
+          "item": "cloth",
+          "quantity": 2,
+          "kind": "donate",
+          "created": 1791235714406,
+          "name": "Sera 50949"
+        },
+        {
+          "item": "wire",
+          "quantity": 1,
+          "kind": "donate",
+          "created": 1791235713073,
+          "name": "Sera 50949"
+        },
+        {
+          "item": "wire",
+          "quantity": 5,
+          "kind": "donate",
+          "created": 1791235711773,
+          "name": "Sera 50949"
+        }
+      ],
+      "receipts": [
+        {
+          "body": "Your supplies enter the shared shelf. They remain with this building if you leave.",
+          "created": 1791236625470
+        },
+        {
+          "body": "Bought vat-grown ration for 6 credits. It’s in your bag.",
+          "created": 1791236624155
+        },
+        {
+          "body": "Completed regular shift as residue custodian. Earned 4 credits and 2 career XP. The last applicant has your face. You close the terminal before it can speak.",
+          "created": 1791236618708
+        },
+        {
+          "body": "One shared repair unit completed. Six units protect building members from 0.75 cold per city hour for twenty-four real hours.",
+          "created": 1791235820419
+        },
+        {
+          "body": "Repairing the draught line: thirty seconds, four energy, one shared wire and fabric. Protection begins after the sixth unit actually finishes.",
+          "created": 1791235790419
+        },
+        {
+          "body": "One shared repair unit completed. Six units protect building members from 0.75 cold per city hour for twenty-four real hours.",
+          "created": 1791235786704
+        }
+      ]
+    },
+    {
+      "name": "Vale 11519",
+      "arrival": "2026-10-05T21:22:50.622Z",
+      "verified": "2026-10-05T21:45:15.852Z",
+      "credits": 6,
+      "grossIncome": 6,
+      "energy": 18,
+      "health": 78,
+      "food": 39,
+      "warmth": 31,
+      "bread": 1,
+      "shifts": 1,
+      "clothingWear": 4,
+      "rentDebt": 0,
+      "taxHeld": 0,
+      "taxDebt": 0,
+      "shortStarts": 8,
+      "contact": 3,
+      "building": {
+        "id": "6d1b1fe4-6c3a-486c-a5e9-88f7bf1be4b9",
+        "name": "Rainline 452ad1",
+        "founder": "804e16d4-301f-4db0-a60b-5fca6f57a26e",
+        "stock": {
+          "wire": 0,
+          "cloth": 2,
+          "bread": 0
+        },
+        "progress": 6,
+        "reserved": 6,
+        "target": 6,
+        "heatUntil": 1791322222002,
+        "round": 1
+      },
+      "messages": [
+        {
+          "body": "The line is sealed and a ration is waiting for the next arrival.",
+          "created": 1791236628136,
+          "name": "Vale 11519"
+        },
+        {
+          "body": "Checking the collection bins. Let us seal these windows.",
+          "created": 1791235522031,
+          "name": "Vale 11519"
+        },
+        {
+          "body": "I will bring fabric. Can you check the copper?",
+          "created": 1791235520699,
+          "name": "Sera 50949"
+        }
+      ],
+      "transfers": [
+        {
+          "item": "bread",
+          "quantity": 1,
+          "kind": "take",
+          "created": 1791236627087,
+          "name": "Vale 11519"
+        },
+        {
+          "item": "bread",
+          "quantity": 1,
+          "kind": "donate",
+          "created": 1791236625470,
+          "name": "Sera 50949"
+        },
+        {
+          "item": "cloth",
+          "quantity": 1,
+          "kind": "donate",
+          "created": 1791235717073,
+          "name": "Vale 11519"
+        },
+        {
+          "item": "cloth",
+          "quantity": 5,
+          "kind": "donate",
+          "created": 1791235715773,
+          "name": "Vale 11519"
+        },
+        {
+          "item": "cloth",
+          "quantity": 2,
+          "kind": "donate",
+          "created": 1791235714406,
+          "name": "Sera 50949"
+        },
+        {
+          "item": "wire",
+          "quantity": 1,
+          "kind": "donate",
+          "created": 1791235713073,
+          "name": "Sera 50949"
+        },
+        {
+          "item": "wire",
+          "quantity": 5,
+          "kind": "donate",
+          "created": 1791235711773,
+          "name": "Sera 50949"
+        }
+      ],
+      "receipts": [
+        {
+          "body": "Completed regular shift as residue custodian. Earned 4 credits and 2 career XP. The last applicant has your face. You close the terminal before it can speak.",
+          "created": 1791236621374
+        },
+        {
+          "body": "One shared repair unit completed. Six units protect building members from 0.75 cold per city hour for twenty-four real hours.",
+          "created": 1791235822002
+        },
+        {
+          "body": "Repairing the draught line: thirty seconds, four energy, one shared wire and fabric. Protection begins after the sixth unit actually finishes.",
+          "created": 1791235792002
+        },
+        {
+          "body": "One shared repair unit completed. Six units protect building members from 0.75 cold per city hour for twenty-four real hours.",
+          "created": 1791235788287
+        }
+      ]
+    }
+  ],
+  "screens": 17,
+  "widths": [
+    360,
+    390,
+    1440
+  ],
+  "errors": []
+}

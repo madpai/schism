@@ -1,0 +1,2098 @@
+{
+  "mode": "isolated simulated seven real days; ordinary registration/actions; accelerated test deadlines only",
+  "policy": "At each scheduled visit: relief if needed, free barrel fire, one 30-minute memory shift (earned-room works two consecutive shifts, choosing unlocked 45-minute lattice work) plus a 20-second terminal task, buy affordable broth/ration, queue 90-minute free sleep. Each cycle starts sleep once. No fixture goods, stat grants, crime, trades, or career switches. Earned-room saves 155 CR before a private deposit/four-cycle prepayment, then funds each rent bill from earned wages.",
+  "limitations": [
+    "Current-weather settlement applies across each offline interval; future simulation can model historical weather.",
+    "Sleep completion is simulated; a person would leave after starting it.",
+    "This is a recovery/economy benchmark, not proof of enjoyable real multi-day play."
+  ],
+  "results": [
+    {
+      "schedule": {
+        "id": "daily",
+        "visits": 1,
+        "skips": []
+      },
+      "completedShifts": 7,
+      "returns": 7,
+      "reliefMeals": 6,
+      "foodSpending": 35,
+      "grossIncome": 64,
+      "taxPaid": 7,
+      "endingCredits": 22,
+      "endingHealth": 10,
+      "endingEnergy": 100,
+      "housing": "bunk",
+      "rentPaid": 0,
+      "rentHeld": 0,
+      "rentDebt": 0,
+      "taxDebt": 0,
+      "samples": [
+        {
+          "realDay": 1,
+          "visit": 1,
+          "cityDay": 1,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 78,
+            "energy": 58,
+            "food": 42,
+            "warmth": 35,
+            "credits": 0
+          },
+          "exit": {
+            "health": 86,
+            "energy": 75,
+            "food": 64,
+            "warmth": 46,
+            "credits": 3,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 1,
+          "cityDay": 5,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 3
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 6,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 3,
+          "visit": 1,
+          "cityDay": 9,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 6
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 9,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 4,
+          "visit": 1,
+          "cityDay": 13,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 9
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 12,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 1,
+          "cityDay": 17,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 12
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 15,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 1,
+          "cityDay": 21,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 15
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 18,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 1,
+          "cityDay": 25,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 18
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 22,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        }
+      ]
+    },
+    {
+      "schedule": {
+        "id": "twice-daily",
+        "visits": 2,
+        "skips": []
+      },
+      "completedShifts": 14,
+      "returns": 14,
+      "reliefMeals": 13,
+      "foodSpending": 70,
+      "grossIncome": 134,
+      "taxPaid": 16,
+      "endingCredits": 48,
+      "endingHealth": 10,
+      "endingEnergy": 100,
+      "housing": "bunk",
+      "rentPaid": 0,
+      "rentHeld": 0,
+      "rentDebt": 0,
+      "taxDebt": 0,
+      "samples": [
+        {
+          "realDay": 1,
+          "visit": 1,
+          "cityDay": 1,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 78,
+            "energy": 58,
+            "food": 42,
+            "warmth": 35,
+            "credits": 0
+          },
+          "exit": {
+            "health": 86,
+            "energy": 75,
+            "food": 64,
+            "warmth": 46,
+            "credits": 3,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 1,
+          "visit": 2,
+          "cityDay": 3,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 57,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 3
+          },
+          "exit": {
+            "health": 65,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 6,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 1,
+          "cityDay": 5,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 20,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 6
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 9,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 2,
+          "cityDay": 7,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 9
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 12,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 3,
+          "visit": 1,
+          "cityDay": 9,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 12
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 15,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 3,
+          "visit": 2,
+          "cityDay": 11,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 15
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 18,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 4,
+          "visit": 1,
+          "cityDay": 13,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 18
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 22,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 4,
+          "visit": 2,
+          "cityDay": 15,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 22
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 26,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 1,
+          "cityDay": 17,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 26
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 29,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 2,
+          "cityDay": 19,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 29
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 33,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 1,
+          "cityDay": 21,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 33
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 37,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 2,
+          "cityDay": 23,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 37
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 41,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 1,
+          "cityDay": 25,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 41
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 45,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 2,
+          "cityDay": 27,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 45
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 48,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 121
+        }
+      ]
+    },
+    {
+      "schedule": {
+        "id": "each-cycle",
+        "visits": 4,
+        "skips": []
+      },
+      "completedShifts": 28,
+      "returns": 28,
+      "reliefMeals": 27,
+      "foodSpending": 194,
+      "grossIncome": 282,
+      "taxPaid": 33,
+      "endingCredits": 55,
+      "endingHealth": 90,
+      "endingEnergy": 100,
+      "housing": "bunk",
+      "rentPaid": 0,
+      "rentHeld": 0,
+      "rentDebt": 0,
+      "taxDebt": 0,
+      "samples": [
+        {
+          "realDay": 1,
+          "visit": 1,
+          "cityDay": 1,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 78,
+            "energy": 58,
+            "food": 42,
+            "warmth": 35,
+            "credits": 0
+          },
+          "exit": {
+            "health": 86,
+            "energy": 75,
+            "food": 64,
+            "warmth": 46,
+            "credits": 3,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 1,
+          "visit": 2,
+          "cityDay": 2,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 83,
+            "energy": 91,
+            "food": 32,
+            "warmth": 0,
+            "credits": 3
+          },
+          "exit": {
+            "health": 91,
+            "energy": 100,
+            "food": 78,
+            "warmth": 13,
+            "credits": 3,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 1,
+          "visit": 3,
+          "cityDay": 3,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 83,
+            "energy": 100,
+            "food": 46,
+            "warmth": 0,
+            "credits": 3
+          },
+          "exit": {
+            "health": 90,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 5,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 1,
+          "visit": 4,
+          "cityDay": 4,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 83,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 5
+          },
+          "exit": {
+            "health": 91,
+            "energy": 100,
+            "food": 91,
+            "warmth": 21,
+            "credits": 6,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 1,
+          "cityDay": 5,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 84,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 6
+          },
+          "exit": {
+            "health": 92,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 8,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 2,
+          "cityDay": 6,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 84,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 8
+          },
+          "exit": {
+            "health": 92,
+            "energy": 100,
+            "food": 91,
+            "warmth": 13,
+            "credits": 7,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 3,
+          "cityDay": 7,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 84,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 7
+          },
+          "exit": {
+            "health": 91,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 10,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 4,
+          "cityDay": 8,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 84,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 10
+          },
+          "exit": {
+            "health": 92,
+            "energy": 100,
+            "food": 91,
+            "warmth": 21,
+            "credits": 12,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 3,
+          "visit": 1,
+          "cityDay": 9,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 85,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 12
+          },
+          "exit": {
+            "health": 93,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 14,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 3,
+          "visit": 2,
+          "cityDay": 10,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 85,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 14
+          },
+          "exit": {
+            "health": 93,
+            "energy": 100,
+            "food": 91,
+            "warmth": 13,
+            "credits": 14,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 3,
+          "visit": 3,
+          "cityDay": 11,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 85,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 14
+          },
+          "exit": {
+            "health": 93,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 17,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 3,
+          "visit": 4,
+          "cityDay": 12,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 85,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 17
+          },
+          "exit": {
+            "health": 93,
+            "energy": 100,
+            "food": 91,
+            "warmth": 21,
+            "credits": 19,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 4,
+          "visit": 1,
+          "cityDay": 13,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 86,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 19
+          },
+          "exit": {
+            "health": 94,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 22,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 4,
+          "visit": 2,
+          "cityDay": 14,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 86,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 22
+          },
+          "exit": {
+            "health": 94,
+            "energy": 100,
+            "food": 91,
+            "warmth": 13,
+            "credits": 21,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 4,
+          "visit": 3,
+          "cityDay": 15,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 86,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 21
+          },
+          "exit": {
+            "health": 94,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 24,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 4,
+          "visit": 4,
+          "cityDay": 16,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 86,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 24
+          },
+          "exit": {
+            "health": 94,
+            "energy": 100,
+            "food": 91,
+            "warmth": 21,
+            "credits": 26,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 1,
+          "cityDay": 17,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 87,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 26
+          },
+          "exit": {
+            "health": 95,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 29,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 2,
+          "cityDay": 18,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 87,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 29
+          },
+          "exit": {
+            "health": 95,
+            "energy": 100,
+            "food": 91,
+            "warmth": 13,
+            "credits": 29,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 3,
+          "cityDay": 19,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 87,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 29
+          },
+          "exit": {
+            "health": 95,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 31,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 4,
+          "cityDay": 20,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 87,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 31
+          },
+          "exit": {
+            "health": 95,
+            "energy": 100,
+            "food": 91,
+            "warmth": 21,
+            "credits": 33,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 1,
+          "cityDay": 21,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 88,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 33
+          },
+          "exit": {
+            "health": 96,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 37,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 2,
+          "cityDay": 22,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 88,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 37
+          },
+          "exit": {
+            "health": 96,
+            "energy": 100,
+            "food": 91,
+            "warmth": 13,
+            "credits": 38,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 3,
+          "cityDay": 23,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 88,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 38
+          },
+          "exit": {
+            "health": 96,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 41,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 4,
+          "cityDay": 24,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 88,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 41
+          },
+          "exit": {
+            "health": 96,
+            "energy": 100,
+            "food": 91,
+            "warmth": 21,
+            "credits": 44,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 1,
+          "cityDay": 25,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 89,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 44
+          },
+          "exit": {
+            "health": 97,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 48,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 2,
+          "cityDay": 26,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 90,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 48
+          },
+          "exit": {
+            "health": 97,
+            "energy": 100,
+            "food": 91,
+            "warmth": 13,
+            "credits": 48,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 3,
+          "cityDay": 27,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 89,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 48
+          },
+          "exit": {
+            "health": 97,
+            "energy": 100,
+            "food": 91,
+            "warmth": 17,
+            "credits": 52,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 4,
+          "cityDay": 28,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 89,
+            "energy": 100,
+            "food": 59,
+            "warmth": 0,
+            "credits": 52
+          },
+          "exit": {
+            "health": 97,
+            "energy": 100,
+            "food": 91,
+            "warmth": 21,
+            "credits": 55,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        }
+      ]
+    },
+    {
+      "schedule": {
+        "id": "missed-weekend",
+        "visits": 1,
+        "skips": [
+          2,
+          3
+        ]
+      },
+      "completedShifts": 5,
+      "returns": 5,
+      "reliefMeals": 4,
+      "foodSpending": 25,
+      "grossIncome": 45,
+      "taxPaid": 5,
+      "endingCredits": 15,
+      "endingHealth": 10,
+      "endingEnergy": 100,
+      "housing": "bunk",
+      "rentPaid": 0,
+      "rentHeld": 0,
+      "rentDebt": 0,
+      "taxDebt": 0,
+      "samples": [
+        {
+          "realDay": 1,
+          "visit": 1,
+          "cityDay": 1,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 78,
+            "energy": 58,
+            "food": 42,
+            "warmth": 35,
+            "credits": 0
+          },
+          "exit": {
+            "health": 86,
+            "energy": 75,
+            "food": 64,
+            "warmth": 46,
+            "credits": 3,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 2,
+          "visit": 1,
+          "cityDay": 5,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 3
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 6,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 5,
+          "visit": 1,
+          "cityDay": 17,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 6
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 21,
+            "credits": 9,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 6,
+          "visit": 1,
+          "cityDay": 21,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 9
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 12,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        },
+        {
+          "realDay": 7,
+          "visit": 1,
+          "cityDay": 25,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 10,
+            "energy": 100,
+            "food": 0,
+            "warmth": 0,
+            "credits": 12
+          },
+          "exit": {
+            "health": 33,
+            "energy": 100,
+            "food": 46,
+            "warmth": 17,
+            "credits": 15,
+            "taxHeld": 1,
+            "taxDebt": 1
+          },
+          "elapsedMinutes": 121
+        }
+      ]
+    },
+    {
+      "schedule": {
+        "id": "earned-room",
+        "visits": 4,
+        "skips": [],
+        "progression": true
+      },
+      "completedShifts": 56,
+      "returns": 28,
+      "reliefMeals": 14,
+      "foodSpending": 198,
+      "grossIncome": 1261,
+      "taxPaid": 151,
+      "endingCredits": 447,
+      "endingHealth": 100,
+      "endingEnergy": 100,
+      "housing": "room",
+      "rentPaid": 400,
+      "rentHeld": 20,
+      "rentDebt": 0,
+      "taxDebt": 0,
+      "samples": [
+        {
+          "realDay": 1,
+          "visit": 1,
+          "cityDay": 1,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 78,
+            "energy": 58,
+            "food": 42,
+            "warmth": 35,
+            "credits": 0
+          },
+          "exit": {
+            "health": 86,
+            "energy": 57,
+            "food": 60,
+            "warmth": 39,
+            "credits": 9,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 151
+        },
+        {
+          "realDay": 1,
+          "visit": 2,
+          "cityDay": 2,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 83,
+            "energy": 71,
+            "food": 32,
+            "warmth": 0,
+            "credits": 9
+          },
+          "exit": {
+            "health": 88,
+            "energy": 70,
+            "food": 74,
+            "warmth": 4,
+            "credits": 15,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 151
+        },
+        {
+          "realDay": 1,
+          "visit": 3,
+          "cityDay": 3,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 81,
+            "energy": 84,
+            "food": 46,
+            "warmth": 0,
+            "credits": 15
+          },
+          "exit": {
+            "health": 87,
+            "energy": 83,
+            "food": 88,
+            "warmth": 9,
+            "credits": 23,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 151
+        },
+        {
+          "realDay": 1,
+          "visit": 4,
+          "cityDay": 4,
+          "job": "sorting",
+          "housing": "bunk",
+          "entry": {
+            "health": 80,
+            "energy": 97,
+            "food": 60,
+            "warmth": 0,
+            "credits": 23
+          },
+          "exit": {
+            "health": 86,
+            "energy": 96,
+            "food": 91,
+            "warmth": 14,
+            "credits": 32,
+            "taxHeld": 2,
+            "taxDebt": 2
+          },
+          "elapsedMinutes": 151
+        },
+        {
+          "realDay": 2,
+          "visit": 1,
+          "cityDay": 5,
+          "job": "maintenance",
+          "housing": "bunk",
+          "entry": {
+            "health": 79,
+            "energy": 100,
+            "food": 63,
+            "warmth": 0,
+            "credits": 32
+          },
+          "exit": {
+            "health": 83,
+            "energy": 95,
+            "food": 91,
+            "warmth": 3,
+            "credits": 67,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 2,
+          "visit": 2,
+          "cityDay": 6,
+          "job": "maintenance",
+          "housing": "bunk",
+          "entry": {
+            "health": 77,
+            "energy": 100,
+            "food": 67,
+            "warmth": 0,
+            "credits": 67
+          },
+          "exit": {
+            "health": 80,
+            "energy": 95,
+            "food": 91,
+            "warmth": 0,
+            "credits": 100,
+            "taxHeld": 5,
+            "taxDebt": 5
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 2,
+          "visit": 3,
+          "cityDay": 7,
+          "job": "maintenance",
+          "housing": "bunk",
+          "entry": {
+            "health": 74,
+            "energy": 100,
+            "food": 67,
+            "warmth": 0,
+            "credits": 100
+          },
+          "exit": {
+            "health": 77,
+            "energy": 95,
+            "food": 91,
+            "warmth": 3,
+            "credits": 135,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 2,
+          "visit": 4,
+          "cityDay": 8,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 71,
+            "energy": 100,
+            "food": 67,
+            "warmth": 0,
+            "credits": 135
+          },
+          "exit": {
+            "health": 77,
+            "energy": 100,
+            "food": 91,
+            "warmth": 70,
+            "credits": 45,
+            "taxHeld": 5,
+            "taxDebt": 5
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 3,
+          "visit": 1,
+          "cityDay": 9,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 77,
+            "energy": 100,
+            "food": 67,
+            "warmth": 52,
+            "credits": 45
+          },
+          "exit": {
+            "health": 85,
+            "energy": 100,
+            "food": 81,
+            "warmth": 81,
+            "credits": 82,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 3,
+          "visit": 2,
+          "cityDay": 10,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 85,
+            "energy": 100,
+            "food": 57,
+            "warmth": 57,
+            "credits": 82
+          },
+          "exit": {
+            "health": 93,
+            "energy": 100,
+            "food": 71,
+            "warmth": 80,
+            "credits": 116,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 3,
+          "visit": 3,
+          "cityDay": 11,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 93,
+            "energy": 100,
+            "food": 47,
+            "warmth": 62,
+            "credits": 116
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 61,
+            "warmth": 91,
+            "credits": 153,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 3,
+          "visit": 4,
+          "cityDay": 12,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 37,
+            "warmth": 79,
+            "credits": 153
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 51,
+            "warmth": 94,
+            "credits": 169,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 4,
+          "visit": 1,
+          "cityDay": 13,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 27,
+            "warmth": 76,
+            "credits": 169
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 41,
+            "warmth": 91,
+            "credits": 186,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 4,
+          "visit": 2,
+          "cityDay": 14,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 17,
+            "warmth": 67,
+            "credits": 186
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 55,
+            "warmth": 88,
+            "credits": 200,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 4,
+          "visit": 3,
+          "cityDay": 15,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 31,
+            "warmth": 70,
+            "credits": 200
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 45,
+            "warmth": 91,
+            "credits": 217,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 4,
+          "visit": 4,
+          "cityDay": 16,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 21,
+            "warmth": 79,
+            "credits": 217
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 59,
+            "warmth": 94,
+            "credits": 233,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 5,
+          "visit": 1,
+          "cityDay": 17,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 35,
+            "warmth": 76,
+            "credits": 233
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 49,
+            "warmth": 91,
+            "credits": 251,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 5,
+          "visit": 2,
+          "cityDay": 18,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 25,
+            "warmth": 67,
+            "credits": 251
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 39,
+            "warmth": 88,
+            "credits": 267,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 5,
+          "visit": 3,
+          "cityDay": 19,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 15,
+            "warmth": 70,
+            "credits": 267
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 53,
+            "warmth": 91,
+            "credits": 286,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 5,
+          "visit": 4,
+          "cityDay": 20,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 29,
+            "warmth": 79,
+            "credits": 286
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 43,
+            "warmth": 94,
+            "credits": 304,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 6,
+          "visit": 1,
+          "cityDay": 21,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 19,
+            "warmth": 76,
+            "credits": 304
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 57,
+            "warmth": 91,
+            "credits": 323,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 6,
+          "visit": 2,
+          "cityDay": 22,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 33,
+            "warmth": 67,
+            "credits": 323
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 47,
+            "warmth": 88,
+            "credits": 339,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 6,
+          "visit": 3,
+          "cityDay": 23,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 23,
+            "warmth": 70,
+            "credits": 339
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 61,
+            "warmth": 91,
+            "credits": 358,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 6,
+          "visit": 4,
+          "cityDay": 24,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 37,
+            "warmth": 79,
+            "credits": 358
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 51,
+            "warmth": 94,
+            "credits": 376,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 7,
+          "visit": 1,
+          "cityDay": 25,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 27,
+            "warmth": 76,
+            "credits": 376
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 41,
+            "warmth": 91,
+            "credits": 395,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 7,
+          "visit": 2,
+          "cityDay": 26,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 17,
+            "warmth": 67,
+            "credits": 395
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 55,
+            "warmth": 88,
+            "credits": 410,
+            "taxHeld": 7,
+            "taxDebt": 7
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 7,
+          "visit": 3,
+          "cityDay": 27,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 31,
+            "warmth": 70,
+            "credits": 410
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 45,
+            "warmth": 91,
+            "credits": 429,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        },
+        {
+          "realDay": 7,
+          "visit": 4,
+          "cityDay": 28,
+          "job": "maintenance",
+          "housing": "room",
+          "entry": {
+            "health": 100,
+            "energy": 100,
+            "food": 21,
+            "warmth": 79,
+            "credits": 429
+          },
+          "exit": {
+            "health": 100,
+            "energy": 100,
+            "food": 59,
+            "warmth": 94,
+            "credits": 447,
+            "taxHeld": 6,
+            "taxDebt": 6
+          },
+          "elapsedMinutes": 181
+        }
+      ]
+    }
+  ]
+}

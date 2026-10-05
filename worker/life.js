@@ -1,8 +1,10 @@
+import {contactThreads,recurringContacts} from './contacts.js';
 import {quickBlocked} from './street.js';
 
 const lifeNeed=(ok,message)=>{if(!ok)throw Object.assign(new Error(message),{status:400});};
 const lifeClamp=(n,min=0,max=100)=>Math.max(min,Math.min(max,n));
 export const districtThreads={
+ ...contactThreads,...recurringContacts,
  ration:{name:'The name on the ration card',contact:'neri',speaker:'Neri / Cell Stack IX',art:'scavenge',trigger:'bins',nodes:{
   found:{title:'Someone threw away a name.',text:'Under wet municipal wrappers you find Neri’s ration card. Her address is two doors from yours. The printer will accept it once before the missing-card notice arrives.',choices:[
    {id:'return',label:'Return the card to Neri.',preview:'Neri +2 · Trust +1 · Order +2',relations:2,delta:{rep:1,alignment:2},next:'neighbor',wait:60000,outcome:'Neri has been waiting beside an empty printer. You return her card. She gives you a place to knock when the district gets colder.'},
@@ -71,12 +73,12 @@ function districtChoiceBlocked(p,choice,now,thread){
 }
 export function districtEncounters(p,w){
  const d=districtState(p,w.day);
- return Object.entries(d.threads).filter(([id,s])=>districtThreads[id]&&s.node!=='done').map(([id,s])=>{
-  const t=districtThreads[id],n=t.nodes[s.node];return {id,node:s.node,name:t.name,speaker:t.speaker,art:t.art,title:n.title,text:n.text,readyAt:s.readyAt,choices:n.choices.map(choice=>({id:choice.id,label:choice.label,preview:choice.preview,blocked:districtChoiceBlocked(p,choice,w.now,s)}))};
+ return Object.entries(d.threads).filter(([id,s])=>districtThreads[s.template||id]&&s.node!=='done').map(([id,s])=>{
+  const t=districtThreads[s.template||id],n=t.nodes[s.node];return {id,contact:t.contact,node:s.node,name:t.name,speaker:t.speaker,art:t.art,title:n.title,text:n.text,readyAt:s.readyAt,choices:n.choices.map(choice=>({id:choice.id,label:choice.label,preview:choice.preview,blocked:districtChoiceBlocked(p,choice,w.now,s)}))};
  });
 }
 export function chooseDistrict(p,input,w){
- const d=districtState(p,w.day),t=typeof input.id==='string'&&Object.hasOwn(districtThreads,input.id)?districtThreads[input.id]:null,s=d.threads[input.id];
+ const d=districtState(p,w.day),s=typeof input.id==='string'&&Object.hasOwn(d.threads,input.id)?d.threads[input.id]:null,key=s?.template||input.id,t=typeof key==='string'&&Object.hasOwn(districtThreads,key)?districtThreads[key]:null;
  lifeNeed(t&&s&&s.node!=='done'&&s.node===input.node,'That encounter has moved on. Read its current message.');
  const choice=t.nodes[s.node].choices.find(x=>x.id===input.choice);lifeNeed(choice,'Choose a published response.');const blocked=districtChoiceBlocked(p,choice,w.now,s);lifeNeed(!blocked,blocked);
  for(const [id,n] of Object.entries(choice.cost||{})){if(['cloth','wire','circuit','data'].includes(id))p.materials[id]-=n;else p[id]-=n;}
@@ -85,7 +87,7 @@ export function chooseDistrict(p,input,w){
  p.energy-=choice.energy||0;d.contacts[t.contact]=(d.contacts[t.contact]||0)+(choice.relations||0);
  if(choice.flag)d.flags[choice.flag]=true;if(choice.plan)d.plan={mode:choice.plan,day:w.day};if(choice.clearPlan)d.plan=null;
  d.decisions.push({thread:input.id,node:s.node,choice:choice.id,label:choice.label,outcome:choice.outcome,created:w.now});d.decisions=d.decisions.slice(-40);
- s.node=choice.next;s.readyAt=w.now+(choice.wait||0);
+ s.choices??=[];s.choices.push(choice.id);s.node=choice.next;s.readyAt=w.now+(choice.wait||0);
  return {message:choice.outcome,taxGross:choice.taxGross||0};
 }
 export const districtSurveys={
@@ -138,7 +140,7 @@ export function startCareerCase(p,input,w){
  return {message:`Started ${desk.name.toLowerCase()}. ${choice.seconds} seconds; ${choice.energy} energy.`,metrics:choice.metrics,endsAt:p.errand.endsAt};
 }
 export function completeDistrictTask(p,a,day){
- const d=districtState(p,day),completionDay=Math.max(1,Math.floor((a.endsAt-Date.UTC(2026,9,5))/21600000)+1);if(a.action==='career_case'){d.cases[a.id]={day:completionDay,status:'closed',choice:a.caseChoice,closedAt:a.endsAt,message:a.message};if(a.crimeXP)p.criminal.xp+=a.crimeXP;}
+ const d=districtState(p,day),completionDay=Math.max(1,Math.floor((a.endsAt-Date.UTC(2026,9,5))/21600000)+1);if(a.action==='career_case'){d.cases[a.id]={day:completionDay,status:'closed',choice:a.caseChoice,closedAt:a.endsAt,message:a.message};if(a.crimeXP){p.criminal.xp+=a.crimeXP;d.contacts.rook=(d.contacts.rook||0)+1;}}
  if(a.action==='prepare_crime'&&completionDay===day)d.plan={mode:'quiet',day};
  if(a.action==='quick')discoverDistrict(p,a.id,a.endsAt,day);
 }

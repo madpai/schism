@@ -14,7 +14,7 @@ The hosted game currently retains its owner-private audience. Sign-in and separa
 
 ChatGPT sign-in creates a durable account. Register one character: choose a name, gender, six skin tones, six hair colors, five hairstyles, and three builds. The same layered painted character portrait appears in your papers, loadout, and overview. These choices are cosmetic and can be updated later. Administration and security issue earned uniforms that appear when equipped.
 
-Every arrival comes by an import train into the **current** Ninth Stratum. New citizens start neutral with **0 credits**, worn equipment, and a bunk for one city cycle.
+Every arrival comes by an import train into the **current** Ninth Stratum. New citizens start neutral with **0 credits**, worn equipment, and a permanently free, unheated bunk.
 
 The owner requested a fresh start after the residency update. On October 5, 2026, all existing characters and their personal records were reset once. Sign in again to create a new citizen under the harsher rules. The shared city clock, market, faction balance, repair projects, and completed district contributions continue. Future updates retain character progress.
 
@@ -34,7 +34,7 @@ A job reserves energy and completes in the background. Pay, career XP, and benef
 
 Long shifts have company now. Take **20–75 second** tasks: search municipal bins, strip dead electronics, clean public terminals, decode stray signals, and repair heating relays. Spend energy to recover fabric, copper, circuit parts, and signal traces. Ten short tasks per city cycle keep this from becoming an endless credit faucet.
 
-**v0.7 gives those actions consequences.** A found ration card introduces Neri, salvage uncovers sabotage, a decoded signal reveals a permit dispute, and your first completed shift exposes a wage discrepancy. Return, sell, forge, report, or conceal what you find. Named contacts remember; follow-up messages arrive after a minute. These four finite encounters persist across visits and cannot be rerolled.
+**The people you meet remember.** A found ration card introduces Neri, salvage uncovers sabotage, a decoded signal reveals a permit dispute, and your first completed shift exposes a wage discrepancy. Return, sell, forge, report, or conceal what you find. Named contacts remember; follow-up messages arrive after a minute. Four initial discoveries lead to twelve context-dependent continuations and four rotating neighborhood check-ins. Neri can teach economical mending; Voss can reduce the effort of a lawful Registry review. Finished paid encounters cannot be rerolled.
 
 The overview suggests your next useful moves and shows your rent and tax budget. Lower short-task energy costs leave more room for a visit without raising wages. Read three free district bulletins, review an earned career case, reply to contacts, arrange trades, and use chat without energy. A prepared checkpoint route lowers one crime's capture risk by ten percentage points; it expires with the cycle.
 
@@ -46,11 +46,19 @@ The **civic neural network** has persistent District IX, Exchange, and Uncounted
 
 ## Obey, and still struggle
 
-**Revenue collects 12% of reported earned income.** Tax accumulates in a separate ledger; the player must pay it before the deadline. Fractional amounts carry forward so splitting small earnings cannot avoid tax.
+**Revenue collects 12% of reported earned income.** Tax accumulates in a separate ledger; pay it manually or enable a credit-backed automatic reserve before the deadline. Fractional amounts carry forward so splitting small earnings cannot avoid tax.
 
 An overdue account flags the citizen ID. Factory gates refuse flagged citizens. Debt payment does not erase the flag: Registry review takes a fee, time, and energy. An indigence appeal substitutes a longer wait for the fee. Public custodial work stays open to earn debt money. A daily emergency meal helps an exhausted, broke citizen recover enough to act.
 
-Rent starts after one six-hour arrival grace period. Four unpaid bills mean eviction. Better housing costs deposits and higher rent, but protects warmth and improves sleep. A heated apartment requires two real days of residency and civic trust.
+**The starting bunkhouse is rent free.** Its broken radiator gives no sleep warmth, but a ninety-minute rest restores up to 38 energy. A free forty-five-second barrel-fire visit restores a little warmth. Private rooms and apartments have deposits and six-hour rent, prepaid reserves, and a four-bill arrears cap. You can always return to a free bunk, even owing old private rent. Absence stays harsh without creating endless housing debt.
+
+## A block worth coming back to
+
+Create or join a free **tenant association** with up to twelve neighbors. Donate actual supplies, take one donated consumable per cycle, and talk in a private building channel. Six thirty-second repairs consume shared copper and fabric; completed work reduces indoor cold exposure for **24 real hours**. Shelf transfers are visible, supplies are conserved, and no bill is attached to membership.
+
+![Free bunks beneath a broken radiator](public/bunkhouse.webp)
+
+The compact daily screen puts vitals, pending work, ready contact messages, and useful next moves first. Mobile navigation keeps tasks, messages, and rest close. Painted contact portraits and visible jacket scuffs carry the district into the interface; mending costs fabric and effort while earned uniforms retain their corrected composition.
 
 ## Choose a life
 
@@ -81,7 +89,7 @@ District events show their causes and their effects. They respond to completed p
 
 Weather fronts, identity sweeps, shared food stock, faction effects, and the thermal lattice add further pressure. Survival is a budget of time, energy, credits, and compliance.
 
-The **cold line** and **relief convoy** add a developing emergency each cycle: warning, response, stabilization, and a recorded outcome at a five-hour deadline. Relevant work helps, criminal diversions undo progress, and 25–60 second direct responses consume useful supplies. Requirements are fixed when the incident opens and scale between three and twelve units from recent contributors. Its food or cold penalty affects everyone, including arrivals joining late.
+The **cold line** and **relief convoy** add a developing emergency each cycle: warning, response, stabilization, and a recorded outcome at a five-hour deadline. Relevant work helps, criminal diversions undo progress, and 25–60 second direct responses consume useful supplies. Requirements are fixed when the incident opens and scale between three and twelve units from recent contributors. Its food or cold penalty affects everyone, including arrivals joining late. Failed incidents leave bounded damage for four later cycles; forty-second supply-consuming recovery contracts can lift it early. The district newspaper preserves outcomes and names public repair contributors.
 
 ## Run locally
 
@@ -97,7 +105,12 @@ npm run dev
 
 The development game runs at `http://127.0.0.1:4173`, uses a local QA identity, and stores one shared city in ignored `.local-data/city.sqlite`. Each browser receives a separate signed local session. Production uses Sites identity and durable D1 storage. Local characters persist across server restarts. Set `SCHISM_TAILSCALE_IP` to bind the same city to your Tailscale address as well as loopback; see [local hosting](docs/LOCAL_HOSTING.md). Rebuild and restart development after changing source.
 
-**355 checks** cover registration, survival, timed rewards, stories, equipment, careers, taxes, ID holds, clearance, arrests, legacy saves, reset safety, short tasks, and neural messages. New checks cover encounter replay, prepared routes, escrow and delivery races, incoming stock during a shift, municipal caps, emergency deadlines, earned cases, and a 24-hour return. A separate real 20-minute browser playthrough uses two ordinary citizens in the same city and waits for actual wages before trading. Desktop and mobile checks cover all screens. See [verification and limits](docs/playtests/V0.7.md).
+**438 rule assertions** cover accounts, survival, timed rewards, careers, taxes and ID holds, trade races, encounters, shared supplies, tenant repairs, recovery, and persistence. A seven-day isolated balance simulation uses ordinary registration and actions; it distinguishes daily, twice-daily, each-cycle, and missed-weekend schedules. Real browser checks use ordinary citizens in the same city and wait through actual short tasks and wages. All 17 screens are checked at 360/390/1440px. See [verification and limits](docs/playtests/V0.8.md).
+
+```sh
+npm run test:balance        # isolated simulated schedules
+npm run test:living-browser # real shared-city play; creates ordinary citizens
+```
 
 ## Source and hosting
 
@@ -112,10 +125,10 @@ drizzle/      Append-only production migrations
 docs/         Gameplay and architecture reference
 ```
 
-Build emits a Worker module with embedded interface and 23 WebP assets, including cropped portrait layers, plus D1 migrations. Publishing uses the **Sites building and hosting skills** and preserves the existing Site and audience. Production requires the trusted `oai-authenticated-user-id` header forwarded by Sites. No browser-provided identity or balances are trusted.
+Build emits a Worker module with embedded interface and 29 WebP assets, including cropped portrait layers, plus D1 migrations. Publishing uses the **Sites building and hosting skills** and preserves the existing Site and audience. Production requires the trusted `oai-authenticated-user-id` header forwarded by Sites. No browser-provided identity or balances are trusted.
 
 ## Original artwork
 
-The rainy city banner above is part of SCHISM’s original artwork. The original five generated scene assets depict the city, foundry, exchange, rainline, and worker archetype. Prompts and provenance live in [occult-provenance.json](art/occult-provenance.json) and [noir-provenance.json](art/noir-provenance.json). Eight generated assets add seven city scenes and a transparent painted portrait kit. Ten cropped head/hair/uniform components compose the customizable portrait. Prompts and asset provenance live in [street-prompts.json](art/street-prompts.json) and [street-provenance.json](art/street-provenance.json). v0.7 reuses that art across encounters and cases; the corrected neck, collar, braid, and shaved layers remain. Earlier visual findings are in [the v0.6 critique](docs/playtests/V0.6.md).
+The rainy city banner above is part of SCHISM’s original artwork. The original five generated scene assets depict the city, foundry, exchange, rainline, and worker archetype. Prompts and provenance live in [occult-provenance.json](art/occult-provenance.json) and [noir-provenance.json](art/noir-provenance.json). Eight generated assets add seven city scenes and a transparent painted portrait kit. Ten cropped head/hair/uniform components compose the customizable portrait. Prompts and asset provenance live in [street-prompts.json](art/street-prompts.json) and [street-provenance.json](art/street-provenance.json). Six new painted contact/bunkhouse/barrel-fire assets add faces and places without replacing the corrected neck, collar, braid, and shaved layers. Their exact prompts, hashes, and provenance are in [living-prompts.json](art/living-prompts.json) and [living-provenance.json](art/living-provenance.json). Earlier visual findings are in [the v0.6 critique](docs/playtests/V0.6.md).
 
 Browser agent tools are feature-detected. Native WebMCP registration remains unverified because the available QA browser does not support it.

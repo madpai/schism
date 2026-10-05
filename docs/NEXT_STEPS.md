@@ -1,41 +1,27 @@
-# SCHISM priorities after v0.7
+# SCHISM priorities after v0.8
 
-The five priorities accepted by the owner now have playable implementations. [Gameplay](GAMEPLAY.md) describes their exact costs and limits; [the v0.7 playtest](playtests/V0.7.md) separates real browser evidence from simulated deadlines and earned-role previews. Existing citizens and the shared city are preserved.
+The accepted living-city priorities now have playable implementations, including the owner's rent-free bunkhouse correction. Current characters are preserved. [Gameplay](GAMEPLAY.md) gives costs and gates; [v0.8 evidence](playtests/V0.8.md) separates real shared-city play from injected-time balance checks.
 
-The setting remains the strongest part: the train, civic papers, heating, wages, clothes, and shortages describe one harsh place. v0.7 gives a visit more decisions without increasing regular wages, removing ID consequences, or shortening residency gates. The next content should build on player histories and economic evidence rather than adding another independent currency or timer.
+## Completed in this release
 
-## 1. Encounters tied to ordinary actions — implemented
+1. **Absence without endless housing debt.** Municipal bunks are free, unheated, and restore 38 energy over ninety minutes. Cardboard restores 30; a free forty-five-second fire helps warmth. Private bills consume prepaid money, stop at four unpaid cycles, and never block returning to a free bunk. Old basic-bunk charges are waived once. Optional automatic tax reserves use real credits while preserving Registry consequences.
+2. **People who continue to remember.** Twelve finite continuations respond to original choices, actual housing, roles, and city damage. Four recurring check-ins support later visits without repeating paid discovery rewards. Neri can teach lower-effort mending; Voss can reduce lawful review effort. A contact's unfinished original reply keeps its continuation offer from being consumed by a premature recurring check-in.
+3. **Useful cooperation.** Free twelve-member associations share actual donated supplies, member chat, visible transfers, and six completed repair units. Members gain a bounded twenty-four-hour indoor cold reduction. Quotas survive membership switching; last-stock, last-member, and repair reservations are guarded.
+4. **Emergency memory and recovery.** Failed observed incidents affect four later cycles with capped lingering penalties. Supply-consuming short recovery jobs lift damage early. A newspaper preserves outcomes and names public repair contributors; later success cannot rewrite an earlier failure.
+5. **Clearer mobile visits and more painted life.** A compact daily feed, four vital values, ready replies, reserves, and a four-button mobile dock lead the interface. Four painted contact faces, bunkhouse and barrel-fire scenes, and cosmetic clothing scuffs add visual context. Focused drafts survive refreshes; default-open directories still refresh. Corrected player portrait layering remains.
 
-Bins, salvage, decoding, and a completed shift reveal four authored branching encounters. Neri, Esra, Voss, and Rook remember choices; follow-up replies arrive after a minute. Returning a card, reporting sabotage, fixing a permit, or leaking a log has a stated immediate consequence and persistent history. Repeated tasks do not reroll them.
+## What the balance evidence says
 
-Next: add encounters that use established contacts, current emergency history, housing, and repeated choices. The four initial stories are finite and will run out. Repeating the same reward branch would weaken the economy and the fiction; later encounters should change relationships and access, with occasional costly decisions and bounded material rewards.
+Seven-day simulated schedules use ordinary registered accounts and real rules in isolated SQLite. No fixture resources or production timestamps are changed. Daily and missed-weekend schedules retain free shelter, pay reserved tax, and reopen normal work, but return hungry and cold. One shift per visit produces modest savings: 22 CR after seven daily visits, 15 after missing two days, and 55 for one visit each city cycle.
 
-## 2. Useful visits and low-energy activity — implemented
+An intensive progression schedule completes two shifts per cycle and switches to the lattice technician job only when eligible. It affords a deposit, prepays private rent, pays 400 CR of rent, and ends housed with 447 CR. That schedule requires many return visits and is not evidence that a casual player's private room is affordable. The room should remain an earned goal, but the next human playtest should measure how often it feels attainable without organizing one's day around the timers.
 
-Short tasks and crafts cost less energy; public/hidden contract costs are 5/6. Regular wages, permits, rent, food, tax, sleep, and residency requirements retain their previous values. The overview offers immediate survival, work-break, ID recovery, and savings objectives. Free bulletins, encounter replies, case review, trade, and chat are available without energy. Quiet routes reduce one crime's capture risk but expire with the cycle.
+## Next work, in order
 
-Next: observe real multi-day visits, net wages after survival costs, exhausted returnees, and how often recovery consumes a whole visit. The isolated 24-hour-return check proves relief can reopen work after eviction; it does not establish that this experience feels good over a week. Low-energy time should offer meaningful relationships and planning, while sleep still matters.
+1. **A real week of ordinary phone play.** Measure recovery time, attention per visit, food/heat spending, private-housing moves, and missed days. Current-weather offline settlement is still an approximation. The simulated schedules prove recoverability, not enjoyment. Do not inflate wages or add another currency without observing where people actually stall.
+2. **More consequential authored histories.** Expand the small finite pool, role cases, and emergency stories. Give contacts decisions about supplies, neighbors, and public records, with clear costs and delayed consequences. Existing relationship scores mainly choose authored encounters and access flags; they do not yet form a broad reputation simulation.
+3. **Association demand and trade evidence.** Track whether donated supplies, repairs, and funded orders attract ordinary participation. Consider member requests and scheduled deliveries once real fill rates support them. Keep ownership, refunds, and shared quotas explicit; do not generate stock to make an empty shelf look busy.
+4. **Reduce remaining mobile screen length.** The daily view is shorter, but housing options, shelf controls, case desks, and encounter lists remain long. Watch actual taps and scrolls before rearranging them again. A screenshot or overflow assertion cannot establish that an interface is easy to use.
+5. **Historical event settlement.** Reconstruct weather and damage changes over long absences if their impact proves material. Tenant protection already uses exact completion/join/expiry windows; global weather still uses the state at return. Keep bounded recovery for quiet cities.
 
-## 3. Demand for player-made supplies — implemented
-
-Funded buy orders accept ten supply types, partial deliveries, taxable supplier payments, and remaining-escrow refunds. Citizen demand uses actual credits and inventory. A small municipal floor buys one unit from each participating citizen per cycle, with finite shared quantities. Shops choose consumable stock and can hold more open orders. Crisis repairs consume those same items.
-
-Next: measure fill rates, traded prices, shortages, and whether specialized scavenging/crafting is worthwhile after tax and energy. Add persistent deliveries or tenant requests when actual participation supports them. Crews and mutual-aid funds need rules for ownership and contributed goods before they can become useful cooperation tools.
-
-## 4. Emergencies with phases and memory — implemented
-
-The boiler and freight convoy alternate by shared city cycle. Warning leads to active pressure, possible stabilization, and a secured/failed record at a five-hour deadline. Fixed goals scale from recent completed contributors. Authorized work adds repair units; criminal diversions remove progress. Fast responses consume supplies and have bounded personal starts. Late arrivals inherit the city's phase.
-
-Next: vary the emergency stories, show more concrete attribution, and connect later incidents to recorded outcomes. Outcomes currently affect the last hour of their cycle; longer consequences need recovery routes so a weakly populated city remains playable. The two types are a first content slice, not a complete event generator.
-
-## 5. Distinct earned institutional work — implemented
-
-Administration handles disputed permits; security handles evidence and repair cargo; shops choose a crew sale or private buyer; underground contacts restore or divert a manifest. Free case review precedes a timed response. Lawful options favor trust and shared output; illicit options favor immediate income with heat and Chaos. Existing appointment gates, ID holds, earned uniforms, and crime consequences remain.
-
-Next: expand case variety and connect prior decisions to later work. Players should see their civic record affect opportunities before giving them powers over other citizens. No direct player detention or competitive combat is introduced. Combat needs a separate design for fairness, injury recovery, asynchronous participation, and city consequences.
-
-## Presentation
-
-Keep the corrected painted portrait composition: independent face/hair crops, neck inside the rear/front garment collar, and no hair layer for Shaved. Reuse the existing scene art where it fits; add faces, clothing wear, and institution-specific art as content expands. Dark skin tint choices still deserve more lighting variation. Mobile emergencies now lead the city page, with area artwork available in an expandable gallery.
-
-Long screens remain a weakness. Progressive disclosure and clearer labels should accompany future content so the next useful action stays close to the top. Inspect screenshots and actual phone sessions; passing an overflow check cannot establish visual quality or enjoyable pacing.
+Direct player arrest, real-time combat, an AI-run social network, and an open hosted audience are separate decisions. Current shared gameplay uses authored rules, persistent chat, trades, associations, and asynchronous work. Earned institutional gates and visible uniforms remain important pacing anchors.

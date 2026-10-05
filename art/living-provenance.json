@@ -1,0 +1,104 @@
+[
+  {
+    "id": "contact-neri",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-4cceb6c5-b698-4000-9571-495e1dcc1a29.png",
+    "archive": "/home/commander/schism-living-assets/contact-neri.png",
+    "output": "public/contact-neri.webp",
+    "source_dimensions": [
+      1254,
+      1254
+    ],
+    "output_dimensions": [
+      512,
+      512
+    ],
+    "sha256": "bc08b3a7167f09d934b767227d404b5600e94ee878f53bdecbdd9955bcd6ca3c",
+    "transform": "Aspect-preserving resize and WebP conversion only; no semantic editing.",
+    "generator": "built-in image_gen"
+  },
+  {
+    "id": "contact-esra",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-cfaaf1d3-fe78-4e39-b76a-6b2c2c4ac51f.png",
+    "archive": "/home/commander/schism-living-assets/contact-esra.png",
+    "output": "public/contact-esra.webp",
+    "source_dimensions": [
+      1254,
+      1254
+    ],
+    "output_dimensions": [
+      512,
+      512
+    ],
+    "sha256": "1f2bdafd1f64aaa9db1d1603d4d1b1b811e77dd5efc4628e3ff0066e57cba48d",
+    "transform": "Aspect-preserving resize and WebP conversion only; no semantic editing.",
+    "generator": "built-in image_gen"
+  },
+  {
+    "id": "contact-voss",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-5b8e9b7b-8df8-4f5c-92ca-61fe189c565a.png",
+    "archive": "/home/commander/schism-living-assets/contact-voss.png",
+    "output": "public/contact-voss.webp",
+    "source_dimensions": [
+      1254,
+      1254
+    ],
+    "output_dimensions": [
+      512,
+      512
+    ],
+    "sha256": "e18ee9cb523840e1e2a2a72b077cdb8d4eeb63233c23ba11170099e887b5cd74",
+    "transform": "Aspect-preserving resize and WebP conversion only; no semantic editing.",
+    "generator": "built-in image_gen"
+  },
+  {
+    "id": "contact-rook",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-7ea7a18b-8a7f-4e52-ac0a-807aa18ec971.png",
+    "archive": "/home/commander/schism-living-assets/contact-rook.png",
+    "output": "public/contact-rook.webp",
+    "source_dimensions": [
+      1254,
+      1254
+    ],
+    "output_dimensions": [
+      512,
+      512
+    ],
+    "sha256": "9998612147105211f6fd5f0b35f422ea5f08ed89ea315390305b04b1415f8b4c",
+    "transform": "Aspect-preserving resize and WebP conversion only; no semantic editing.",
+    "generator": "built-in image_gen"
+  },
+  {
+    "id": "bunkhouse",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-67a1c0dc-7faf-49fb-993a-97639af1770e.png",
+    "archive": "/home/commander/schism-living-assets/bunkhouse.png",
+    "output": "public/bunkhouse.webp",
+    "source_dimensions": [
+      1774,
+      887
+    ],
+    "output_dimensions": [
+      1200,
+      600
+    ],
+    "sha256": "638b7dc53027d222114727a4b67b31e80ac18f26c611b725b40a1472a38b3cb0",
+    "transform": "Aspect-preserving resize and WebP conversion only; no semantic editing.",
+    "generator": "built-in image_gen"
+  },
+  {
+    "id": "barrel-fire",
+    "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-7938086f-8d32-4a63-97a7-3cb56fdc49f6.png",
+    "archive": "/home/commander/schism-living-assets/barrel-fire.png",
+    "output": "public/barrel-fire.webp",
+    "source_dimensions": [
+      1672,
+      940
+    ],
+    "output_dimensions": [
+      1200,
+      675
+    ],
+    "sha256": "9148a29d53854b17df520ff78297f45bcd23ad6c39082f19195de2d174b10d8e",
+    "transform": "Aspect-preserving resize and WebP conversion only; no semantic editing.",
+    "generator": "built-in image_gen"
+  }
+]

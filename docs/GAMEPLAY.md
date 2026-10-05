@@ -1,10 +1,10 @@
 # Life in the Ninth Stratum
 
-This file describes the v0.7 rules. Player values come from the server. The game has asynchronous multiplayer; it does not simulate a real-time movement or combat world. This update preserves all existing characters.
+This file describes the v0.8 rules. Player values come from the server. The game has asynchronous multiplayer; it does not simulate a real-time movement or combat world. This update preserves all existing characters.
 
 ## Account, arrival, and appearance
 
-Sites provides ChatGPT sign-in; the stable authenticated user ID owns one citizen. Opening the state endpoint creates an unregistered account record. A valid registration supplies a character name and appearance, and starts residency, housing grace, and the first tax deadline. The train arrives at the existing shared server day. Registration cannot be replayed or used to reset a character.
+Sites provides ChatGPT sign-in; the stable authenticated user ID owns one citizen. Opening the state endpoint creates an unregistered account record. A valid registration supplies a character name and appearance, and starts residency, free housing, and the first tax deadline. The train arrives at the existing shared server day. Registration cannot be replayed or used to reset a character.
 
 Appearance: Woman/Man/Nonbinary; Porcelain/Sand/Olive/Bronze/Umber/Ebony skin; Black/Brown/Copper/Blonde/Silver/Violet hair; Cropped/Swept/Bob/Braids/Shaved styles; Lean/Broad/Soft builds. No choice changes stats. Names accept 2–24 Unicode letters, numbers, spaces, periods, underscores, and hyphens.
 
@@ -26,27 +26,32 @@ Finite narrative choices and daily faction rites consume their declared energy w
 
 ## Survival and housing
 
-New citizens have 0 credits, health 78, energy 58, fullness 42, warmth 35, and no trust or allegiance. They have worn clothing, boots, an identity implant, and a bunk. The first rent bill arrives six real hours after registration.
+New citizens have 0 credits, health 78, energy 58, fullness 42, warmth 35, and no trust or allegiance. Worn clothing, boots, an identity implant, and a municipal bunk are assigned. **The starting bunk is permanently rent free and unheated.** Absence does not charge rent or remove this basic recovery route.
 
-Per city hour, fullness falls by 2, or 1.5 during sleep. Idle energy returns at 1/hour, sleep at 6/hour; employment does not regenerate energy. Completing full sleep grants 16 additional energy and 8 health. Completing housed sleep restores warmth: bunk 20, room 32, apartment 40. Street sleep grants no warmth.
+Per city hour, fullness falls by 2, or 1.5 during sleep. Idle energy returns at 1/hour; employment does not regenerate energy. Sleep lasts 90 real minutes and is available once per starting cycle. Its housing-specific recovery is below; energy cannot exceed 100. Food and cold exposure continue during sleep.
 
-During an assignment, hourly cold exposure is 3 without an insulated shroud or 1 with it, before district weather and heating effects. Idle/sleep baseline hourly cold exposure: street 3, bunk 1, private room 0.5, heated apartment 0.25. An equipped insulated shroud reduces this by 0.6; shared repairs and communal boilers each reduce exposure by 1; a null front increases it by 1. The minimum cold exposure is 0.2/hour. Below 15 fullness or warmth, exposure damages health. Passive health cannot fall below 10, allowing relief recovery instead of irreversible death.
+| Housing | Deposit | Rent per six-hour cycle | Full sleep energy / warmth / health | Idle or sleep cold per city hour |
+| --- | --- | --- | --- | --- |
+| Municipal bunkhouse | Free | 0 CR | 38 / 0 / 8 | 1.5 |
+| Street cardboard | Free | 0 CR | 30 / 0 / 4 | 3 |
+| Private room | 45 CR | 20 CR | 52 / 32 / 8 | 0.5 |
+| Heated apartment | 180 CR | 32 CR | 62 / 40 / 10 | 0.25 |
 
-Offline survival settlement is capped at seven real days per visit and uses the current district weather/heating. Rent deadlines are timestamp-based; four unpaid bills trigger street eviction, with rent arrears bounded to four unpaid cycles rather than growing without limit. Paying rent restores access to a bunk.
+The room requires no existing private arrears. The apartment requires a current room, no arrears, two real residence days, and 20 trust. Private rent starts six real hours after moving. Up to eight cycles can be prepaid using actual spendable credits; deadlines consume these held funds without a login. Unused funds can be reclaimed, and leaving paid housing refunds only the unused balance. Four unpaid bills end the lease; arrears stop at 80 CR for a room or 128 CR for an apartment. Returning to a free bunk is immediate while off duty, does not require paying these arrears, and stops additional rent. Paying arrears is necessary before renting privately again.
 
-| Housing | Deposit | Rent per six-hour cycle | Additional eligibility |
-| --- | --- | --- | --- |
-| Bunk | Starting assignment | 12 CR | Settle an eviction to re-enter |
-| Private room | 45 CR | 20 CR | Not evicted |
-| Heated apartment | 180 CR | 32 CR | Currently in a room; 2 real residency days; 20 trust |
+A one-time compatibility reform waives old basic-bunk charges and reverses old basic-bunk evictions. Old street evictions with at most 48 CR are recognized as the previous four-bill bunk limit; old paid-housing eviction debts are retained. The `housingVersion` marker prevents later debt from being waived again. Characters, possessions, tax obligations, and progress are retained.
 
-Once per city day, relief is consumed immediately: +24 fullness, +10 warmth, health raised to at least 25 and energy to at least 20. It grants no tradeable ration or credits. Public custodial work is available to a tax- or arrest-flagged citizen after any active sentence ends.
+During an assignment, hourly cold exposure is 3 without an insulated shroud or 1 with it, before district effects. Outside work, the equipped shroud reduces housing exposure by 0.6. District heating, weather, and crisis damage modify exposure; its floor is 0.2/hour. Completed tenant draught repairs reduce indoor members' exposure by 0.75/hour during their actual protection window. Street cardboard gains no building benefit. Below 15 fullness or warmth, exposure damages health; passive health cannot fall below 10. Offline survival settlement is capped at seven real days per visit and uses current district weather/heating. Tenant protection is calculated from historical completion and membership timestamps.
+
+Once per city cycle, a free barrel-fire task takes **45 seconds, zero energy**, and restores 12 warmth only on completion. It requires being off duty, uses its own once-cycle limit, and remains possible while exhausted or injured; it does not grant food, housing, or credits and does not spend a common short-task start.
+
+Once per city cycle, relief is consumed immediately: +24 fullness, +10 warmth, health raised to at least 25 and energy to at least 20. It grants no tradeable ration or credits. Public custodial work is available to a tax- or arrest-flagged citizen after any active sentence ends. Absence can leave a citizen hungry and cold, but free shelter and relief allow them to return to work.
 
 ## Tax and identity holds
 
 Tax is 12% of recorded earned income: employment, licensed shops, administration, security, paid city-response work, quotas, property income, broker sales, citizen exchange sales, and reported narrative wages. Illegal operations, Wound payments, and unreported story proceeds are outside Revenue’s ledger.
 
-The server keeps gross earned income, unpaid tax, lifetime paid tax, and fractional carry in hundredths of a credit. Whole-credit tax is assessed as earnings accrue; small earnings cannot avoid tax by splitting transactions. The player pays manually. The deadline is six real hours after registration or the most recent payment; with no whole-credit debt, an elapsed deadline rolls forward. Once a deadline expires with debt, the ID receives a delinquency hold.
+The server keeps gross earned income, unpaid tax, lifetime paid tax, and fractional carry in hundredths of a credit. Whole-credit tax is assessed as earnings accrue; small earnings cannot avoid tax by splitting transactions. Manual payment remains available. An optional automatic reserve holds newly assessed whole-credit tax from reported earnings, including offline wages, player sales, and supply deliveries. Enabling it funds existing debt from affordable spendable credits; any unfunded shortfall still needs attention. At the deadline, Revenue pays the held amount. Disabling refunds unused reserves without erasing debt. Reserved credits cannot be spent on food, trades, or other fees. The deadline is six real hours after registration or the most recent payment; with no whole-credit debt, an elapsed deadline rolls forward. Once a deadline expires with debt, the ID receives a delinquency hold.
 
 A tax hold or unresolved arrest blocks mnemonic/recovery factory jobs, factory/freight emergency work, shop licensing and shop operation, administration, and security. An active detention also restricts other actions; taxes, rent, posts, owned consumables, and relief remain available.
 
@@ -56,7 +61,7 @@ To clear an ID:
 2. Finish detention and reduce heat to 20 or below.
 3. Complete Registry review: 2 CR, 6 energy, and 15 real minutes. With less than 2 CR, the no-fee indigence appeal takes 14 energy and 30 real minutes.
 
-Paying debt alone and finishing detention alone each leave the hold intact. Factory access returns only after clearance completes. Heat normally fades by 0.25 per city hour. A 12-credit bribe reduces heat by 35 but does not clear an ID hold.
+A remembered Voss advocacy reduces the fee-based or indigence review effort by two energy, while retaining its fee and full deadline. Paying debt alone and finishing detention alone each leave the hold intact. Factory access returns only after clearance completes. Heat normally fades by 0.25 per city hour. A 12-credit bribe reduces heat by 35 but does not clear an ID hold.
 
 ## Careers, institutions, and crime
 
@@ -188,3 +193,49 @@ The case closes at completion; wages, alignment, XP, and supplies do not arrive 
 ## Earned wardrobe
 
 Municipal appointment awards and equips a Canon administrative uniform. Security recruitment awards and equips a Canon security uniform. Existing earned institutions receive their uniforms on normal save compatibility. Neither uniform is for sale or substitutes for an insulated shroud. The portrait follows the equipped body item; all gender, skin, hair, and build choices remain cosmetic. Selecting Shaved adds no hair layer.
+
+
+## Contacts that continue to know you
+
+The four original discoveries now lead to **twelve authored continuations**. A thread's chosen branches remain on the thread, beyond the shorter 40-entry decision journal. Offers use actual remembered decisions, housing, earned roles, and unresolved city history; they are not random rerolls of paid first encounters.
+
+| Context | Contact | Later consequence |
+| --- | --- | --- |
+| Returned ration card | Neri | Free mending lesson: effort falls from 3 to 2 |
+| Sold ration card | Neri | Admission, refusal, or real-credit restitution |
+| Copied civic seal | Neri | Acknowledgment or denial changes relationship and heat |
+| Reported sabotage | Esra | Public repair record and boiler contact |
+| Stripped the evidence | Esra | Contribute actual wire or keep it |
+| Corrected applicant address | Voss | Registry advocacy reduces review energy by 2 |
+| Kept the obsolete route | Voss | Surrender prepared route or accept more heat |
+| Established Rook contact | Rook | Spend a trace on verification or bounded illicit delivery |
+| Moved into private housing | Neri | Decide whether to keep helping the block |
+| Unresolved failed incident | Esra | Discuss actual recovery supplies and record |
+| Earned administration | Voss | State what your signature means |
+| Earned security | Esra | Explain whose repairs your uniform protects |
+
+One new continuation or recurring check-in is offered per cycle; at most two remain open. Each has a first decision and a free reply after **60 real seconds**. Finished finite stories remain finished. Four rotating check-ins cover new arrivals, maintenance observations, civic ledgers, and courier weather. Most choices change relationships or consume owned supplies; they do not create a repeatable wage stream. Free replies work at zero energy during ordinary employment; detention and other long assignments still have their normal restrictions.
+
+## Tenant associations
+
+An association is free to create and holds **12 citizens**. A citizen has one current membership and can found only one association. Leaving preserves donations and repairs; no dues, free generated supplies, or withdrawal of donated materials is implied.
+
+The shared shelf accepts 1–5 owned units per donation from the ten exchange supply types, up to 100 of each. A citizen may withdraw **one donated consumable per cycle across all buildings**: ration, warming pack, dressing, medicine, or neural patch. Switching buildings does not reset this quota. Copper, fabric, circuit parts, traces, and fragments remain shared materials. Every transfer names its contributor to members.
+
+A repair unit takes **30 seconds, 4 energy, one shared wire and one shared fabric**, and one common short-task start. Ordinary work breaks allow repairs. All six units must actually finish before indoor members receive **0.75 less cold exposure per city hour for 24 real hours**. Reserved units do not help early. The next maintenance round begins after expiry, with no supply refill. Protection never applies before a member joined, before completion, or after expiry; its historical window survives an offline return.
+
+The private building channel uses 1–320 characters, fifteen seconds between posts, and forty per hour. Current members see messages, residents, and shelf transfers; outsiders see only the directory. The association cannot tax, imprison, or take another citizen's personal inventory.
+
+## Damage, recovery, and the newspaper
+
+Failed observed emergencies leave damage during the **next four city cycles**, up to 24 real hours. Unrecovered boiler damage adds 0.5 cold/hour; turned-back freight adds 1 CR to food. Multiple unresolved incidents of the same type do not stack those lingering penalties. Current weather and current-cycle incident effects still apply.
+
+Each failed incident opens a fixed recovery target: `max(3, min(6, ceil(original target / 2)))`. A contract takes **40 seconds, 4 energy, one wire for a boiler or one trace for freight**, and one short-task start. It pays 2 taxable CR and 1 trust on completion. Two recovery starts per citizen per cycle encourage shared work; final-slot guards prevent overassignment. Finishing the shared target lifts the pressure early. Contracts that cannot finish before expiry are rejected.
+
+The district newspaper stores the immutable deadline outcome, actual repair/diversion totals, and up to four named public repair contributors. Later recovery does not rewrite that historical result or publish names of covert diversion actors. Only observed cycles have incidents; absent cycles do not acquire fabricated outcomes.
+
+## Clothing and the daily screen
+
+Each completed ordinary shift adds four cosmetic wear, capped at 100. Scuffs appear on the painted garment at 25 wear. Mending consumes one owned fabric, 3 energy (2 with Neri's lesson), thirty seconds, and a short-task start; it removes 40 wear only on completion. Wear does not weaken equipment, create repair debt, or block a job. Earned administration and security uniforms still use the corrected neck/collar/hair composition.
+
+The daily screen leads with four vital values, available credits, pending assignments, ready contact replies, and up to three useful next actions. Housing and reserves have a separate page; shared history expands on request. A four-button mobile dock keeps Today, Tasks, Messages, and Rest within reach. Focused drafts survive polling, and the automatically open association directory remains eligible for refresh.

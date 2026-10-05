@@ -1,3 +1,4 @@
+import {livingState} from './living.js';
 // City hours advance for everybody together. One city hour is fifteen real minutes.
 export const CITY_HOUR_MS=900000, CITY_DAY_MS=21600000;
 export const appearanceOptions={
@@ -20,7 +21,7 @@ export function residencyState(p,now){
   p.reliefDay??=0;p.security??=false;p.lastRestDay??=0;
   p.taxDebt??=0;p.taxRemainder??=0;p.taxEarned??=0;p.taxPaid??=0;p.taxDeadline??=now+CITY_DAY_MS;
   p.taxHold??=false;p.criminalHold??=false;
-  p.daysInCity=residenceDays(p,now);return p;
+  p.daysInCity=residenceDays(p,now);livingState(p,now);return p;
 }
 export function institutionRequirements(p,now){
   const age=residenceDays(p,now),civic=p.careers?.civic?.xp||0;
@@ -31,10 +32,11 @@ export function institutionRequirements(p,now){
 }
 export const timedActions=new Set(['work','rest','crime','organize','clinic','official_work','business_work','security_work','event_work','clearance']);
 export const onDutyActions=new Set(['buy','consume','rent','tax','post','rename','appearance','gear_buy','gear_equip','gear_remove','relief','list','trade','cancel','sell','collect','quick','craft','casino','network_job','network_post','use_craft']);
-for(const action of ['district_choice','survey','case_review','order_create','order_fill','order_cancel','career_case','prepare_crime','crisis_response'])onDutyActions.add(action);
+for(const action of ['tenant_create','tenant_join','tenant_leave','tenant_post','tenant_donate','tenant_take','tenant_repair','recovery_work','mend_clothes','tax_reserve','rent_prepay','rent_reclaim','district_choice','survey','case_review','order_create','order_fill','order_cancel','career_case','prepare_crime','crisis_response'])onDutyActions.add(action);
 export function accrueTax(p,gross){
   p.taxEarned+=gross;const amount=p.taxRemainder+gross*12;
-  p.taxDebt+=Math.floor(amount/100);p.taxRemainder=amount%100;
+  const assessed=Math.floor(amount/100);p.taxDebt+=assessed;p.taxRemainder=amount%100;
+  if(p.finance?.taxAuto){const held=Math.min(p.credits,assessed);p.credits-=held;p.finance.taxReserve+=held;}
 }
 export function identityFlags(p,now){
   const flags=[];
@@ -49,7 +51,7 @@ export function identityFlags(p,now){
 export function scheduleActivity(before,after,{action,label,message,now,hours,energy,day}){
   const deltas={},sets={};
   for(const key of Object.keys(after)){
-    if(['activity','lastTick','nextRent','nextRentAt','clock','daysInCity','energy','labor','criminal','district','shopDay','shopSessions','lastRestDay'].includes(key))continue;
+    if(['activity','lastTick','nextRent','nextRentAt','clock','daysInCity','energy','labor','criminal','district','neighborhood','aftermath','finance','clothingWear','fireDay','housingReform','housingVersion','rentTier','shopDay','shopSessions','lastRestDay'].includes(key))continue;
     if(typeof after[key]==='number'&&typeof before[key]==='number'){
       const delta=after[key]-before[key];if(delta>0)deltas[key]=delta;
     }else if(JSON.stringify(after[key])!==JSON.stringify(before[key]))sets[key]=after[key];
@@ -58,7 +60,7 @@ export function scheduleActivity(before,after,{action,label,message,now,hours,en
   for(const [key,value] of Object.entries(deltas))p[key]-=value;
   for(const key of Object.keys(sets))p[key]=structuredClone(before[key]??null);
   p.energy=Math.max(0,before.energy-energy);
-  if(action==='rest')deltas.energy=16;
+  if(action==='rest')deltas.energy=({bunk:8,street:6,room:16,flat:20}[after.housing]??8);
   p.activity={action,label,started:now,endsAt:now+hours*CITY_HOUR_MS,hours,day,deltas,sets,message};
   return p;
 }
