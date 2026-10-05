@@ -1,4 +1,4 @@
-# SCHISM session handoff — v0.8 living city
+# SCHISM session handoff — v0.8.1 mobile visits
 
 Updated October 5, 2026. The owner requested all accepted priorities, a permanently free unheated starting bunkhouse, and publication/documentation/GitHub handoffs before a fresh session. v0.8 implements them. Exact final deployment and matching GitHub source IDs are recorded in `/home/commander/SCHISM_HANDOFF.md` after publication. Leave the same shared local city running; preserve all current characters.
 
@@ -20,6 +20,12 @@ Keep a harsh persistent city: zero-credit neutral train arrivals inherit the act
 The basic bunkhouse must not bill an absent citizen. Its misery is no heat and weak recovery, with voluntary street/cardboard sleep and a barrel fire. Private obligations are bounded. Do not turn these changes into a character reset.
 
 Keep independently cropped alpha-preserving player portrait layers: rear garment, face/neck, neckline-specific clipped front garment, hair. Both garments share body breadth. Shaved has no hair layer. Never restore the leaking atlas, pixel portrait, floating neck, or whole-jacket overlay. Earlier checks covered 135 combinations and all skin/hair pairs. New contact portraits do not replace the customized player sheet.
+
+## v0.8.1 mobile visits
+
+The Playwright MCP is available in the current tool catalog. Reuse its persistent dedicated QA profile, signed in as ordinary Quin 676e0 in the same phone city. Housing puts rest controls before descriptive copy and folds other residences and current tax detail; owed tax/ID holds expand by default and Registry controls remain fully visible. The neighbors page puts the building channel before the shelf in both DOM and visual order, shows stocked supplies first, and folds empty rows and membership controls. Keyed disclosures survive refresh, actions, and navigation in the current tab. Their preference is deliberately not persisted across full reloads. Daily activity Details now targets housing/Registry/underground for rest/clearance/crime. No wages, housing rules, ownership, art layers, or migrations changed.
+
+Run the function in `scripts/playtest-visits-mcp.js` through `browser_run_code_unsafe` with an absolute filename in the opened checkout. It uses visible navigation, checks 17 screens plus papers at three widths, verifies disclosures/drafts, and tests urgent-tax/detail routes with temporary client-only render copies restored before any request. See `docs/playtests/V0.8.1.md` and its credential-free numeric evidence. The older living-browser harness now opens the folded tax control and keeps its association ID available through the reload check; its full multiplayer route was not rerun for this UI patch.
 
 ## v0.8 behavior
 

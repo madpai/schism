@@ -1,0 +1,392 @@
+{
+  "started": "2026-10-05T23:27:19.421Z",
+  "screens": [
+    {
+      "page": "overview",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 1621
+    },
+    {
+      "page": "street",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 6930
+    },
+    {
+      "page": "workshop",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 3502
+    },
+    {
+      "page": "network",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 3842
+    },
+    {
+      "page": "city",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 7552
+    },
+    {
+      "page": "jobs",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 8235
+    },
+    {
+      "page": "market",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 2209
+    },
+    {
+      "page": "housing",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 1711
+    },
+    {
+      "page": "neighbors",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 2757
+    },
+    {
+      "page": "loadout",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 2892
+    },
+    {
+      "page": "inventory",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 2393
+    },
+    {
+      "page": "careers",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 3817
+    },
+    {
+      "page": "encounters",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 4246
+    },
+    {
+      "page": "forces",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 3357
+    },
+    {
+      "page": "underground",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 4230
+    },
+    {
+      "page": "institutions",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 5548
+    },
+    {
+      "page": "citizens",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 1575
+    },
+    {
+      "page": "profile",
+      "width": 360,
+      "scrollWidth": 360,
+      "height": 4160
+    },
+    {
+      "page": "overview",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 1516
+    },
+    {
+      "page": "street",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 6574
+    },
+    {
+      "page": "workshop",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 3390
+    },
+    {
+      "page": "network",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 3662
+    },
+    {
+      "page": "city",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 7291
+    },
+    {
+      "page": "jobs",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 7981
+    },
+    {
+      "page": "market",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 2150
+    },
+    {
+      "page": "housing",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 1650
+    },
+    {
+      "page": "neighbors",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 2705
+    },
+    {
+      "page": "loadout",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 2911
+    },
+    {
+      "page": "inventory",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 2321
+    },
+    {
+      "page": "careers",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 3706
+    },
+    {
+      "page": "encounters",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 3988
+    },
+    {
+      "page": "forces",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 3188
+    },
+    {
+      "page": "underground",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 3929
+    },
+    {
+      "page": "institutions",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 5312
+    },
+    {
+      "page": "citizens",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 1518
+    },
+    {
+      "page": "profile",
+      "width": 390,
+      "scrollWidth": 390,
+      "height": 3912
+    },
+    {
+      "page": "overview",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1202
+    },
+    {
+      "page": "street",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 3685
+    },
+    {
+      "page": "workshop",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2041
+    },
+    {
+      "page": "network",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2099
+    },
+    {
+      "page": "city",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 4618
+    },
+    {
+      "page": "jobs",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 4279
+    },
+    {
+      "page": "market",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1514
+    },
+    {
+      "page": "housing",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1146
+    },
+    {
+      "page": "neighbors",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1866
+    },
+    {
+      "page": "loadout",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1310
+    },
+    {
+      "page": "inventory",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1372
+    },
+    {
+      "page": "careers",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1901
+    },
+    {
+      "page": "encounters",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2806
+    },
+    {
+      "page": "forces",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1806
+    },
+    {
+      "page": "underground",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2388
+    },
+    {
+      "page": "institutions",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 2833
+    },
+    {
+      "page": "citizens",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1379
+    },
+    {
+      "page": "profile",
+      "width": 1440,
+      "scrollWidth": 1440,
+      "height": 1986
+    }
+  ],
+  "checks": [
+    "All 17 navigation screens and character papers fit 360/390/1440px.",
+    "Open and closed housing sections survive refresh and navigation.",
+    "Registry keeps its full tax controls.",
+    "Empty-stock sections and unsent building drafts survive refresh."
+  ],
+  "citizen": "Quin 676e0",
+  "renderCases": [
+    "Assessed tax and held IDs expand housing tax details by default.",
+    "Rest, clearance, crime and work details link to the relevant screen."
+  ],
+  "housing": {
+    "height": 1650,
+    "sleepButtonTop": 580
+  },
+  "neighbors": {
+    "height": 2705,
+    "channelTop": 816,
+    "stockedRows": 2
+  },
+  "errors": [],
+  "ended": "2026-10-05T23:27:39.859Z",
+  "livePlay": {
+    "fire": {
+      "started": "2026-10-05T23:19:27.907Z",
+      "endsAt": "2026-10-05T23:20:12.907Z",
+      "observedAfter": "2026-10-05T23:20:13.851Z",
+      "warmthBefore": 31.247641111111133,
+      "warmthAfter": 43.22583288888891
+    },
+    "work": {
+      "job": "Residue custodian",
+      "started": "2026-10-05T23:20:13.823Z",
+      "endsAt": "2026-10-05T23:35:13.823Z",
+      "grossPay": 4,
+      "statusAtReport": "pending on original deadline"
+    },
+    "workBreak": {
+      "task": "Clean a public terminal",
+      "started": "2026-10-05T23:22:07.070Z",
+      "endsAt": "2026-10-05T23:22:27.070Z",
+      "observedAfter": "2026-10-05T23:22:27.479Z",
+      "creditsBefore": 0,
+      "creditsAfter": 1,
+      "energyBefore": 50.90988888888888,
+      "energyAfter": 47.90988888888888
+    },
+    "wireDonation": {
+      "at": "2026-10-05T23:24:23.241Z",
+      "ownedBefore": 2,
+      "ownedAfter": 1,
+      "shelfBefore": 0,
+      "shelfAfter": 1,
+      "openSectionRetained": true
+    },
+    "taxReserve": {
+      "at": "2026-10-05T23:26:53.785Z",
+      "enabled": true,
+      "heldCredits": 0,
+      "persistedAfterReload": true
+    },
+    "fixturePolicy": "Live actions used ordinary resources and real clocks. Render-case checks used a temporary client copy restored before requests."
+  }
+}
