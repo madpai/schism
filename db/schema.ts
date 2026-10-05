@@ -37,3 +37,7 @@ export const cityActivity = sqliteTable('city_activity', {
 export const maintenanceRuns = sqliteTable('maintenance_runs', {
   id:text('id').primaryKey(), completed:integer('completed').notNull(), citizens:integer('citizens').notNull(),
 });
+
+export const neuralMessages = sqliteTable('neural_messages', {
+  id:text('id').primaryKey(), citizen:text('citizen').notNull(), channel:text('channel').notNull(), body:text('body').notNull(), created:integer('created').notNull(),
+},t=>[index('idx_neural_channel_created').on(t.channel,t.created),index('idx_neural_citizen_created').on(t.citizen,t.created)]);

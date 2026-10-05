@@ -6,13 +6,15 @@
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-artifact.mjs",
     "db:generate": "drizzle-kit generate",
-    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs && node --experimental-sqlite scripts/test-reset.mjs",
-    "dev": "node --experimental-sqlite scripts/dev.mjs"
+    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs && node --experimental-sqlite scripts/test-reset.mjs && node --experimental-sqlite scripts/test-street.mjs",
+    "dev": "node --experimental-sqlite scripts/dev.mjs",
+    "test:browser": "node scripts/playtest-browser.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2"
   },
   "devDependencies": {
-    "drizzle-kit": "0.31.10"
+    "drizzle-kit": "0.31.10",
+    "playwright-core": "1.63.0"
   }
 }

@@ -1,6 +1,6 @@
 # Life in the Ninth Stratum
 
-This file describes the shipped v0.5 rules. Player values come from the server. The game has asynchronous multiplayer; it does not simulate a real-time movement or combat world.
+This file describes the shipped v0.6 rules. Player values come from the server. The game has asynchronous multiplayer; it does not simulate a real-time movement or combat world.
 
 ## Account, arrival, and appearance
 
@@ -93,3 +93,36 @@ The active production target is `max(6, recently active registered citizens × 3
 Mnemonic and recovery work contribute production equal to hours; transit contributes equivalent freight; civic work contributes 1 relief. Organizing adds 1 unrest; a criminal operation adds 1 crime; security adds 2 patrols. Completed production and freight deliver ration/broth stock once using a guarded delivered counter. Food modifiers combine with Order/Chaos price effects; prices never fall below 1 CR.
 
 Citizens can take published district-response assignments: emergency printers (2 city hours, 18 energy, 5 CR, 4 production), unload relief freight (2 hours, 22 energy, 6 CR, 3 freight), or run the boiler (2 hours, 12 energy, one fragment, 1 trust, 2 relief). The boiler remains available with an ID hold.
+
+## Short activities, salvage, and crafts
+
+One short-task slot runs alongside an ordinary `work` shift. The off-duty tasks (bins, electronics, casino) require no long assignment. Work-break tasks and crafts are unavailable during sleep, detention, clinic, official/security duty, and other non-work assignments. An unfinished short task must finish before starting a long assignment. All short tasks, recipes, network contracts, and casino hands share a ten-start limit per six-hour city cycle. The starting cycle pays the quota, even when the task finishes after midnight.
+
+| Task | Real seconds | Energy | Result |
+| --- | --- | --- | --- |
+| Search collection bins | 25 | 6 | Two fabric or two wire, equally likely |
+| Strip dead electronics | 45 | 8 | Two wire and one circuit part; 20% chance of 2 health damage |
+| Clean a terminal | 20 | 5 | 1 taxable CR |
+| Decode a signal | 35 | 7 | One signal trace |
+| Patch a heating relay | 60 | 9 | Costs one wire; 2 taxable CR and one shared relief |
+
+| Recipe | Ingredients | Real seconds / energy | Result |
+| --- | --- | --- | --- |
+| Warming pack | Two fabric, one wire | 45 / 5 | Consumable: +14 warmth |
+| Field dressing | Two fabric | 35 / 5 | Consumable: +10 health |
+| Relay fragment | Three wire, one circuit | 75 / 10 | One ordinary relay fragment; trade, sell, or repair with it |
+| Neural patch | Two circuits, two traces | 60 / 8 | Consumable: +12 coherence |
+
+Costs are reserved at start; rewards and one workshop XP arrive at completion. Workshop XP is a record of crafting, not civic career XP. Materials are carried separately; crafted relay fragments use the existing fragment inventory. Crafted consumables work during a shift and in detention. Repairs and contract contributions become visible to the whole city at completion, even before their owner returns.
+
+## Civic neural network and the Null House
+
+Three persistent player chat channels: District IX, Exchange wire, and The Uncounted. Character names are attached by the server. Messages accept 1–320 characters, with 15 seconds between transmissions and 40 per real hour. The interface polls every ten seconds while the network screen is visible and the player is not typing. Chat is available during shifts and detention.
+
+Two network contracts are each available once per cycle. Each costs one trace, 8 energy, and 50 seconds. A public freight manifest pays 2 taxable CR and 1 trust, contributing one freight. A hidden Wound echo pays 3 unreported CR, adds 4 heat, moves personal alignment −1, and contributes one criminal operation. Decode signals to obtain traces.
+
+A Null House hand costs 6 energy and 20 seconds. Stakes must be whole credits from 1–3; the stake is reserved immediately. A 45% win returns twice the stake; otherwise nothing returns. Expected loss is 10% of the stake. Four hands per cycle are also counted toward the common ten-task limit. Gambling proceeds are unreported; there is no debt, cancel/reroll, or client-chosen outcome.
+
+## Earned wardrobe
+
+Municipal appointment awards and equips a Canon administrative uniform. Security recruitment awards and equips a Canon security uniform. Existing earned institutions receive their uniforms on normal save compatibility. Neither uniform is for sale or substitutes for an insulated shroud. The portrait follows the equipped body item; all gender, skin, hair, and build choices remain cosmetic. Selecting Shaved adds no hair layer.

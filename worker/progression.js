@@ -1,5 +1,7 @@
 // Persistent character equipment and career progression; all effects are server-owned.
 export const gearCatalog={
+  adminuniform:{name:'Canon administrative uniform',slot:'body',price:0,earned:true,icon:'institutions',description:'Tailored slate cloth, pale piping, and a numbered civic insignia. Issued with your municipal appointment.',effect:'Earned administration appearance; no insulation bonus'},
+  securityuniform:{name:'Canon security uniform',slot:'body',price:0,earned:true,icon:'shield',description:'Structured dark cloth and a district badge. Issued after recruitment into security.',effect:'Earned security appearance; no insulation bonus'},
   weathercoat:{name:'Threadbare weathercoat',slot:'body',price:0,icon:'coat',description:'City-issue synthetic leather. Rain gets in at the seams.',effect:'No protection bonus',starter:true},
   boots:{name:'Worn work boots',slot:'feet',price:0,icon:'jobs',description:'The soles remember every shift you have forgotten.',effect:'No fatigue bonus',starter:true},
   civicimplant:{name:'Civic identity implant',slot:'neural',price:0,icon:'shield',description:'Your name, your debt, and the city’s right to locate you.',effect:'Standard civic connection',starter:true},
@@ -36,6 +38,7 @@ const baseLoadout={head:null,body:'weathercoat',hands:null,feet:'boots',neural:'
 export function careerState(p){
   p.ownedGear??=['weathercoat','boots','civicimplant',...(p.coat?['coat']:[])];
   p.loadout??={...baseLoadout,body:p.coat?'coat':'weathercoat'};
+  for(const [flag,id] of [['official','adminuniform'],['security','securityuniform']])if(p[flag]&&!p.ownedGear.includes(id))p.ownedGear.push(id);
   p.career??='mnemonic';p.careers??={};
   for(const id of Object.keys(careerPaths))p.careers[id]??={xp:id==='mnemonic'?p.shifts*2:0,shifts:0};
   p.dailyWork??={day:0,counts:{},claimed:{}};
@@ -52,7 +55,7 @@ export function jobQuote(p,job,mode='standard',w={}){
   const shift=shiftTypes[mode],effects=gearEffects(p),track=p.careers[job.career],rank=rankFor(track.xp);
   const pay=Math.max(1,Math.ceil(job.pay*shift.pay)+(p.union?1:0)+(p.career===job.career?rank:0)+(job.field?effects.fieldPay:0)+(w.wageModifier||0));
   const hours=job.hours+shift.hours,energy=Math.max(2,job.energy+shift.energy-effects.energy-(job.physical?effects.physicalEnergy:0));
-  const blocked=!p.registered?'Register at the arrival platform.':p.activity?'Already on an assignment.':['mnemonic','recovery'].includes(job.career)&&(p.taxHold||p.criminalHold)?'ID flagged. Registry clearance required.':p.detainedUntil>w.now?'Serve your sentence first.':(p.labor?.day===w.day?p.labor.hours:0)+hours>8?'Daily work permit exhausted.':p.rep<job.requires?`Requires ${job.requires} trust.`:track.xp<(job.xp||0)?`Requires ${job.xp} ${careerPaths[job.career].name} XP.`:p.shifts<shift.requires?`Complete ${shift.requires} shifts first.`:p.health<15?'Treatment needed.':p.energy<energy?`Need ${energy} energy.`:null;
+  const blocked=!p.registered?'Register at the arrival platform.':p.errand?'Finish your short task.':p.activity?'Already on an assignment.':['mnemonic','recovery'].includes(job.career)&&(p.taxHold||p.criminalHold)?'ID flagged. Registry clearance required.':p.detainedUntil>w.now?'Serve your sentence first.':(p.labor?.day===w.day?p.labor.hours:0)+hours>8?'Daily work permit exhausted.':p.rep<job.requires?`Requires ${job.requires} trust.`:track.xp<(job.xp||0)?`Requires ${job.xp} ${careerPaths[job.career].name} XP.`:p.shifts<shift.requires?`Complete ${shift.requires} shifts first.`:p.health<15?'Treatment needed.':p.energy<energy?`Need ${energy} energy.`:null;
   return {mode,name:shift.name,pay,hours,energy,fullness:hours*2,warmth:hours*Math.max(.2,coldRate(p,w)+(w.coldModifier||0)),xp:hours*2,healthLoss:Math.max(0,(job.hazard||0)-effects.protection),coherenceLoss:Math.max(0,(job.coherence||0)+(mode==='graveyard'?4:0)-effects.coherence),heat:(job.heat||0)+(mode==='graveyard'?3:0),scrap:job.scrap||0,blocked};
 }
 export function recordShift(p,job,quote,day){

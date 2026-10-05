@@ -1,14 +1,14 @@
 # Architecture
 
-SCHISM keeps its existing vanilla web interface, Cloudflare Worker, Sites identity, and D1 database. The generated deployment is one ESM Worker with embedded interface and five WebP assets.
+SCHISM keeps its existing vanilla web interface, Cloudflare Worker, Sites identity, and D1 database. The generated deployment is one ESM Worker with embedded interface and 23 WebP assets, including independently cropped painted portrait layers.
 
 ## Authoritative simulation
 
 `worker/game.js` owns state reads, action validation, resource changes, settlement, and D1 transactions. Identity comes exclusively from the trusted Sites `oai-authenticated-user-id` header. The browser cannot choose its owner, balances, timestamps, activity outcomes, or city contributions.
 
-`worker/residency.js` owns appearance validation, registration compatibility, elapsed real residency days, civic eligibility, tax accrual, identity flags, activity reservations, and completion rewards. `worker/citylife.js` aggregates completed immutable district commitments and derives public events and their modifiers. `worker/progression.js` owns equipment, jobs, career ranks, shift quotes, and quotas. Stories and shared faction mechanics remain in their existing modules.
+`worker/residency.js` owns appearance validation, registration compatibility, elapsed real residency days, civic eligibility, tax accrual, identity flags, activity reservations, and completion rewards. `worker/citylife.js` aggregates completed immutable district commitments and derives public events and their modifiers. `worker/street.js` owns the separate short-task slot, salvage materials, recipes, neural contracts, and casino limits. `worker/progression.js` owns equipment, jobs, career ranks, shift quotes, and quotas. Stories and shared faction mechanics remain in their existing modules.
 
-A citizen's JSON remains the durable record for appearance, inventory, careers, civic ledgers, and current assignment. Existing saves acquire absent fields without a reset. Read settlement persists through optimistic version checks; completing an assignment atomically saves its effects and journal entry with a transaction guard. A competing read retries the current record. This prevents duplicate rewards and lost incoming trade payments.
+A citizen's JSON remains the durable record for appearance, inventory, careers, civic ledgers, and current assignment. Existing saves acquire absent fields without a reset. Read settlement persists through optimistic version checks; completing either assignment slot atomically saves its effects and journal entry with a transaction guard. A competing read retries the current record. This prevents duplicate rewards and lost incoming trade payments.
 
 Every mutation batch validates the citizen version plus any shared stock, listing, or project guard, then writes all effects and deletes its guards. A failed guard rolls back the complete batch. Seller payment and seller tax accrual share the player-trade transaction and increment the seller's version.
 
@@ -30,16 +30,26 @@ Migration `0004_fluffy_selene.sql` adds `maintenance_runs`, an audit and idempot
 
 The reset ran through a temporary POST route behind the confirmed owner-private Sites access boundary. That route and the reset helper were removed from the production bundle immediately afterward. There is no reset HTTP endpoint or automatic reset on future deployments.
 
+## Short tasks and neural messages
+
+`errand` is separate from the long `activity` slot. `startQuick` validates energy, materials, state gates, and the cycle quota before reserving costs and a server-owned result. Settlement applies additive rewards; it never replaces a long assignment's state. One guarded batch persists both completion receipts when their deadlines coincide. Quick district commitments use the same immutable `city_activity` table and completion-day rules as long jobs.
+
+Append-only migration `0005_complex_kree.sql` adds indexed `neural_messages`. Posting validates a published channel, 1–320 characters, a 15-second interval, and a 40-per-hour cap. Sender identity comes from the current citizen. Messages and character changes share the guarded action transaction. All player text is escaped for HTML; chat does not execute markup or remote model prompts. The snapshot returns the most recent 100 messages across channels, and the interface shows up to 40 in the selected channel.
+
+Chat polls only on the visible network screen and pauses while typing. Completion refreshes also pause for focused form controls. No WebSocket, push notification, or fake AI conversation is implied. The neural relay's repeatable public/hidden contracts are ordinary authoritative gameplay operations.
+
 ## Interface and build
 
-`public/residency.js` adds the train intake, composed SVG character scan, appearance editor, character sheet, activity countdowns, Revenue, Registry, security eligibility, and district conditions. `public/residency.css` extends the existing dark terminal and neon visual direction. The original art remains in `public/`, with generation provenance under `art/`.
+`public/residency.js` adds the train intake, painted layered character portrait, appearance editor, character sheet, activity countdowns, Revenue, Registry, security eligibility, and district conditions. `public/residency.css` extends the existing dark terminal and neon visual direction. New city, job, event, and assignment illustrations extend the existing art in `public/`. A transparent grayscale portrait kit supplies three faces, four hairstyles, and civilian/administrative/security clothing. Runtime SVG filters tint separate skin and hair layers; Shaved omits hair. Portrait components are cropped to individual alpha-preserving WebP files so filtering cannot reveal neighboring atlas cells. Outfit layers occlude the lower neck naturally. Generation prompts/provenance remain under `art/`.
 
 `scripts/build.mjs` embeds modules and the interface, and copies hosting configuration and Drizzle migrations into `dist`. `scripts/validate-artifact.mjs` imports the generated ESM and requires `default.fetch`. Production publishing uses the Sites archive-backed workflow; checked source is pushed before an exact matching archive is saved and deployed.
 
-Local development uses a Node SQLite D1 adapter and fixed QA identity. Gameplay tests inject time directly into server functions; production request handlers never accept a client timestamp. Browser checks exercise the real built Worker through the local development server.
+Local development uses a Node SQLite D1 adapter, one persistent city file, and separate HMAC-signed browser sessions. The development adapter listens on loopback and an optional explicit Tailscale IP. It never enters the production Worker bundle. Local migrations apply once, and data/session keys remain under ignored `.local-data`. See `docs/LOCAL_HOSTING.md`. Gameplay tests inject time directly into server functions; production request handlers never accept a client timestamp. Browser checks exercise the real built Worker through the local development server.
 
 ## Verification
 
-The current suite has 217 assertions: 197 across core survival/trading, narratives/repairs, faction effects, equipment/careers, and residency/economy, plus 20 reset checks. It includes last-stock and player-listing races, duplicate faction actions, concurrent activity-completion reads, fractional tax, seller payment during a shift, gate restrictions, clearance, detention, indigence, offline city output, and legacy saves. Reset checks cover linked-record cleanup, fresh registration, retained shared state, idempotence, concurrent requests, and transaction rollback.
+The current suite has 272 assertions: 197 across core survival/trading, narratives/repairs, faction effects, equipment/careers, and residency/economy, plus 20 reset checks and 55 short-activity/network/wardrobe checks. It includes last-stock and player-listing races, duplicate faction actions, concurrent activity-completion reads, fractional tax, seller payment during a shift, gate restrictions, clearance, detention, indigence, offline city output, and legacy saves. Reset checks cover linked-record cleanup, fresh registration, retained shared state, idempotence, concurrent requests, and transaction rollback.
 
 Desktop/mobile browser checks verify intake, name and appearance persistence, all primary screens, profile editing, timed work, deferred pay, assignment reload, and no overflow or page errors. Native WebMCP registration is feature-detected and has not been verified in a supporting browser.
+
+The real-time browser playthrough and visual critique are recorded in `docs/playtests/V0.6.md`; `npm run test:browser` can repeat a shared-city playthrough with normal characters.
