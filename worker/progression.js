@@ -23,14 +23,14 @@ export const shiftTypes={
   graveyard:{name:'Graveyard',pay:1.35,hours:1,energy:4,requires:2,description:'35% more base pay; +1 hour, +4 energy, +3 heat, −4 coherence.'},
 };
 export const specialistJobs={
-  diagnostics:{name:'Grid diagnostic survey',employer:'Canon Mnemonic Works',pay:16,energy:17,hours:2,rep:2,description:'Follow a faulty memory signal into the rain. The scanner says it has a heartbeat.',risk:'Field diagnostics',requires:4,career:'mnemonic',xp:12,field:true,coherence:2},
-  extraction:{name:'Memory extraction',employer:'Canon Mnemonic Works',pay:28,energy:29,hours:4,rep:3,description:'Enter a live archive and separate a citizen from their recorded past.',risk:'Neural exposure',requires:8,career:'mnemonic',xp:32,coherence:5},
+  diagnostics:{name:'Grid diagnostic survey',employer:'Canon Mnemonic Works',pay:16,energy:17,hours:2,rep:2,description:'Follow a faulty memory signal into the rain. The scanner says it has a heartbeat.',risk:'Field diagnostics',requires:4,career:'mnemonic',xp:24,field:true,coherence:2},
+  extraction:{name:'Memory extraction',employer:'Canon Mnemonic Works',pay:28,energy:29,hours:4,rep:3,description:'Enter a live archive and separate a citizen from their recorded past.',risk:'Neural exposure',requires:8,career:'mnemonic',xp:80,coherence:5},
   delivery:{name:'Rainline delivery',employer:'Vestibule Transit Office',pay:10,energy:14,hours:2,rep:1,description:'Carry sealed correspondence across the elevated rainline. Do not read the return address.',risk:'Street exposure',requires:0,career:'transit',physical:true,field:true},
-  nightcourier:{name:'Black-route courier',employer:'Vestibule Transit Office',pay:24,energy:28,hours:4,rep:2,description:'Deliver to unregistered addresses between two civic scanner passes.',risk:'Unregistered route',requires:4,career:'transit',xp:12,physical:true,field:true,heat:4},
+  nightcourier:{name:'Black-route courier',employer:'Vestibule Transit Office',pay:24,energy:28,hours:4,rep:2,description:'Deliver to unregistered addresses between two civic scanner passes.',risk:'Unregistered route',requires:4,career:'transit',xp:24,physical:true,field:true,heat:4},
   records:{name:'Identity processing',employer:'Canon Civic Bureau',pay:9,energy:12,hours:2,rep:1,description:'Approve six identities an hour. The same face appears in every seventh application.',risk:'Archive duty',requires:0,career:'civic'},
-  patrol:{name:'Anomaly field inspection',employer:'Canon Civic Bureau',pay:19,energy:23,hours:3,rep:2,description:'Investigate a housing stack that is reporting one more resident than it contains.',risk:'Field inspection',requires:4,career:'civic',xp:12,physical:true,field:true,heat:3},
+  patrol:{name:'Anomaly field inspection',employer:'Canon Civic Bureau',pay:19,energy:23,hours:3,rep:2,description:'Investigate a housing stack that is reporting one more resident than it contains.',risk:'Field inspection',requires:4,career:'civic',xp:24,physical:true,field:true,heat:3},
   salvage:{name:'Tunnel salvage',employer:'Stratum Reclamation Office',pay:11,energy:20,hours:2,rep:1,description:'Strip a dead transit relay in the lower tunnels. Bring back one usable fragment.',risk:'Hazardous air',requires:0,career:'recovery',physical:true,field:true,hazard:2,scrap:1},
-  reclamation:{name:'Deep-core reclamation',employer:'Stratum Reclamation Office',pay:25,energy:30,hours:4,rep:3,description:'Recover two relay fragments from a server core marked biologically active.',risk:'Biological exposure',requires:8,career:'recovery',xp:32,physical:true,field:true,hazard:5,scrap:2,coherence:2},
+  reclamation:{name:'Deep-core reclamation',employer:'Stratum Reclamation Office',pay:25,energy:30,hours:4,rep:3,description:'Recover two relay fragments from a server core marked biologically active.',risk:'Biological exposure',requires:8,career:'recovery',xp:80,physical:true,field:true,hazard:5,scrap:2,coherence:2},
 };
 const baseLoadout={head:null,body:'weathercoat',hands:null,feet:'boots',neural:'civicimplant'};
 export function careerState(p){
@@ -41,7 +41,7 @@ export function careerState(p){
   p.dailyWork??={day:0,counts:{},claimed:{}};
   return p;
 }
-export function rankFor(xp){return xp>=64?3:xp>=32?2:xp>=12?1:0;}
+export function rankFor(xp){return xp>=180?3:xp>=80?2:xp>=24?1:0;}
 export function gearEffects(p){
   const effects={cold:3,energy:0,physicalEnergy:0,protection:0,coherence:0,captureRisk:0,fieldPay:0};
   for(const id of Object.values(p.loadout||{})){const g=gearCatalog[id];if(!g)continue;for(const key of Object.keys(effects))if(g[key]!==undefined)effects[key]=key==='cold'?g[key]:effects[key]+g[key];}
@@ -50,10 +50,10 @@ export function gearEffects(p){
 export function coldRate(p,w={}){return Math.max(0,gearEffects(p).cold-(w.heating?1:0));}
 export function jobQuote(p,job,mode='standard',w={}){
   const shift=shiftTypes[mode],effects=gearEffects(p),track=p.careers[job.career],rank=rankFor(track.xp);
-  const pay=Math.ceil(job.pay*shift.pay)+(p.union?1:0)+(p.career===job.career?rank:0)+(job.field?effects.fieldPay:0);
+  const pay=Math.max(1,Math.ceil(job.pay*shift.pay)+(p.union?1:0)+(p.career===job.career?rank:0)+(job.field?effects.fieldPay:0)+(w.wageModifier||0));
   const hours=job.hours+shift.hours,energy=Math.max(2,job.energy+shift.energy-effects.energy-(job.physical?effects.physicalEnergy:0));
-  const blocked=p.rep<job.requires?`Requires ${job.requires} trust.`:track.xp<(job.xp||0)?`Requires ${job.xp} ${careerPaths[job.career].name} XP.`:p.shifts<shift.requires?`Complete ${shift.requires} shifts first.`:p.health<15?'Treatment needed.':p.energy<energy?`Need ${energy} energy.`:null;
-  return {mode,name:shift.name,pay,hours,energy,fullness:hours*3,warmth:hours*coldRate(p,w),xp:hours*2,healthLoss:Math.max(0,(job.hazard||0)-effects.protection),coherenceLoss:Math.max(0,(job.coherence||0)+(mode==='graveyard'?4:0)-effects.coherence),heat:(job.heat||0)+(mode==='graveyard'?3:0),scrap:job.scrap||0,blocked};
+  const blocked=!p.registered?'Register at the arrival platform.':p.activity?'Already on an assignment.':['mnemonic','recovery'].includes(job.career)&&(p.taxHold||p.criminalHold)?'ID flagged. Registry clearance required.':p.detainedUntil>w.now?'Serve your sentence first.':(p.labor?.day===w.day?p.labor.hours:0)+hours>8?'Daily work permit exhausted.':p.rep<job.requires?`Requires ${job.requires} trust.`:track.xp<(job.xp||0)?`Requires ${job.xp} ${careerPaths[job.career].name} XP.`:p.shifts<shift.requires?`Complete ${shift.requires} shifts first.`:p.health<15?'Treatment needed.':p.energy<energy?`Need ${energy} energy.`:null;
+  return {mode,name:shift.name,pay,hours,energy,fullness:hours*2,warmth:hours*Math.max(.2,coldRate(p,w)+(w.coldModifier||0)),xp:hours*2,healthLoss:Math.max(0,(job.hazard||0)-effects.protection),coherenceLoss:Math.max(0,(job.coherence||0)+(mode==='graveyard'?4:0)-effects.coherence),heat:(job.heat||0)+(mode==='graveyard'?3:0),scrap:job.scrap||0,blocked};
 }
 export function recordShift(p,job,quote,day){
   p.careers[job.career].xp+=quote.xp;p.careers[job.career].shifts++;
@@ -61,7 +61,7 @@ export function recordShift(p,job,quote,day){
   p.dailyWork.counts[job.career]=(p.dailyWork.counts[job.career]||0)+1;
 }
 export function careerSnapshot(p,w){
-  return Object.entries(careerPaths).map(([id,path])=>{const record=p.careers[id],rank=rankFor(record.xp),next=[12,32,64][rank]||null;return {id,...path,...record,rank,title:path.ranks[rank],next,active:p.career===id,bonus:rank,quota:p.dailyWork.day===w.day?p.dailyWork.counts[id]||0:0,claimed:p.dailyWork.day===w.day&&!!p.dailyWork.claimed[id]};});
+  return Object.entries(careerPaths).map(([id,path])=>{const record=p.careers[id],rank=rankFor(record.xp),next=[24,80,180][rank]||null;return {id,...path,...record,rank,title:path.ranks[rank],next,active:p.career===id,bonus:rank,quota:p.dailyWork.day===w.day?p.dailyWork.counts[id]||0:0,claimed:p.dailyWork.day===w.day&&!!p.dailyWork.claimed[id]};});
 }
 export function equipmentSnapshot(p,stock,w={}){return Object.entries(gearCatalog).map(([id,g])=>({id,...g,price:g.price+(id==='coat'&&w.shortage?2:0),stock:stock.find(s=>s.id===id)?.stock||0,owned:p.ownedGear.includes(id),equipped:p.loadout[g.slot]===id}));}
 export function removeEquipment(p,slot){p.loadout[slot]=baseLoadout[slot];p.coat=p.loadout.body==='coat';}

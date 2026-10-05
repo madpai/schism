@@ -1,27 +1,101 @@
 # SCHISM
 
-A persistent occult cyberpunk city survival game, powered by a Cloudflare Worker and Sites D1. The interface is a legacy neural terminal with near-black panels, pale phosphor text, and crimson/violet signals. Three original raster scenes in `public/` depict the Ninth Stratum, the Mnemonic Foundry, and the Null Exchange. Generated source prompts and provenance are recorded in `art/occult-provenance.json`.
+**The train ends here. The city owes you nothing.**
 
-The rainline update adds a new neon street scene and worker identity scan, with prompts and provenance in `art/noir-provenance.json`. The Loadout screen provides five equipment slots; Inventory shows owned equipment, consumables, and recovered materials. Seven purchasable gear items have server-owned effects on fatigue, cold, hazardous work, implant coherence, field pay, and checkpoint capture risk. Equipment stock is shared and protected by the same atomic stock guards as food. Existing shrouds remain owned and equipped when an older save first loads.
+![Rain, neon, and surveillance in the Ninth Stratum](public/city-noir.webp)
 
-Four employment tracks—mnemonic engineering, transit, civic service, and recovery—contain 12 jobs. Every working hour earns two XP on the job’s track. Ranks at 12, 32, and 64 XP unlock specialist shifts and pay 1–3 bonus credits on the active track; specialist trust requirements still apply. Switching paths preserves experience. Regular, overtime, and graveyard modes publish server-calculated costs that include equipment and career bonuses. Completing three shifts on a path in one city day unlocks a once-only 8-credit, 1-trust quota reward. Old work records receive two mnemonic XP per recorded shift on first migration; new shifts earn XP by actual working hours.
+A persistent dystopian city RPG about ordinary people surviving an indifferent system. Arrive with no money, no allegiance, and a civic ID. Work the foundry, climb into administration, open a shop, or disappear into the underground. Your neighbors change the city you all have to live in.
 
-Each authenticated Sites user has a durable citizen. The server validates every action and owns balances, inventory, trust, health, rent, and crime outcomes. D1 transactions enforce shared-stock and player-trade integrity. The shared world changes every six hours, and elapsed time is settled when players return. Offline survival costs accrue for up to seven days per visit. Personal work and rest advance the citizen’s clock.
+[Play SCHISM](https://schism.williamschultz903.chatgpt.site) · [Gameplay rules](docs/GAMEPLAY.md) · [Architecture](docs/ARCHITECTURE.md) · [Session handoff](SESSION_HANDOFF.md)
 
-Play includes jobs and trust unlocks, food and warmth, rent and eviction, private housing, risky theft and smuggling, union membership and organizing, trading, shop licenses, property leases, municipal posts, citizen names, and a shared noticeboard. The landlord and official roles are an initial progression layer. This first version uses asynchronous multiplayer and a polling noticeboard, rather than a real-time movement world.
+The hosted game currently retains its owner-private audience. Sign-in and separate persistent characters support additional authorized citizens when access is expanded. This is an asynchronous multiplayer RPG: shared markets, district conditions, projects, trades, and notices, with timed individual activities.
 
-Personal encounters provide five branching story threads: an out-of-sync mirror transmitting the Canon and the Wound, Iona in the cell stacks, Havel’s memory-archive wage deductions, Rook’s sealed mnemonic delivery, and Voss’s identity registry. Choices have server-validated resource costs, relationship changes, gated follow-ups, and durable decision history. Different citizens keep separate stories within the shared city. The starting chapter is directly playable in Overview; all encounters, contacts, and decisions appear in Your story.
+## Arrive as someone
 
-Order and Chaos share a city balance between -100 and +100. At +20, the Canon lowers ration/broth prices by 1 credit and raises capture risk by 10 percentage points. At -20, the Wound raises food prices by 1 credit, lowers capture risk by 10 percentage points, and raises successful package-run pay to 28 credits. The contested range uses ordinary prices and risks. Personal signal choices and one daily rite per citizen change the balance. An Order rite consumes a relay fragment and earns trust/coherence; a Chaos rite earns credits and surveillance while reducing coherence. City influence resets each six-hour city day; private alignment, coherence, and story history persist. Coherence is an implant-status record altered by choices, rites, and clinic treatment; it does not impose an additional survival penalty.
+ChatGPT sign-in creates a durable account. Register one character: choose a name, gender, six skin tones, six hair colors, five hairstyles, and three builds. The same composed character scan appears in your papers, loadout, and overview. These choices are cosmetic and can be updated later.
 
-The thermal-lattice project is a shared multiplayer objective: donate 12 relay fragments in total, earn contributor trust, and reduce hourly cold exposure by one point for every citizen. A new project begins each city day. Atomic guards prevent duplicate final contributions, duplicate rites, and replayed personal choices. Existing character saves acquire story and signal fields without resetting progress. Legacy inventory keys remain unchanged to preserve saved items and existing player listings.
+Every arrival comes by an import train into the **current** Ninth Stratum. New citizens start neutral with **0 credits**, worn equipment, and a bunk for one city cycle. Existing characters retain their money, gear, careers, relationships, and original arrival date.
 
-The desktop keyboard accepts 1–3 to select the first visible encounter’s responses; mobile exposes the same labeled choices. Optional browser agent tools are feature-detected. Their native WebMCP registration could not be validated in the available browser.
+## A clock you cannot outrun
 
-## Build and verify
+| Clock | Duration |
+| --- | --- |
+| City hour | 15 real minutes |
+| Shared city day / cycle | 6 real hours |
+| Days in the city | Whole 24-hour days since character registration |
+| Regular memory-sorting shift | 30 real minutes |
+| Full sleep | 90 real minutes; once per city day |
 
-Use Node 22.20 or newer. Run `npm ci`, `npm run db:generate` for new unapplied schema changes, `npm test`, `npm run build`, and `npm run validate`. The 118 gameplay checks cover survival and progression, concurrent stock/trades/repairs/rites, private branching stories, shared faction effects, replay protection, equipment ownership, shift costs, career unlocks, quotas, legacy saves, and city-day resets. Build emits a single Worker module with embedded HTML, CSS, JavaScript, and five WebP assets, plus generated D1 migrations. Publishing is handled through the Sites skill.
+A job reserves energy and completes in the background. Pay, career XP, and benefits arrive at its deadline. Sleeping restores energy over time. Neither action fast-forwards the city. A permit allows **eight work hours per city day**. Hunger, cold, rent, and tax deadlines continue while you are away.
 
-After building, `npm run dev` serves the local game on `http://127.0.0.1:4173` with an in-memory SQLite database and a fixed development citizen. Local data resets when the server restarts. Production uses Sites identity and durable D1 storage. Rebuild and restart the local server after source changes.
+## Obey, and still struggle
 
-The site requires the trusted `oai-authenticated-user-id` header forwarded by the Sites platform; requests without identity cannot load or change a character. To use the game with more citizens, the owner can change the Site sharing audience through Sites.
+**Revenue collects 12% of reported earned income.** Tax accumulates in a separate ledger; the player must pay it before the deadline. Fractional amounts carry forward so splitting small earnings cannot avoid tax.
+
+An overdue account flags the citizen ID. Factory gates refuse flagged citizens. Debt payment does not erase the flag: Registry review takes a fee, time, and energy. An indigence appeal substitutes a longer wait for the fee. Public custodial work stays open to earn debt money. A daily emergency meal helps an exhausted, broke citizen recover enough to act.
+
+Rent starts after one six-hour arrival grace period. Four unpaid bills mean eviction. Better housing costs deposits and higher rent, but protects warmth and improves sleep. A heated apartment requires two real days of residency and civic trust.
+
+## Choose a life
+
+- **Factory and field work:** four career paths, twelve jobs, regular/overtime/graveyard shifts, equipment effects, and ranks at 24, 80, and 180 XP. Three shifts on a path earn a once-per-day 3-credit quota bonus.
+- **Administration:** at least two real days in the city, 25 trust, 80 civic XP, low heat, a cleared ID, and a 60-credit application fee.
+- **Trade:** buy and sell directly with other citizens. After one real day and 10 trust, a 90-credit license unlocks a shop. Stock is consumed to earn taxable sales; simulated foot traffic supports two sessions per city day.
+- **Security:** seven real days, 30 completed shifts, 60 trust, 180 civic XP, Order +40, low heat, and a cleared ID. Patrols contribute to easing district lockdowns.
+- **Crime:** three operations per city day. Unreported earnings avoid Revenue. Success builds underground reputation and pulls alignment toward Chaos. Arrest means fines, injury, detention, and an ID hold that needs Registry clearance.
+
+Five branching personal stories remember your choices and relationships. The Canon and the Wound compete through personal allegiance and a shared Order/Chaos balance. Cooperative lattice repairs protect the whole district.
+
+## Your neighbors can make tomorrow worse
+
+District events show their causes and their effects. They respond to completed player activity, including shifts whose owner has not returned yet.
+
+| What citizens do | What the district does |
+| --- | --- |
+| Neglect factory production | Food costs more; shift wages fall |
+| Restore printer output | Food costs less; common stock grows |
+| Leave the relief train unloaded | Border surcharge raises food prices |
+| Complete freight work | Lift the surcharge and deliver common food stock |
+| Complete criminal operations | Trigger a lockdown and stronger checkpoint scrutiny |
+| Organize through the Uncounted | Win higher wages, draw additional scrutiny |
+| Run communal boilers | Reduce cold exposure for everyone |
+| Serve on security patrols | Counter criminal pressure and lift lockdowns |
+
+Weather fronts, identity sweeps, shared food stock, faction effects, and the thermal lattice add further pressure. Survival is a budget of time, energy, credits, and compliance.
+
+## Run locally
+
+Requires Node **22.20 or newer**.
+
+```sh
+npm ci
+npm test
+npm run build
+npm run validate
+npm run dev
+```
+
+The development game runs at `http://127.0.0.1:4173`, uses a local QA identity, and resets its in-memory database on restart. Production uses Sites identity and durable D1 storage. Rebuild and restart development after changing source.
+
+**197 gameplay checks** cover registration, timed settlement, survival, branching stories, shared-stock and player-trade races, equipment, careers, fractional income tax, factory holds, administrative clearance, relief, arrests, late security progression, shared event causes, and legacy saves. Desktop and mobile browser checks cover character creation/editing, all screens, and assignment persistence. See the handoff for verification evidence.
+
+## Source and hosting
+
+Vanilla HTML/CSS/JavaScript and a Cloudflare Worker; no client framework. The Worker owns every balance, permit, flag, queue, inventory item, and city contribution. SQLite transactions and optimistic version guards protect shared purchases and trades, duplicate actions, and activity completion. Drizzle owns schema migrations.
+
+```text
+worker/       Simulation, identity rules, stories, factions, city events
+public/       Terminal UI, composed character art, original city assets
+scripts/      Build, local D1 adapter, development server, gameplay checks
+db/           Drizzle schema
+drizzle/      Append-only production migrations
+docs/         Gameplay and architecture reference
+```
+
+Build emits a Worker module with embedded interface and five original WebP assets, plus D1 migrations. Publishing uses the **Sites building and hosting skills** and preserves the existing Site and audience. Production requires the trusted `oai-authenticated-user-id` header forwarded by Sites. No browser-provided identity or balances are trusted.
+
+## Original artwork
+
+The rainy city banner above is part of SCHISM’s original artwork. Five generated scene assets depict the city, foundry, exchange, rainline, and worker archetype. Prompts and provenance live in [occult-provenance.json](art/occult-provenance.json) and [noir-provenance.json](art/noir-provenance.json). Custom citizen appearances are composed from native SVG layers rather than separate portrait files.
+
+Browser agent tools are feature-detected. Native WebMCP registration remains unverified because the available QA browser does not support it.
