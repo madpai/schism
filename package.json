@@ -6,7 +6,7 @@
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-artifact.mjs",
     "db:generate": "drizzle-kit generate",
-    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs",
+    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs",
     "dev": "node --experimental-sqlite scripts/dev.mjs"
   },
   "dependencies": {

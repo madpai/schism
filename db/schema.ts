@@ -7,6 +7,7 @@ export const citizens = sqliteTable('citizens', {
 });
 export const market = sqliteTable('market', {
   id: text('id').primaryKey(), stock: integer('stock').notNull(), day: integer('day').notNull(),
+  delivered: integer('delivered').notNull().default(0),
 }, t => [check('market_stock_nonnegative', sql`${t.stock} >= 0`)]);
 export const journal = sqliteTable('journal', {
   id: text('id').primaryKey(), citizen: text('citizen').notNull(), body: text('body').notNull(), created: integer('created').notNull(),
@@ -28,3 +29,8 @@ export const forces = sqliteTable('forces', {
   id: text('id').primaryKey(), day: integer('day').notNull(), balance: integer('balance').notNull().default(0),
   interventions: integer('interventions').notNull().default(0),
 }, t => [check('force_balance_bounds', sql`${t.balance} >= -100 AND ${t.balance} <= 100`)]);
+export const cityActivity = sqliteTable('city_activity', {
+  id:text('id').primaryKey(), citizen:text('citizen').notNull(), day:integer('day').notNull(), completes:integer('completes').notNull(),
+  output:integer('output').notNull().default(0), freight:integer('freight').notNull().default(0), crime:integer('crime').notNull().default(0),
+  unrest:integer('unrest').notNull().default(0), relief:integer('relief').notNull().default(0), patrols:integer('patrols').notNull().default(0),
+},t=>[index('idx_city_activity_day_completes').on(t.day,t.completes)]);
