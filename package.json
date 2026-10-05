@@ -1,0 +1,17 @@
+{
+  "name": "schism",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/validate-artifact.mjs",
+    "db:generate": "drizzle-kit generate",
+    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs"
+  },
+  "dependencies": {
+    "drizzle-orm": "0.45.2"
+  },
+  "devDependencies": {
+    "drizzle-kit": "0.31.10"
+  }
+}

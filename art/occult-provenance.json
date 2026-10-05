@@ -1,0 +1,83 @@
+{
+  "project": "Schism",
+  "tool": "built-in image_gen.imagegen",
+  "mode": "new generation",
+  "requests": 3,
+  "variants": 0,
+  "retries": 0,
+  "reference_images": [],
+  "created_at_utc": "2026-10-05",
+  "inspiration": [
+    "ANEURISM IV",
+    "E.Y.E. Divine Cybermancy"
+  ],
+  "assets": [
+    {
+      "file": "city.png",
+      "title": "The Ninth Stratum",
+      "scene": "Primary request: The Ninth Stratum, a claustrophobic megastructure canyon seen at human eye level. Massive black brutalist cathedral-server towers loom above both sides of a deep narrow damp black street, connected overhead by impossible ribbed cable bridges that look like technological vertebrae. Thin red lumen slits cut into the buildings, precise cold white scanner beams sweep the monumental darkness. A few tiny disposable workers in featureless masks give scale, almost lost beneath the architecture. In the distant vanishing point there is a wound in reality, a very faint poisonous violet rupture embedded in darkness. The wet ground faintly reflects white and muted blood-red light. The towers have ritualistic vertical hierarchy, dense server-fin surfaces and void-like openings; no familiar historical cathedral decoration. Monumental architectural forms dominate, humans remain tiny. Cold midtones make the layered canyon legible.",
+      "prompt": "Use case: stylized-concept.\nAsset type: original environment art for Schism, an occult cyberpunk terminal adventure.\nStyle/medium: eerie late-1990s / early-2000s legacy PC game environment render; deliberate low-poly brutalism, PS1/Source-era painted coarse textures, visibly grainy surfaces and dithered shadows. Stylized in-game environment art, dark and uncannily sacred. Original worldbuilding inspired by the disturbing occult cyberpunk sensibility of ANEURISM IV and E.Y.E. Divine Cybermancy, without copying characters, symbols, locations or existing art.\nComposition/framing: wide panoramic 2.2:1 landscape. Place all important forms within the central 70 percent so a centered crop remains coherent. Strong readable architectural silhouette and layered deep perspective.\nLighting/mood: fantastically dark, oppressive, eerie; deep near-black shadows with cool-gray readable midtones. Cold radiation/scanner light. Preserve enough faint diffuse cold light to see shapes in darkness.\nColor palette: near-black, cold gray, tarnished silver, dim bone-white, restrained dark blood-red accents; rare very dim poisonous violet where specifically requested.\nMaterials/textures: damp black concrete, blackened surgical metal, coarse painted grain, dirty tarnished silver, pale synthetic biomatter. Technological yet ritualistic architecture, absurd sacred technology, surreal dystopia of Order and Chaos.\nText: none.\nConstraints: single complete environment image, opaque background; no montage, labels, interface, text, writing, logos or watermark.\nAvoid: photorealism, polished contemporary 3D, brown palette, sepia, gold, amber lighting, orange warm glow, steam-age or 1930s imagery, historical lamps, smokestacks, tents, conventional industrial factory machinery, recognizable game symbols.\nPrimary request: The Ninth Stratum, a claustrophobic megastructure canyon seen at human eye level. Massive black brutalist cathedral-server towers loom above both sides of a deep narrow damp black street, connected overhead by impossible ribbed cable bridges that look like technological vertebrae. Thin red lumen slits cut into the buildings, precise cold white scanner beams sweep the monumental darkness. A few tiny disposable workers in featureless masks give scale, almost lost beneath the architecture. In the distant vanishing point there is a wound in reality, a very faint poisonous violet rupture embedded in darkness. The wet ground faintly reflects white and muted blood-red light. The towers have ritualistic vertical hierarchy, dense server-fin surfaces and void-like openings; no familiar historical cathedral decoration. Monumental architectural forms dominate, humans remain tiny. Cold midtones make the layered canyon legible.",
+      "source": "/home/commander/.codex/generated_images/01a10a9c-f310-72c2-9ab5-4e6a5cf9e04c/exec-7ecf1dec-8c7c-4df0-a136-a9ed38b5fbd9.png",
+      "output": "/home/commander/schism-occult-assets/city.png",
+      "dimensions": {
+        "width": 1860,
+        "height": 845,
+        "aspect_ratio": 2.201183431952663
+      },
+      "color_mode": "RGB",
+      "sha256": "b88a1e52e9843b9eb52a0f106fce87c96fc4152e09726406c8ba4901bb5b3071",
+      "inspection": "Inspected: cold dark cathedral-server canyon, ribbed bridges, masked workers, scanner light, red slits, violet reality wound; no text or historical-industrial props."
+    },
+    {
+      "file": "factory.png",
+      "title": "Mnemonic Foundry",
+      "scene": "Primary request: Mnemonic Foundry, interior of an immense black machine cathedral. Neural memory wafers \u2014 thin pale rigid organic circuit slices \u2014 are sorted into suspended monolithic storage coffins, heavy black rectangular slabs held by taut biomechanical cables. The coffins form a massive hanging archive around a dark central aisle. Grotesque bundled biomechanical conduits crawl through monumental black concrete ribs, integrating coarse silver machine parts with synthetic neural tissue. Dim dark blood-red diagnostic lamps are tiny and sparse. Narrow cold bone-white radiation light beams cut through dark dusty space. Exactly one faraway tiny masked worker stands beneath the hanging slabs to establish scale. Surreal sacred memory-processing technology, eerie symmetry with disturbing asymmetry. No conventional conveyor belts, production lines, steam, rust, ordinary industrial machinery or warm lights.",
+      "prompt": "Use case: stylized-concept.\nAsset type: original environment art for Schism, an occult cyberpunk terminal adventure.\nStyle/medium: eerie late-1990s / early-2000s legacy PC game environment render; deliberate low-poly brutalism, PS1/Source-era painted coarse textures, visibly grainy surfaces and dithered shadows. Stylized in-game environment art, dark and uncannily sacred. Original worldbuilding inspired by the disturbing occult cyberpunk sensibility of ANEURISM IV and E.Y.E. Divine Cybermancy, without copying characters, symbols, locations or existing art.\nComposition/framing: wide panoramic 2.2:1 landscape. Place all important forms within the central 70 percent so a centered crop remains coherent. Strong readable architectural silhouette and layered deep perspective.\nLighting/mood: fantastically dark, oppressive, eerie; deep near-black shadows with cool-gray readable midtones. Cold radiation/scanner light. Preserve enough faint diffuse cold light to see shapes in darkness.\nColor palette: near-black, cold gray, tarnished silver, dim bone-white, restrained dark blood-red accents; rare very dim poisonous violet where specifically requested.\nMaterials/textures: damp black concrete, blackened surgical metal, coarse painted grain, dirty tarnished silver, pale synthetic biomatter. Technological yet ritualistic architecture, absurd sacred technology, surreal dystopia of Order and Chaos.\nText: none.\nConstraints: single complete environment image, opaque background; no montage, labels, interface, text, writing, logos or watermark.\nAvoid: photorealism, polished contemporary 3D, brown palette, sepia, gold, amber lighting, orange warm glow, steam-age or 1930s imagery, historical lamps, smokestacks, tents, conventional industrial factory machinery, recognizable game symbols.\nPrimary request: Mnemonic Foundry, interior of an immense black machine cathedral. Neural memory wafers \u2014 thin pale rigid organic circuit slices \u2014 are sorted into suspended monolithic storage coffins, heavy black rectangular slabs held by taut biomechanical cables. The coffins form a massive hanging archive around a dark central aisle. Grotesque bundled biomechanical conduits crawl through monumental black concrete ribs, integrating coarse silver machine parts with synthetic neural tissue. Dim dark blood-red diagnostic lamps are tiny and sparse. Narrow cold bone-white radiation light beams cut through dark dusty space. Exactly one faraway tiny masked worker stands beneath the hanging slabs to establish scale. Surreal sacred memory-processing technology, eerie symmetry with disturbing asymmetry. No conventional conveyor belts, production lines, steam, rust, ordinary industrial machinery or warm lights.",
+      "source": "/home/commander/.codex/generated_images/01a10a9c-f310-72c2-9ab5-4e6a5cf9e04c/exec-090a5fce-2a85-43eb-914b-9b712a90a2a0.png",
+      "output": "/home/commander/schism-occult-assets/factory.png",
+      "dimensions": {
+        "width": 1860,
+        "height": 845,
+        "aspect_ratio": 2.201183431952663
+      },
+      "color_mode": "RGB",
+      "sha256": "71364ed23d6fa00ed4edf9f9b05212106b0202bc7c52d979edb6f302a599edc3",
+      "inspection": "Inspected: suspended monolithic storage coffins, biomechanical conduit bundles, cold shafts, restrained red lamps, one distant worker; no conventional conveyors or text."
+    },
+    {
+      "file": "market.png",
+      "title": "Null Exchange",
+      "scene": "Primary request: Null Exchange, an illicit biotech trading concourse beneath the ribbed ceiling of a black concrete megastructure. Deep concourse perspective with sealed medical vending racks recessed into massive walls, their cold bone-white illuminated compartments revealing ambiguous sealed biomechanical implants and sterile pale specimen forms. Black cables crawl along floor channels and through concrete ribs. Exactly one hooded faceless trader occupies the middle distance beside the medical racks; exactly one small distant surveillance drone watches above the walkway. Dim blood-red blank screens punctuate the darkness. A sparse uncanny shrine of arranged bone-white medical cartridges and a small tarnished-silver neural object sits in a recess. Bone-white fluorescent strips light only patches of cold gray surfaces. The concourse is quiet, sparse, oppressive, and uncanny, combining forbidden commerce with ritual technology. No tents, market cloth, open bazaar stalls, signage, ordinary shops or crowds.",
+      "prompt": "Use case: stylized-concept.\nAsset type: original environment art for Schism, an occult cyberpunk terminal adventure.\nStyle/medium: eerie late-1990s / early-2000s legacy PC game environment render; deliberate low-poly brutalism, PS1/Source-era painted coarse textures, visibly grainy surfaces and dithered shadows. Stylized in-game environment art, dark and uncannily sacred. Original worldbuilding inspired by the disturbing occult cyberpunk sensibility of ANEURISM IV and E.Y.E. Divine Cybermancy, without copying characters, symbols, locations or existing art.\nComposition/framing: wide panoramic 2.2:1 landscape. Place all important forms within the central 70 percent so a centered crop remains coherent. Strong readable architectural silhouette and layered deep perspective.\nLighting/mood: fantastically dark, oppressive, eerie; deep near-black shadows with cool-gray readable midtones. Cold radiation/scanner light. Preserve enough faint diffuse cold light to see shapes in darkness.\nColor palette: near-black, cold gray, tarnished silver, dim bone-white, restrained dark blood-red accents; rare very dim poisonous violet where specifically requested.\nMaterials/textures: damp black concrete, blackened surgical metal, coarse painted grain, dirty tarnished silver, pale synthetic biomatter. Technological yet ritualistic architecture, absurd sacred technology, surreal dystopia of Order and Chaos.\nText: none.\nConstraints: single complete environment image, opaque background; no montage, labels, interface, text, writing, logos or watermark.\nAvoid: photorealism, polished contemporary 3D, brown palette, sepia, gold, amber lighting, orange warm glow, steam-age or 1930s imagery, historical lamps, smokestacks, tents, conventional industrial factory machinery, recognizable game symbols.\nPrimary request: Null Exchange, an illicit biotech trading concourse beneath the ribbed ceiling of a black concrete megastructure. Deep concourse perspective with sealed medical vending racks recessed into massive walls, their cold bone-white illuminated compartments revealing ambiguous sealed biomechanical implants and sterile pale specimen forms. Black cables crawl along floor channels and through concrete ribs. Exactly one hooded faceless trader occupies the middle distance beside the medical racks; exactly one small distant surveillance drone watches above the walkway. Dim blood-red blank screens punctuate the darkness. A sparse uncanny shrine of arranged bone-white medical cartridges and a small tarnished-silver neural object sits in a recess. Bone-white fluorescent strips light only patches of cold gray surfaces. The concourse is quiet, sparse, oppressive, and uncanny, combining forbidden commerce with ritual technology. No tents, market cloth, open bazaar stalls, signage, ordinary shops or crowds.",
+      "source": "/home/commander/.codex/generated_images/01a10a9c-f310-72c2-9ab5-4e6a5cf9e04c/exec-57adda5b-b6eb-4147-ad93-ea29a7ceb1a1.png",
+      "output": "/home/commander/schism-occult-assets/market.png",
+      "dimensions": {
+        "width": 1860,
+        "height": 845,
+        "aspect_ratio": 2.201183431952663
+      },
+      "color_mode": "RGB",
+      "sha256": "40d130ae9d2b157f4a3121e5bec0a4edf7bde088230e954d3bed3e46331c00e8",
+      "inspection": "Inspected: sealed illuminated medical racks, hooded trader, surveillance drone, uncanny shrine, cold concrete ribs; no tents, signs or text."
+    }
+  ],
+  "output_processing": "Unmodified copies of generated originals. No cropping, recoloring, resizing or edits.",
+  "inspection_complete": true,
+  "deployed_assets": [
+    {
+      "path": "public/city.webp",
+      "sha256": "b4fddfbd938db5a75560e7a12b6919927a7867f9976bd28838515964827df041",
+      "conversion": "Resized to 1000px wide and encoded WebP quality 87."
+    },
+    {
+      "path": "public/factory.webp",
+      "sha256": "95af36bd9e332a0525f55ab08207e01f87072cf5dec814d5a1505e01c03329ab",
+      "conversion": "Resized to 1000px wide and encoded WebP quality 87."
+    },
+    {
+      "path": "public/market.webp",
+      "sha256": "a8fffe23770885a3cd060168e255f59b7b88df22cb58ce183f734b809c12f0b0",
+      "conversion": "Resized to 1000px wide and encoded WebP quality 87."
+    }
+  ]
+}

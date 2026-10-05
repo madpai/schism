@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050507">
+  <meta name="description" content="A persistent occult cyberpunk city caught between Order and Chaos. Survive the economy. Choose who you become. You are not the chosen one.">
+  <title>SCHISM — Order is a cage. Chaos is a wound.</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23050507'/%3E%3Cpath d='M7 5h6v22H7zm12 0h6v22h-6z' fill='%23d6d6dd'/%3E%3Cpath d='m2 23 28-15' stroke='%23050507' stroke-width='5'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=VT323&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>/* STYLES */</style>
+</head>
+<body>
+  <aside class="sidebar" aria-label="Main navigation">
+    <a href="#overview" class="brand" aria-label="Schism overview"><span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 40"><path d="M16 1v38M3 9h26L5 31h22M7 2v36m18-36v36"/></svg></span><span>SCHISM<i>NEURAL ACCESS TERMINAL</i></span></a>
+    <div class="world-label">[IX] NINTH STRATUM <span class="world-status">ONLINE</span></div>
+    <nav id="navigation"></nav>
+    <div class="sidebar-bottom"><div class="system-note">ORDER IS A CAGE.<br>CHAOS IS A WOUND.</div><button class="citizen-id" data-nav="profile"><span class="avatar" id="avatar"></span><span><strong id="citizen-name">Unregistered citizen</strong><small id="citizen-role">Awaiting papers</small></span></button><div class="build-label">SCHISM.EXE <span>v0.3</span></div></div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><button class="mobile-menu icon-button" id="menu-toggle" aria-label="Toggle navigation" aria-expanded="false"></button><div class="breadcrumb"><span id="breadcrumb">CITIZEN OVERVIEW</span><span class="crumb-divider">/</span><span>NINTH STRATUM</span></div><div class="topbar-right"><span id="city-clock">CITY DAY —</span><span class="top-weather" id="top-weather">— °C</span><button class="icon-button help-button" data-help aria-label="How to survive"></button></div></header>
+    <main id="main"></main>
+    <footer><span>THE CITY OWES YOU NOTHING.</span><span id="save-status">Connecting to the city registry…</span></footer>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="dialog"><div id="dialog-content"></div></dialog>
+  <script>/* APP */</script>
+</body>
+</html>
