@@ -31,6 +31,7 @@ export function institutionRequirements(p,now){
 }
 export const timedActions=new Set(['work','rest','crime','organize','clinic','official_work','business_work','security_work','event_work','clearance']);
 export const onDutyActions=new Set(['buy','consume','rent','tax','post','rename','appearance','gear_buy','gear_equip','gear_remove','relief','list','trade','cancel','sell','collect','quick','craft','casino','network_job','network_post','use_craft']);
+for(const action of ['district_choice','survey','case_review','order_create','order_fill','order_cancel','career_case','prepare_crime','crisis_response'])onDutyActions.add(action);
 export function accrueTax(p,gross){
   p.taxEarned+=gross;const amount=p.taxRemainder+gross*12;
   p.taxDebt+=Math.floor(amount/100);p.taxRemainder=amount%100;
@@ -48,7 +49,7 @@ export function identityFlags(p,now){
 export function scheduleActivity(before,after,{action,label,message,now,hours,energy,day}){
   const deltas={},sets={};
   for(const key of Object.keys(after)){
-    if(['activity','lastTick','nextRent','nextRentAt','clock','daysInCity','energy','labor','criminal','shopDay','shopSessions','lastRestDay'].includes(key))continue;
+    if(['activity','lastTick','nextRent','nextRentAt','clock','daysInCity','energy','labor','criminal','district','shopDay','shopSessions','lastRestDay'].includes(key))continue;
     if(typeof after[key]==='number'&&typeof before[key]==='number'){
       const delta=after[key]-before[key];if(delta>0)deltas[key]=delta;
     }else if(JSON.stringify(after[key])!==JSON.stringify(before[key]))sets[key]=after[key];

@@ -33,7 +33,7 @@ h.now+=1000;const race=await Promise.allSettled([act(db,'solo',{action:'contribu
 check(race.filter(r=>r.status==='fulfilled').length===1,'Only one player can donate the final part');
 result=await read('other');check(result.project.progress===12&&result.world.heating,'Shared repair activates district heating for all players');
 check(db.sqlite.prepare('SELECT count(*) n FROM action_guards').get().n===0,'Project guards are cleaned up');
-const warmth=result.citizen.warmth;result=await action('other',{action:'work',id:'cleaning'});check(Math.abs(result.citizen.warmth-(warmth-2))<.01,'Completed shared project reduces working cold exposure');
+const warmth=result.citizen.warmth;result=await action('other',{action:'work',id:'cleaning'});check(Math.abs(result.citizen.warmth-(warmth-(2+result.world.coldModifier)))<.01,'Completed shared project reduces working cold exposure');
 await reject(()=>action('solo',{action:'contribute'}));
 const beforeReset=await read('other');h.now+=21600000;const reset=await read('other');check(reset.project.progress===0&&!reset.world.heating&&reset.project.day===beforeReset.project.day+1,'A new city day starts a new shared repair');
 await reject(()=>pick('other','__proto__','start','bread'));

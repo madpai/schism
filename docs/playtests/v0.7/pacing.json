@@ -1,0 +1,94 @@
+{
+  "started": "2026-10-05T20:06:12.707Z",
+  "samples": [
+    {
+      "label": "Arrival",
+      "elapsedSeconds": 1,
+      "day": 4,
+      "phase": "active",
+      "credits": 0,
+      "energy": 58,
+      "fullness": 42,
+      "warmth": 35,
+      "tax": 0,
+      "tasks": 0,
+      "encounters": []
+    },
+    {
+      "label": "Work-break encounters and planning",
+      "elapsedSeconds": 220,
+      "day": 4,
+      "phase": "active",
+      "credits": 0,
+      "energy": 44,
+      "fullness": 42,
+      "warmth": 34,
+      "tax": 0,
+      "tasks": 1,
+      "encounters": []
+    },
+    {
+      "label": "Scavenging and emergency response",
+      "elapsedSeconds": 220,
+      "day": 4,
+      "phase": "active",
+      "credits": 2,
+      "energy": 39,
+      "fullness": 42,
+      "warmth": 35,
+      "tax": 0,
+      "tasks": 4,
+      "encounters": [
+        "sabotage",
+        "permit"
+      ]
+    },
+    {
+      "label": "Wages received",
+      "elapsedSeconds": 904,
+      "day": 4,
+      "phase": "active",
+      "credits": 5,
+      "energy": 44,
+      "fullness": 40,
+      "warmth": 32,
+      "tax": 0,
+      "tasks": 1,
+      "encounters": [
+        "shift"
+      ]
+    },
+    {
+      "label": "Neighbor order filled",
+      "elapsedSeconds": 932,
+      "day": 4,
+      "phase": "active",
+      "credits": 4,
+      "energy": 40,
+      "fullness": 40,
+      "warmth": 34,
+      "tax": 0,
+      "tasks": 4,
+      "encounters": [
+        "sabotage",
+        "permit"
+      ]
+    },
+    {
+      "label": "Twenty-minute return",
+      "elapsedSeconds": 1200,
+      "day": 4,
+      "phase": "active",
+      "credits": 3,
+      "energy": 44,
+      "fullness": 39,
+      "warmth": 32,
+      "tax": 0,
+      "tasks": 1,
+      "encounters": [
+        "shift"
+      ]
+    }
+  ],
+  "errors": []
+}

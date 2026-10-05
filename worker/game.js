@@ -1,6 +1,9 @@
 import { CITY_HOUR_MS, CITY_DAY_MS, appearanceOptions, defaultAppearance, validAppearance, residencyState, institutionRequirements, timedActions, onDutyActions, scheduleActivity, completeActivity, accrueTax, identityFlags } from './residency.js';
 import { cityLife, cityResponses, contributionFor } from './citylife.js';
 import { streetState, streetSnapshot, startQuick, finishQuick, quickSupplies, neuralChannels } from './street.js';
+import {districtState, discoverDistrict, districtSnapshot, chooseDistrict, surveyDistrict, reviewCareerCase, startCareerCase, completeDistrictTask, crimePreparation, startCrimePreparation} from './life.js';
+import {supplyOrdersSnapshot, supplyOrderAction, supplyCatalog, supplyCount, changeSupply} from './orders.js';
+import {crisisCommitment, crisisOptions, crisisResponseBlocked, startCrisisResponse} from './crises.js';
 import { encountersFor, personalState, resolveEncounter } from './stories.js';
 import { forceProfile, citizenForces } from './forces.js';
 import { gearCatalog, careerPaths, shiftTypes, specialistJobs, careerState, gearEffects, coldRate, jobQuote, recordShift, careerSnapshot, equipmentSnapshot, removeEquipment } from './progression.js';
@@ -48,9 +51,9 @@ export function settle(data, now=Date.now(),w=world(now)) {
     p.lastTick=until;
   };
   p.lastTick=start;
-  if(p.activity&&p.activity.endsAt<=now){advance(p.activity.endsAt);completeActivity(p);}
+  if(p.activity&&p.activity.endsAt<=now){const a=p.activity;advance(a.endsAt);completeActivity(p);if(a.action==='work')discoverDistrict(p,'work',a.endsAt,w.day);}
   advance(now);
-  streetState(p,w.day);finishQuick(p,now,accrueTax);
+  streetState(p,w.day);districtState(p,w.day);const quick=p.errand;finishQuick(p,now,accrueTax);if(quick&&!p.errand)completeDistrictTask(p,quick,w.day);
   if(now>=p.nextRentAt){
     const bills=Math.floor((now-p.nextRentAt)/CITY_DAY_MS)+1;
     const charged=Math.min(bills,Math.max(0,4-p.rentCycles));
@@ -129,7 +132,7 @@ export async function snapshot(db,owner,now=Date.now()){
   ]);
   return {citizen:{id:c.id,name:c.name,...citizen},world:{...w,now},cityLife:life,appearanceOptions,requirements:institutionRequirements(citizen,now),idFlags:identityFlags(citizen,now),project,forces:force,encounters:encountersFor(citizen),
     goods:stock.filter(s=>Object.hasOwn(goods,s.id)).map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j,quotes:Object.keys(shiftTypes).map(mode=>jobQuote(citizen,j,mode,w))})),
-    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),streetLife:streetSnapshot(citizen,w),network:await all(db,'SELECT m.id,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen ORDER BY m.created DESC LIMIT 100'),
+    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),streetLife:streetSnapshot(citizen,w),districtLife:districtSnapshot(citizen,w),supplyExchange:await supplyOrdersSnapshot(db,{id:c.id,...citizen},w),crisisResponses:crisisOptions(life.crisis.current).map(x=>({...x,blocked:crisisResponseBlocked(citizen,x,w,life.crisis.current)})),network:await all(db,'SELECT m.id,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen ORDER BY m.created DESC LIMIT 100'),
     log,board:board.map(p=>({id:p.id,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
     citizens:people.filter(p=>JSON.parse(p.data).registered!==false).map(p=>{const d=JSON.parse(p.data);return {id:p.id,name:p.name,role:d.role,rep:d.rep,shifts:d.shifts,union:d.union,appearance:d.appearance||defaultAppearance,daysInCity:Math.max(0,Math.floor((now-d.joined)/86400000)),online:now-p.updated<120000};}),listings:offers,totals};
 }
@@ -149,15 +152,23 @@ export async function act(db,owner,input,now=Date.now()){
   if(p.labor.day!==w.day)p.labor={day:w.day,hours:0};
   if(p.criminal.day!==w.day){p.criminal.day=w.day;p.criminal.count=0;}
   const requirement=kind=>{const requirements=institutionRequirements(p,now)[kind];need(requirements.every(([,met])=>met),'Requirements: '+requirements.filter(([,met])=>!met).map(([label])=>label).join(', '));};
-  const extra=[],checks=[],op=uid();let message='',hours=0,energy=0;
+  const extra=[],checks=[],op=uid();let message='',hours=0,energy=0,immediateTax=0;
+  const districtContribution=(metrics,endsAt,override)=>{
+    const values=['output','freight','crime','unrest','relief','patrols'].map(id=>metrics[id]||0);
+    if(values.some(Boolean))extra.push(stmt(db,'INSERT INTO city_activity (id,citizen,day,completes,output,freight,crime,unrest,relief,patrols) VALUES (?,?,?,?,?,?,?,?,?,?)',op,c.id,world(endsAt).day,endsAt,...values));
+    const commitment=crisisCommitment(db,op,c.id,life.crisis.current,metrics,endsAt,override);if(commitment)extra.push(commitment);
+  };
   const credit=n=>need(p.credits>=n,`You need ${n} credits. You have ${p.credits}.`);
   const job=typeof input.id==='string'&&Object.hasOwn(jobs,input.id)?jobs[input.id]:null;
   switch(input.action){
-    case 'quick':case 'craft':case 'casino':case 'network_job':{
+    case 'district_choice':{const result=chooseDistrict(p,input,w);message=result.message;immediateTax=result.taxGross;break;}
+    case 'survey':message=surveyDistrict(p,input.id,w);break;
+    case 'case_review':message=reviewCareerCase(p,input.id,w);break;
+    case 'order_create':case 'order_fill':case 'order_cancel':{const result=await supplyOrderAction(db,p,c,input,w,op);message=result.message;immediateTax=result.taxGross;extra.push(...result.extra);checks.push(...result.checks);districtContribution(result.metrics,now);break;}
+    case 'quick':case 'craft':case 'casino':case 'network_job':case 'career_case':case 'prepare_crime':case 'crisis_response':{
       const random=crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
-      const result=startQuick(p,input,w,random);message=result.message;
-      const metrics=['output','freight','crime','unrest','relief','patrols'].map(id=>result.metrics[id]||0);
-      if(metrics.some(Boolean))extra.push(stmt(db,'INSERT INTO city_activity (id,citizen,day,completes,output,freight,crime,unrest,relief,patrols) VALUES (?,?,?,?,?,?,?,?,?,?)',op,c.id,world(result.endsAt).day,result.endsAt,...metrics));
+      const result=input.action==='career_case'?startCareerCase(p,input,w):input.action==='prepare_crime'?startCrimePreparation(p,w):input.action==='crisis_response'?startCrisisResponse(p,input,w,life.crisis.current):startQuick(p,input,w,random);message=result.message;
+      districtContribution(result.metrics,result.endsAt,result.crisisUnits);
       break;
     }
     case 'use_craft':{
@@ -240,7 +251,7 @@ export async function act(db,owner,input,now=Date.now()){
     case 'flat':credit(180);need(p.housing==='room'&&!p.evicted,'Rent a private room and settle any eviction first.');need(p.daysInCity>=2&&p.rep>=20,'A heated apartment requires 2 days of residency and 20 trust.');p.credits-=180;p.housing='flat';p.warmth=clamp(p.warmth+30);message='A heated apartment above the rainline. Thirty-two credits each city cycle. For once, the window closes.';break;
     case 'crime':{
       need(['steal','smuggle'].includes(input.id),'Unknown opportunity.');need(p.criminal.count<3,'Three criminal operations per city day. Checkpoints are watching you.');p.criminal.count++;p.criminal.attempts++;hours=input.id==='steal'?1:3;energy=input.id==='steal'?12:22;
-      const risk=clamp((input.id==='steal'?.3:.4)+(p.heat/200)+(w.inspection?.15:0)+(w.securityModifier||0)+gearEffects(p).captureRisk,0,1);
+      const risk=clamp((input.id==='steal'?.3:.4)+(p.heat/200)+(w.inspection?.15:0)+(w.securityModifier||0)+gearEffects(p).captureRisk+crimePreparation(p,w),0,1);p.district.plan=null;
       const random=crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
       if(random<risk){const fine=Math.min(p.credits,input.id==='steal'?7:15);p.credits-=fine;p.rep=Math.max(0,p.rep-2);p.heat=clamp(p.heat+20);p.health=clamp(p.health-8);p.criminalHold=true;p.detainedUntil=now+(hours+2)*CITY_HOUR_MS;message=`Security caught you. Your ID is flagged and you must serve two city hours after this operation. ${fine} credits confiscated. They remember your face.`;}
       else {p.criminal.successes++;p.criminal.xp+=input.id==='steal'?3:6;p.alignment=clamp(p.alignment-3,-100,100);p.heat=clamp(p.heat+12);if(input.id==='steal'){p.scrap+=3;message='Three relay fragments slip into your shroud. The mnemonic sentinel keeps reciting its prayer.';}else {p.credits+=w.contrabandPay||24;p.role='Smuggler';message=`The sealed mnemonic package reaches the other side. ${w.contrabandPay||24} credits enter your implant.`;}}break;
@@ -253,7 +264,7 @@ export async function act(db,owner,input,now=Date.now()){
     case 'official':requirement('administrative');need(!p.taxHold&&!p.criminalHold,'The Bureau requires a cleared ID.');credit(60);need(!p.official,'You already hold a municipal post.');p.credits-=60;p.official=true;p.role='Municipal official';p.ownedGear.push('adminuniform');p.loadout.body='adminuniform';p.coat=false;message='Your application is approved. The processing fee was non-refundable.';break;
     case 'official_work':need(p.official,'You don’t hold a municipal post.');need(!p.taxHold&&!p.criminalHold,'The Bureau requires a cleared ID.');hours=2;energy=8;p.credits+=17;p.rep++;message='You process a stack of work permits. Seventeen credits for deciding who gets to wait.';break;
     case 'business':requirement('shop');need(!p.taxHold&&!p.criminalHold,'A trading license requires a cleared ID.');credit(90);need(!p.business,'You already own a stall.');p.credits-=90;p.business=true;p.role='Shop owner';message='The exchange terminal accepts your signature. No guarantee of customers.';break;
-    case 'business_work':need(p.business,'You don’t own a market stall.');need(!p.taxHold&&!p.criminalHold,'Clear your ID to reopen the licensed stall.');if(p.shopDay!==w.day){p.shopDay=w.day;p.shopSessions=0;}need(p.shopSessions<2,'Two shop sessions per city day. Foot traffic has dried up.');p.shopSessions++;need(p.bread>0||p.scrap>0,'Stock your terminal with rations or relay fragments first.');hours=2;energy=8;{const item=p.bread?'bread':'scrap';p[item]--;p.credits+=item==='bread'?7:8;message=`You sell ${goods[item].name.toLowerCase()} at your stall. ${item==='bread'?7:8} credits from the morning foot traffic.`;}break;
+    case 'business_work':{need(p.business,'You don’t own a market stall.');need(!p.taxHold&&!p.criminalHold,'Clear your ID to reopen the licensed stall.');if(p.shopDay!==w.day){p.shopDay=w.day;p.shopSessions=0;}need(p.shopSessions<2,'Two shop sessions per city day. Foot traffic has dried up.');const shopStock={bread:7,scrap:8,heatpack:6,bandage:4,neuralpatch:7},item=input.id||(p.bread?'bread':'scrap');need(Object.hasOwn(shopStock,item),'Choose published shop stock.');need(supplyCount(p,item)>0,'Stock this item before opening your terminal.');p.shopSessions++;changeSupply(p,item,-1);hours=2;energy=8;p.credits+=shopStock[item];message=`You sell ${supplyCatalog[item].name.toLowerCase()} at your stall. ${shopStock[item]} taxable credits from the foot traffic.`;break;}
     case 'property':credit(180);need(!p.property,'You already hold a lease.');need(p.rep>=15,'You need 15 trust to acquire a property lease.');p.credits-=180;p.property=true;p.role='Landlord';message='You acquire a district lease. The city takes its cut first.';break;
     case 'collect':need(p.property,'You don’t have a property lease.');need(p.lastCollect!==w.day,'You already collected this city day.');p.credits+=9;p.lastCollect=w.day;message='Nine credits from your lease. Somewhere, someone works another shift.';break;
     case 'post':{
@@ -265,25 +276,26 @@ export async function act(db,owner,input,now=Date.now()){
       extra.push(stmt(db,'UPDATE citizens SET name=? WHERE id=?',input.name.trim(),c.id));message='Your citizen papers have been updated.';break;
     }
     case 'list':{
-      need(['bread','medicine','scrap'].includes(input.id),'That item cannot be traded.');need(p[input.id]>0,'You don’t have that item.');need(Number.isInteger(input.price)&&input.price>=1&&input.price<=50,'Choose a price between 1 and 50 credits.');
-      const count=await stmt(db,'SELECT count(*) AS n FROM listings WHERE seller=? AND sold=0',c.id).first();need(count.n<(p.business?12:6),'Your listing slots are full.');p[input.id]--;
-      extra.push(stmt(db,'INSERT INTO listings (id,seller,item,price,created) VALUES (?,?,?,?,?)',uid(),c.id,input.id,input.price,now));message=`Listed ${goods[input.id].name.toLowerCase()} for ${input.price} credits.`;break;
+      need(typeof input.id==='string'&&Object.hasOwn(supplyCatalog,input.id),'That item cannot be traded.');need(supplyCount(p,input.id)>0,'You don’t have that item.');need(Number.isInteger(input.price)&&input.price>=1&&input.price<=50,'Choose a price between 1 and 50 credits.');
+      const count=await stmt(db,'SELECT count(*) AS n FROM listings WHERE seller=? AND sold=0',c.id).first();need(count.n<(p.business?12:6),'Your listing slots are full.');changeSupply(p,input.id,-1);
+      extra.push(stmt(db,'INSERT INTO listings (id,seller,item,price,created) VALUES (?,?,?,?,?)',uid(),c.id,input.id,input.price,now));message=`Listed ${supplyCatalog[input.id].name.toLowerCase()} for ${input.price} credits.`;break;
     }
     case 'trade':{
       need(typeof input.id==='string','Choose a listing.');const offer=await stmt(db,'SELECT * FROM listings WHERE id=? AND sold=0',input.id).first();need(offer,'Someone already bought that listing.');need(offer.seller!==c.id,'You cannot buy your own listing.');credit(offer.price);
       checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM listings WHERE id=? AND sold=0),0))',op+'offer',input.id));
-      extra.push(stmt(db,'UPDATE listings SET sold=1 WHERE id=?',input.id),stmt(db,"UPDATE citizens SET data=json_set(data,'$.credits',json_extract(data,'$.credits')+?,'$.taxEarned',coalesce(json_extract(data,'$.taxEarned'),0)+?,'$.taxDebt',coalesce(json_extract(data,'$.taxDebt'),0)+CAST((coalesce(json_extract(data,'$.taxRemainder'),0)+?*12)/100 AS INTEGER),'$.taxRemainder',(coalesce(json_extract(data,'$.taxRemainder'),0)+?*12)%100),version=version+1 WHERE id=?",offer.price,offer.price,offer.price,offer.price,offer.seller),stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),offer.seller,`Your ${goods[offer.item].name.toLowerCase()} sold for ${offer.price} credits.`,now));
-      p.credits-=offer.price;p[offer.item]++;message=`Bought ${goods[offer.item].name.toLowerCase()} from another citizen for ${offer.price} credits.`;break;
+      extra.push(stmt(db,'UPDATE listings SET sold=1 WHERE id=?',input.id),stmt(db,"UPDATE citizens SET data=json_set(data,'$.credits',json_extract(data,'$.credits')+?,'$.taxEarned',coalesce(json_extract(data,'$.taxEarned'),0)+?,'$.taxDebt',coalesce(json_extract(data,'$.taxDebt'),0)+CAST((coalesce(json_extract(data,'$.taxRemainder'),0)+?*12)/100 AS INTEGER),'$.taxRemainder',(coalesce(json_extract(data,'$.taxRemainder'),0)+?*12)%100),version=version+1 WHERE id=?",offer.price,offer.price,offer.price,offer.price,offer.seller),stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),offer.seller,`Your ${supplyCatalog[offer.item].name.toLowerCase()} sold for ${offer.price} credits.`,now));
+      p.credits-=offer.price;changeSupply(p,offer.item,1);message=`Bought ${supplyCatalog[offer.item].name.toLowerCase()} from another citizen for ${offer.price} credits.`;break;
     }
     case 'cancel':{
       const offer=await stmt(db,'SELECT * FROM listings WHERE id=? AND seller=? AND sold=0',String(input.id),c.id).first();need(offer,'Listing is no longer available.');
-      checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM listings WHERE id=? AND sold=0),0))',op+'offer',offer.id));extra.push(stmt(db,'UPDATE listings SET sold=2 WHERE id=?',offer.id));p[offer.item]++;message='You take your goods back from the market.';break;
+      checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM listings WHERE id=? AND sold=0),0))',op+'offer',offer.id));extra.push(stmt(db,'UPDATE listings SET sold=2 WHERE id=?',offer.id));changeSupply(p,offer.item,1);message='You take your goods back from the market.';break;
     }
     default:throw Object.assign(new Error('Unknown action.'),{status:400});
   }
   need(p.energy>=energy,`You need ${energy} energy. Rest before taking this job.`);
   const taxable=['work','official_work','business_work','security_work','event_work','career_claim','collect','sell'].includes(input.action)||(input.action==='encounter'&&input.id==='wages'&&['quiet','challenge'].includes(input.choice));
   const gross=Math.max(0,p.credits-before.credits);
+  if(immediateTax)accrueTax(p,immediateTax);
   if(taxable&&gross&&!timedActions.has(input.action))accrueTax(p,gross);
   let final;
   if(timedActions.has(input.action)){
@@ -293,8 +305,7 @@ export async function act(db,owner,input,now=Date.now()){
     final=scheduleActivity(before,p,{action:input.action,label:input.action==='work'?job.name:input.action==='event_work'?cityResponses[input.id].name:input.action.replaceAll('_',' '),message,now,hours,energy,day:w.day});
     if(input.action==='work')final.activity.job=input.id;
     if(taxable)final.activity.taxGross=gross;
-    const metrics=contributionFor(input.action,input,job,hours),values=Object.values(metrics);
-    if(values.some(Boolean))extra.push(stmt(db,'INSERT INTO city_activity (id,citizen,day,completes,output,freight,crime,unrest,relief,patrols) VALUES (?,?,?,?,?,?,?,?,?,?)',op,c.id,world(final.activity.endsAt).day,final.activity.endsAt,...values));
+    districtContribution(contributionFor(input.action,input,job,hours),final.activity.endsAt);
     message=`Started ${final.activity.label.toLowerCase()}. Finishes in ${hours*15} real minutes. Pay and benefits arrive at completion.`;
   }else{
     p.energy=clamp(p.energy-energy);
@@ -304,7 +315,7 @@ export async function act(db,owner,input,now=Date.now()){
   const statements=[stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM citizens WHERE id=? AND version=?),0))',op,c.id,c.version),...checks,
     stmt(db,'UPDATE citizens SET data=?,version=version+1,last_action=?,updated=? WHERE id=?',JSON.stringify(final),now,now,c.id),...extra,
     stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),c.id,message,now),
-    stmt(db,'DELETE FROM action_guards WHERE id=? OR id=? OR id=? OR id=?',op,op+'stock',op+'offer',op+'project')];
+    stmt(db,'DELETE FROM action_guards WHERE id LIKE ?',op+'%')];
   try{await db.batch(statements);}catch(e){if(String(e).includes('guard_valid'))throw Object.assign(new Error('That offer or your balance just changed. Refresh and try again.'),{status:409});throw e;}
   return {message,...await snapshot(db,owner,now)};
 }

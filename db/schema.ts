@@ -41,3 +41,13 @@ export const maintenanceRuns = sqliteTable('maintenance_runs', {
 export const neuralMessages = sqliteTable('neural_messages', {
   id:text('id').primaryKey(), citizen:text('citizen').notNull(), channel:text('channel').notNull(), body:text('body').notNull(), created:integer('created').notNull(),
 },t=>[index('idx_neural_channel_created').on(t.channel,t.created),index('idx_neural_citizen_created').on(t.citizen,t.created)]);
+
+export const supplyOrders = sqliteTable('supply_orders', {
+ id:text('id').primaryKey(), buyer:text('buyer'), item:text('item').notNull(), price:integer('price').notNull(), remaining:integer('remaining').notNull(), quantity:integer('quantity').notNull(), status:integer('status').notNull().default(0), day:integer('day').notNull(), created:integer('created').notNull(),
+},t=>[index('idx_supply_orders_status_created').on(t.status,t.created),index('idx_supply_orders_buyer_status').on(t.buyer,t.status),check('supply_order_bounds',sql`${t.remaining} >= 0 AND ${t.remaining} <= ${t.quantity} AND ${t.price} >= 1 AND ${t.price} <= 50 AND ${t.quantity} >= 1 AND ${t.quantity} <= 10 AND ${t.status} IN (0,1,2)`)]);
+export const districtCrises = sqliteTable('district_crises', {
+ id:text('id').primaryKey(), day:integer('day').notNull(), type:text('type').notNull(), started:integer('started').notNull(), deadline:integer('deadline').notNull(), target:integer('target').notNull(), outcome:text('outcome'), repair:integer('repair').notNull().default(0), diversion:integer('diversion').notNull().default(0),
+},t=>[index('idx_district_crises_day').on(t.day),index('idx_district_crises_deadline').on(t.deadline)]);
+export const crisisActions = sqliteTable('crisis_actions', {
+ id:text('id').primaryKey(), crisis:text('crisis').notNull(), citizen:text('citizen').notNull(), completes:integer('completes').notNull(), repair:integer('repair').notNull().default(0), diversion:integer('diversion').notNull().default(0),
+},t=>[index('idx_crisis_actions_completion').on(t.crisis,t.completes),check('crisis_units_nonnegative',sql`${t.repair} >= 0 AND ${t.diversion} >= 0`)]);
