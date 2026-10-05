@@ -1,4 +1,4 @@
-# SCHISM session handoff — v0.6 short activities and painted citizens
+# SCHISM session handoff — v0.6 portrait collar follow-up
 
 Updated October 5, 2026. Implementation and playtesting are complete. The final publication and GitHub synchronization IDs are recorded in `/home/commander/SCHISM_HANDOFF.md` after native deployment confirmation. The shared local city stays running for the owner's phone.
 
@@ -22,7 +22,9 @@ This machine requires `PATH=/home/commander/.local/node-runtime/bin:$PATH` for N
 
 The user wants a harsh asynchronous MMORPG city with more meaningful actions between long jobs, stylized illustrations for locations/jobs/events, attractive customizable painted characters, visible earned uniforms, and a neural-network-style social space. They test primarily on mobile but want desktop too. They explicitly asked for agent playthroughs, pacing/visual critique, and multiple characters testing **the same local city**. Each browser has a separate local signed session; there is no second QA world.
 
-They reported hair misplaced on the chest, floating/disconnected heads, and misaligned braids in the first painted prototype. These were corrected with independently cropped alpha layers and collar/neck draw order. All five hairstyles on all three faces were visually checked. Do not restore the pixel character or the leaking nested-atlas implementation.
+They reported hair misplaced on the chest, floating/disconnected heads, and misaligned braids in the first painted prototype. Individual alpha crops corrected the atlas bleed, but the next report identified the head appearing behind the jacket. Garments now render in two passes: rear garment, face/neck, clipped front collar, then hair. Civilian and uniform openings follow their own painted neckline. The 135 face/build/hair/outfit combinations, six skin/hair color pairs, mobile shaved/braided intake, and profiles at 360/390/1440px were checked. Do not restore the pixel character, leaking nested atlas, or flat whole-jacket overlay.
+
+The user also asked for a candid assessment and improvement ideas. [Next priorities](docs/NEXT_STEPS.md) recommends action-triggered branching encounters first, then measured visit pacing, demand for player-made goods, phased shared events, and distinct institutional work. These are proposals, not implemented mechanics.
 
 Keep the Canon/Wound setting, rainy neon noir art, near-black/cyan/crimson palette, and terminal typography. Preserve the existing vanilla HTML/CSS/JavaScript, Worker, Sites identity, and D1 architecture.
 
@@ -36,7 +38,7 @@ Keep the Canon/Wound setting, rainy neon noir art, near-black/cyan/crimson palet
 - Two once-per-cycle contracts, each one trace/8 energy/50s. Public freight: 2 taxable CR, 1 trust, one shared freight. Hidden Wound echo: 3 unreported CR, +4 heat, −1 alignment, one shared crime. Commitments affect the city at completion without requiring owner return.
 - Null House: 20s/6 energy, stakes 1–3 CR, 45% chance of double return, expected loss 10% of stake, four hands per cycle. Stake held at start; no cancellation/reroll/debt or client-selected outcome.
 - Earned administration/security uniforms are awarded and equipped on appointment/recruitment; legacy owners receive them through compatibility. They are not for sale and do not replace insulation. Equipped body gear drives the painted wardrobe.
-- Three painted faces, four painted hairstyles plus Shaved, independent six skin/six hair colors, and three torso builds. Portraits use cropped generated alpha layers and runtime tint filters. Clothing draws in front of the lower neck.
+- Three painted faces, four painted hairstyles plus Shaved, independent six skin/six hair colors, and three torso builds. Portraits use cropped generated alpha layers and runtime tint filters. Rear/front garment passes put the neck inside the collar, with hair above both.
 - Seven new city scene illustrations appear in areas, job tracks, assignments, and shared events. Build embeds 23 WebP assets total, including portrait crops.
 - Long-assignment panels collapse to a concise timer on other screens; Find work retains the full illustrated assignment. This keeps mobile tasks and chat within reach.
 
@@ -54,10 +56,11 @@ The owner explicitly requested a one-time fresh start after the earlier easier e
 - `worker/game.js`: integrates both activity slots, concurrent/combined completion journals, chat writes, and immutable quick contributions.
 - `worker/progression.js`: earned uniform catalog, compatibility, and short-task job blocking.
 - `public/street.js` / `.css`: short activities, workbench, materials, supplies, neural channels/contracts, casino, area gallery, art integration, compact assignment display.
-- `public/residency.js`: generated portrait layers, independent tinting, collar order, five styles, countdown/focused-input behavior.
+- `public/residency.js`: generated portrait layers, independent tinting, neckline-specific front/rear garment composition, five styles, countdown/focused-input behavior.
 - `db/schema.ts`, append-only `drizzle/0005_complex_kree.sql`, and new metadata: indexed `neural_messages`. No prior migration changed.
 - `scripts/dev.mjs`, `scripts/local-db.mjs`: shared persistent local city, per-browser signed sessions, loopback/Tailscale listeners, once-only local migrations. These stay outside the production bundle.
 - `scripts/test-street.mjs`: 55 rule assertions. `scripts/playtest-browser.mjs`: optional real-time shared-city mobile/desktop playthrough; `playwright-core` is a pinned dev dependency.
+- `scripts/playtest-portraits.mjs`: bounded visual gallery and mobile/desktop intake/profile check using an existing private browser session; `npm run test:portraits`. No gameplay POSTs or uniform grants.
 - `README.md`, `docs/GAMEPLAY.md`, `docs/ARCHITECTURE.md`, `docs/LOCAL_HOSTING.md`, and `docs/playtests/V0.6.md`: current rules, local operation, verification, and candid critique.
 - `art/street-prompts.json` / `street-provenance.json`: built-in imagegen prompts, paths, alpha crops, conversion, and hashes. Original new PNGs remain at `/home/commander/schism-street-assets/` and default generated-images paths.
 
@@ -68,5 +71,7 @@ All **272 assertions passed**: 41 core, 27 narratives, 26 factions, 31 equipment
 Actual browser playthroughs used ordinary Iona/Cato/Null Tester characters in the shared Tailscale city. Real scavenging, crafting during a paid shift, decoding, public freight contract, chat across two sessions, and a losing casino hand were checked. Saved appearance, assignments, data, and signed sessions survived reload/restart. All 16 screens fit 360px, 390px, and 1440px with no page errors. A focused mobile chat draft survived a real short-task deadline; automatic completion refreshed after blur. Final portrait and uniform visuals were inspected.
 
 Selected screenshots and critique are committed under `docs/playtests/`. Raw QA scripts/images remain in `/tmp/schism-qa`; Iona Vex browser state remains in ignored `.local-data/qa-browser.json`. These citizens remain available as ordinary city residents; no test grants were applied to their server records.
+
+The collar follow-up changes browser composition and documentation only. Build/ESM validation, diff whitespace, and the bounded portrait browser review passed after that change. Existing gameplay rules are unchanged; the 272-rule suite above records the v0.6 gameplay release, rather than a new run for this cosmetic patch. Selected collar evidence and the follow-up critique are in `docs/playtests/V0.6.md`; all raw follow-up screenshots are in `/tmp/schism-portrait-review` on this machine.
 
 Energy can run out before the ten-task quota, by design. The played five-task route left about six energy; UI advises keeping energy for wages. Further tuning should use the owner's phone sessions and multi-day food/warmth histories. Short contracts currently repeat once each per cycle. Chat is polling with a recent-message window, without private messaging or notifications. Native WebMCP remains unverified. Long deadlines and week-long institutional gates were checked with injected time; a week-long human career was not played.
