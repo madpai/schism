@@ -1,6 +1,6 @@
 # SCHISM session handoff — v0.5 residency update
 
-Prepared October 5, 2026. This handoff describes the checked v0.5 source. The live Site and GitHub must be synchronized before the session is considered complete; use native Sites deployment status for the exact saved version/deployment IDs.
+Updated October 5, 2026. The v0.5 gameplay release was successfully published. All requested game changes, the illustrated README, and rule/architecture documentation are complete. GitHub synchronization and this final release record accompany the publication; no additional feature work is pending.
 
 ## Locations and established workflow
 
@@ -10,6 +10,10 @@ Prepared October 5, 2026. This handoff describes the checked v0.5 source. The li
 - Sites checkout: `/home/commander/ashfall` (historical directory name; the product is SCHISM).
 - Existing project: `appgprj_6ac325aa83348191bf144ff590881fd4`.
 - Hosting stays owner-private; current audience was read and preserved. Do not make the game public without a request.
+- Verified v0.5 gameplay source: `577d76fa2943cda752e5f49e01fa65d251340c98`.
+- Verified v0.5 gameplay deployment: `appgdep_6ac3c2ed2adc81918e0ec023e2e87348` (native status **succeeded**, October 5, 2026, 15:32 UTC).
+- Its saved version: `appgprj_6ac325aa83348191bf144ff590881fd4~appgver_3ed1ba85cc7c8191a6bc543ed8d155ce`.
+- A following documentation-only publication may have a newer source/deployment ID; consult current native Sites history.
 - Prior deployed source, before this update: `1179e8a19c44e392af032fc5dcf11073de274198`.
 - Prior deployment: `appgdep_6ac34ebe3c588191a613a21bab89c4b8`.
 - No credentials belong in source, this file, arguments, or handoffs. Obtain fresh Sites credentials and pass them through workflow stdin.
