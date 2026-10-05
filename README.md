@@ -6,7 +6,7 @@
 
 A persistent dystopian city RPG about ordinary people surviving an indifferent system. Arrive with no money, no allegiance, and a civic ID. Work the foundry, climb into administration, open a shop, or disappear into the underground. Your neighbors change the city you all have to live in.
 
-[Play SCHISM](https://schism.williamschultz903.chatgpt.site) · [Gameplay rules](docs/GAMEPLAY.md) · [Architecture](docs/ARCHITECTURE.md) · [Playtest and critique](docs/playtests/V0.7.md) · [Next priorities](docs/NEXT_STEPS.md) · [Session handoff](SESSION_HANDOFF.md)
+[Play SCHISM](https://schism.williamschultz903.chatgpt.site) · [Gameplay rules](docs/GAMEPLAY.md) · [Architecture](docs/ARCHITECTURE.md) · [Playtest and critique](docs/playtests/V0.8.1.md) · [Next priorities](docs/NEXT_STEPS.md) · [Session handoff](SESSION_HANDOFF.md)
 
 The hosted game currently retains its owner-private audience. Sign-in and separate persistent characters support additional authorized citizens when access is expanded. This is an asynchronous multiplayer RPG: shared markets, district conditions, projects, trades, and notices, with timed individual activities.
 
@@ -58,7 +58,7 @@ Create or join a free **tenant association** with up to twelve neighbors. Donate
 
 ![Free bunks beneath a broken radiator](public/bunkhouse.webp)
 
-The compact daily screen puts vitals, pending work, ready contact messages, and useful next moves first. Mobile navigation keeps tasks, messages, and rest close. Painted contact portraits and visible jacket scuffs carry the district into the interface; mending costs fabric and effort while earned uniforms retain their corrected composition.
+The compact daily screen puts vitals, pending work, ready contact messages, and useful next moves first. The v0.8.1 mobile pass brings rest controls higher, folds secondary housing and empty shelf rows, and retains open sections during refresh. Mobile navigation keeps tasks, messages, and rest close. Painted contact portraits and visible jacket scuffs carry the district into the interface; mending costs fabric and effort while earned uniforms retain their corrected composition.
 
 ## Choose a life
 

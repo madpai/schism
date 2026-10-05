@@ -36,6 +36,21 @@ const icon=(name,cls='')=>`<svg viewBox="0 0 24 24" class="${cls}" aria-hidden="
 const tabs=[['overview','Overview'],['street','Short tasks'],['workshop','Workshop'],['network','Neural network'],['city','The city'],['jobs','Find work'],['market','Marketplace'],['housing','Rest & housing'],['neighbors','Neighbors'],['loadout','Loadout'],['inventory','Inventory'],['careers','Careers'],['encounters','Your story'],['forces','Order & Chaos'],['underground','Underground'],['institutions','Institutions'],['citizens','Citizens']];
 let state=SEED,ready=false,busy=false,tab=location.hash.slice(1)||'overview',filter='all',marketTab='supply',connection='',toastTimer,pendingAction=null,storyTab='encounters';
 const drafts={notice:'',name:''};
+const viewDisclosures=new Map();
+let renderedTab=null;
+function rememberDisclosures(){
+  if(!renderedTab)return;
+  const saved=viewDisclosures.get(renderedTab)||new Map();
+  document.querySelectorAll('#main details[data-view-key]').forEach(el=>saved.set(el.dataset.viewKey,el.open));
+  viewDisclosures.set(renderedTab,saved);
+}
+function restoreDisclosures(){
+  const saved=viewDisclosures.get(tab);
+  document.querySelectorAll('#main details[data-view-key]').forEach(el=>{
+    if(saved?.has(el.dataset.viewKey))el.open=saved.get(el.dataset.viewKey);
+  });
+  renderedTab=tab;
+}
 const timeAgo=t=>{const m=Math.floor((Date.now()-t)/60000);return m<1?'JUST NOW':m<60?`${m}M AGO`:m<1440?`${Math.floor(m/60)}H AGO`:`${Math.floor(m/1440)}D AGO`;};
 const c=()=>state.citizen;
 const button=(label,action,id='',cls='',disabled=false,attrs='')=>`<button class="btn ${cls}" data-action="${action}" ${id?`data-id="${e(id)}"`:''} ${disabled||busy||c().activity&&['work','rest','crime','rite','organize','clinic','official_work','business_work','security_work','event_work','clearance','career','career_claim'].includes(action)?'disabled':''} ${attrs}>${label}</button>`;
@@ -73,6 +88,7 @@ function citizens(){const p=c();return `${heading('You aren’t the only one.','
 function profile(){const p=c();return `${heading('Your citizen papers.','A number to the city. A life to you.')}<div class="two-col"><section class="feature-panel"><div class="eyebrow">CANON BIOLOGICAL REGISTRY</div><div class="profile-heading"><div class="profile-avatar">${icon('user')}</div><div><h2>${e(p.name)}</h2><p>${e(p.role)} · NINTH STRATUM</p></div></div><form class="name-form" id="name-form"><input name="name" value="${e(drafts.name||p.name)}" minlength="2" maxlength="24" aria-label="Citizen name" required><button class="btn">Update papers</button></form><div class="definition"><span>Citizen ID</span><span>${e(p.id.slice(0,8).toUpperCase())}</span></div><div class="definition"><span>Shifts completed</span><span>${p.shifts}</span></div><div class="definition"><span>Employer trust</span><span>${p.rep}</span></div><div class="definition"><span>Signal alignment</span><span>${alignmentLabel(p.alignment)}</span></div><div class="definition"><span>Implant coherence</span><span>${p.coherence} / 100</span></div><div class="definition"><span>Fullness</span><span>${p.fullness} / 100</span></div><div class="definition"><span>Security heat</span><span>${Math.round(p.heat)} / 100</span></div><div class="definition"><span>Personal time</span><span>Day ${Math.floor(p.clock/24)+1} · ${String(p.clock%24).padStart(2,'0')}:00</span></div><div class="definition"><span>Union</span><span>${p.union?'Member':'Unaffiliated'}</span></div></section><section class="feature-panel"><div class="eyebrow">THERE’S MORE THAN ONE WAY UP</div><h2>Find your place</h2><p>Every door has a cost. Some take money; others take a piece of you.</p><div class="role-paths"><div class="role-path"><b>Trusted worker</b><small>8 trust · Licensed lattice work</small></div><div class="role-path"><b>Smuggler</b><small>Complete a package run</small></div><div class="role-path"><b>Union organizer</b><small>Join, then organize a shift</small></div><div class="role-path"><b>Shop owner</b><small>10 trust · 90 CR license</small></div><div class="role-path"><b>Landlord</b><small>15 trust · 180 CR lease</small></div><div class="role-path"><b>Canon official</b><small>20 trust · 60 CR application</small></div></div><div class="quote">You are not the chosen one.<br>You are the one who showed up again.</div></section></div>${bag()}<div class="section-head"><h2>Your journal</h2><small>THE REGISTRY REMEMBERS</small></div>${activity(12)}`;}
 const pages={overview,neighbors:tenantPage,city,jobs:work,market,housing,underground,institutions,citizens,profile:residencyProfile,encounters:personalStory,forces:forcesPage,loadout,inventory,careers,street:streetPage,workshop:workshopPage,network:networkPage};
 function render(){
+  rememberDisclosures();
   if(!pages[tab])tab='overview';
   $('#navigation').innerHTML=`<div class="nav-group">SURVIVE THE CITY</div>${tabs.slice(0,5).map(([id,label])=>`<button class="nav-button ${tab===id?'active':''}" data-nav="${id}" ${tab===id?'aria-current="page"':''}><span class="nav-key" aria-hidden="true">[${String(tabs.findIndex(t=>t[0]===id)+1).padStart(2,'0')}]</span> ${label}${id==='jobs'?`<span class="nav-count" aria-hidden="true">${state.jobs.filter(j=>!shiftQuote(j,'standard').blocked).length}</span>`:''}</button>`).join('')}<div class="nav-group">FIND YOUR PLACE</div>${tabs.slice(5).map(([id,label])=>`<button class="nav-button ${tab===id?'active':''}" data-nav="${id}" ${tab===id?'aria-current="page"':''}><span class="nav-key" aria-hidden="true">[${String(tabs.findIndex(t=>t[0]===id)+1).padStart(2,'0')}]</span> ${label}</button>`).join('')}`;
   $('#citizen-name').textContent=c().name;$('#citizen-role').textContent=c().role;$('#avatar').innerHTML=citizenArt(c().appearance,true);
@@ -81,6 +97,7 @@ function render(){
   $('#top-weather').textContent=`${state.world.temperature}°C · ${state.world.weather}`;
   document.body.classList.toggle('onboarding',!ready||!c().registered);
   $('#main').innerHTML=`${connection?`<div class="connection-banner"><span>${e(connection)}</span>${!ready&&connection.includes('Sign in')?'<a href="/signin-with-chatgpt?return_to=%2F" target="_top">Sign in</a>':'<button class="btn ghost" data-refresh>Retry</button>'}</div>`:''}${!ready||!c().registered?arrivalPage():arrivalConfirmation()+(tab==='overview'?'':assignmentPanel()+shortTaskPanel()+papersWarning())+pages[tab]()}`;
+  restoreDisclosures();
   document.querySelectorAll('.mobile-dock [data-nav]').forEach(el=>el.setAttribute('aria-current',el.dataset.nav===tab?'page':'false'));
   $('#save-status').textContent=busy?'Saving to the city registry…':ready?'PROGRESS SAVED · CITY CONNECTED':'Connecting to the city registry…';
 }
