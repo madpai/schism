@@ -1,5 +1,6 @@
 import { encountersFor, personalState, resolveEncounter } from './stories.js';
 import { forceProfile, citizenForces } from './forces.js';
+import { gearCatalog, careerPaths, shiftTypes, specialistJobs, careerState, gearEffects, coldRate, jobQuote, recordShift, careerSnapshot, equipmentSnapshot, removeEquipment } from './progression.js';
 const EPOCH = Date.UTC(2026,9,5);
 const clamp = (n, min=0, max=100) => Math.max(min,Math.min(max,n));
 export const goods = {
@@ -10,11 +11,12 @@ export const goods = {
   scrap:{name:'Relay fragments',price:4,stock:25,description:'Dead neural hardware. Some fragments still retain an echo.',effect:'Trade, repair, or seal a breach',icon:'box'},
 };
 export const jobs = {
-  sorting:{name:'Memory sorter',employer:'Canon Mnemonic Works',pay:8,energy:18,hours:2,rep:1,description:'Separate intact memory wafers from the ones still speaking. Do not listen.',risk:'Routine exposure',requires:0},
-  hauling:{name:'Reliquary carrier',employer:'Vestibule Transit Office',pay:13,energy:28,hours:3,rep:2,description:'Move sealed reliquaries between the transit pylons. Their weight changes after midnight.',risk:'Heavy load',requires:0},
-  cleaning:{name:'Residue custodian',employer:'Canon Order Maintenance',pay:5,energy:10,hours:1,rep:1,description:'Scrape the black residue from public prayer terminals. It grows back when the speakers go silent.',risk:'Routine exposure',requires:0},
-  maintenance:{name:'Lattice technician',employer:'Canon Mnemonic Works',pay:22,energy:20,hours:3,rep:3,description:'Repair the neural lattice from inside its maintenance coffin. Your badge permits you to leave.',risk:'Trusted operative',requires:8},
+  sorting:{career:'mnemonic',name:'Memory sorter',employer:'Canon Mnemonic Works',pay:8,energy:18,hours:2,rep:1,description:'Separate intact memory wafers from the ones still speaking. Do not listen.',risk:'Routine exposure',requires:0},
+  hauling:{career:'transit',physical:true,name:'Reliquary carrier',employer:'Vestibule Transit Office',pay:13,energy:28,hours:3,rep:2,description:'Move sealed reliquaries between the transit pylons. Their weight changes after midnight.',risk:'Heavy load',requires:0},
+  cleaning:{career:'civic',name:'Residue custodian',employer:'Canon Order Maintenance',pay:5,energy:10,hours:1,rep:1,description:'Scrape the black residue from public prayer terminals. It grows back when the speakers go silent.',risk:'Routine exposure',requires:0},
+  maintenance:{career:'mnemonic',name:'Lattice technician',employer:'Canon Mnemonic Works',pay:22,energy:20,hours:3,rep:3,description:'Repair the neural lattice from inside its maintenance coffin. Your badge permits you to leave.',risk:'Trusted operative',requires:8},
 };
+Object.assign(jobs,specialistJobs);
 export function world(now=Date.now()) {
   const day=Math.max(1,Math.floor((now-EPOCH)/21600000)+1);
   const hour=Math.floor(((now-EPOCH)%21600000+21600000)%21600000/900000);
@@ -25,7 +27,7 @@ export function initial(now=Date.now()) {
   return {credits:9,health:78,energy:58,fullness:32,warmth:24,rep:0,heat:0,scrap:0,bread:0,medicine:0,coat:false,housing:'bunk',role:'Worker',union:false,shifts:0,clock:7,nextRent:24,rentDebt:12,rentCycles:1,joined:now,lastTick:now,evicted:false,business:false,property:false};
 }
 export function settle(data, now=Date.now()) {
-  const p=citizenForces({...data});
+  const p=careerState(citizenForces({...data}));
   const hours=Math.min(168,Math.floor((now-p.lastTick)/3600000));
   if(hours>0){p.fullness=clamp(p.fullness-hours*2);p.warmth=clamp(p.warmth-hours*(p.coat?.3:1));p.energy=clamp(p.energy+hours*3);p.heat=clamp(p.heat-hours);p.clock+=hours;p.lastTick=now-((now-p.lastTick)%3600000);}
   while(p.clock>=p.nextRent){p.rentDebt+=(p.housing==='room'?20:12);p.rentCycles++;p.nextRent+=24;}
@@ -43,7 +45,7 @@ export async function ensureCitizen(db,owner,now=Date.now()){
   return stmt(db,'SELECT * FROM citizens WHERE owner=?',owner).first();
 }
 async function ensureMarket(db,w){
-  await db.batch(Object.entries(goods).map(([id,g])=>stmt(db,'INSERT INTO market (id,stock,day) VALUES (?,?,?) ON CONFLICT(id) DO UPDATE SET stock=min(?,market.stock+max(0,excluded.day-market.day)*?), day=max(market.day,excluded.day)',id,g.stock,w.day,g.stock,g.stock)));
+  await db.batch(Object.entries({...goods,...Object.fromEntries(Object.entries(gearCatalog).filter(([id,g])=>g.price&&!Object.hasOwn(goods,id)))}).map(([id,g])=>stmt(db,'INSERT INTO market (id,stock,day) VALUES (?,?,?) ON CONFLICT(id) DO UPDATE SET stock=min(?,market.stock+max(0,excluded.day-market.day)*?), day=max(market.day,excluded.day)',id,g.stock,w.day,g.stock,g.stock)));
 }
 async function cityProject(db,w){
   const id='heating-'+w.day;
@@ -71,7 +73,8 @@ export async function snapshot(db,owner,now=Date.now()){
     stmt(db,"SELECT count(*) AS citizens, sum(CASE WHEN json_extract(data,'$.union')=1 THEN 1 ELSE 0 END) AS members FROM citizens").first(),
   ]);
   return {citizen:{id:c.id,name:c.name,...citizen},world:w,project,forces:force,encounters:encountersFor(citizen),
-    goods:stock.map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j})),
+    goods:stock.filter(s=>Object.hasOwn(goods,s.id)).map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j,quotes:Object.keys(shiftTypes).map(mode=>jobQuote(citizen,j,mode,w))})),
+    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),
     log,board:board.map(p=>({id:p.id,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
     citizens:people.map(p=>{const d=JSON.parse(p.data);return {id:p.id,name:p.name,role:d.role,rep:d.rep,shifts:d.shifts,union:d.union,online:now-p.updated<120000};}),listings:offers,totals};
 }
@@ -103,18 +106,31 @@ export async function act(db,owner,input,now=Date.now()){
       message='You add a relay fragment to the thermal lattice. One less freezing habitation cell, if enough citizens join you.';break;
     }
     case 'work':{
-      need(job,'That job is no longer available.');need(p.rep>=job.requires,`You need ${job.requires} trust for this job.`);need(p.health>=15,'Visit the clinic or find medicine before another shift.');
-      hours=job.hours;energy=job.energy;p.credits+=job.pay+(p.union?1:0);p.rep+=job.rep;p.shifts++;
+      need(job,'That job is no longer available.');const mode=input.shift||'standard';need(Object.hasOwn(shiftTypes,mode),'Choose a published shift type.');
+      const quote=jobQuote(p,job,mode,w);need(!quote.blocked,quote.blocked);
+      hours=quote.hours;energy=quote.energy;p.credits+=quote.pay;p.rep+=job.rep;p.shifts++;recordShift(p,job,quote,w.day);
+      p.health=clamp(p.health-quote.healthLoss);p.coherence=clamp(p.coherence-quote.coherenceLoss);p.heat=clamp(p.heat+quote.heat);p.scrap+=quote.scrap;
       if(p.rep>=8&&p.role==='Worker')p.role='Trusted worker';
-      message=`Completed a shift as ${job.name.toLowerCase()}. Earned ${job.pay+(p.union?1:0)} credits.`;break;
+      const moments={mnemonic:'You leave with a memory of rain falling in a city you have never visited.',transit:'Rain gathers in your collar. A scanner follows you until the next intersection.',civic:'The last applicant has your face. You close the terminal before it can speak.',recovery:'Your tools smell of ozone. Something beneath the tunnel floor is still breathing.'};
+      message=`Completed ${shiftTypes[mode].name.toLowerCase()} as ${job.name.toLowerCase()}. Earned ${quote.pay} credits and ${quote.xp} career XP. ${moments[job.career]}`;break;
     }
+    case 'career':need(typeof input.id==='string'&&Object.hasOwn(careerPaths,input.id),'Choose a career path.');need(p.career!==input.id,'That career is already active.');p.career=input.id;message=`Your employment record now follows ${careerPaths[input.id].name.toLowerCase()}. Experience on every path is retained.`;break;
+    case 'career_claim':need(typeof input.id==='string'&&Object.hasOwn(careerPaths,input.id),'Choose a career path.');need(p.dailyWork.day===w.day&&(p.dailyWork.counts[input.id]||0)>=3,'Finish three shifts on this path in one city day.');need(!p.dailyWork.claimed[input.id],'You already claimed this work quota.');p.dailyWork.claimed[input.id]=true;p.credits+=8;p.rep++;message='Three shifts recorded. Eight quota credits enter your implant. One more trust in your employment file.';break;
+    case 'gear_buy':{
+      const g=typeof input.id==='string'&&Object.hasOwn(gearCatalog,input.id)?gearCatalog[input.id]:null;need(g&&!g.starter,'That equipment is not for sale.');need(!p.ownedGear.includes(input.id),'You already own that equipment.');const cost=input.id==='coat'?price('coat',w):g.price;credit(cost);
+      checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM market WHERE id=? AND stock>0),0))',op+'stock',input.id));extra.push(stmt(db,'UPDATE market SET stock=stock-1 WHERE id=?',input.id));p.credits-=cost;p.ownedGear.push(input.id);message=`Bought ${g.name.toLowerCase()} for ${cost} credits. Equip it from your loadout.`;break;
+    }
+    case 'gear_equip':{
+      const g=typeof input.id==='string'&&Object.hasOwn(gearCatalog,input.id)?gearCatalog[input.id]:null;need(g&&p.ownedGear.includes(input.id),'You do not own that equipment.');need(p.loadout[g.slot]!==input.id,'That equipment is already equipped.');p.loadout[g.slot]=input.id;p.coat=p.loadout.body==='coat';message=`Equipped ${g.name.toLowerCase()}. ${g.effect}.`;break;
+    }
+    case 'gear_remove':need(typeof input.id==='string'&&['head','body','hands','feet','neural'].includes(input.id),'Unknown equipment slot.');need(p.loadout[input.id]&&!gearCatalog[p.loadout[input.id]].starter,'That slot has no removable equipment.');removeEquipment(p,input.id);message='Equipment returned to your inventory. The city feels a little less forgiving.';break;
     case 'buy':{
       const g=typeof input.id==='string'&&Object.hasOwn(goods,input.id)?goods[input.id]:null;need(g,'Unknown item.');const cost=price(input.id,w);credit(cost);
-      if(input.id==='coat')need(!p.coat,'You already have an insulated shroud.');
+      if(input.id==='coat')need(!p.ownedGear.includes('coat'),'You already have an insulated shroud.');
       checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM market WHERE id=? AND stock>0),0))',op+'stock',input.id));
       extra.push(stmt(db,'UPDATE market SET stock=stock-1 WHERE id=?',input.id));p.credits-=cost;
       if(input.id==='soup'){p.fullness=clamp(p.fullness+35);p.warmth=clamp(p.warmth+18);message='Heated nutrient broth. Your implant marks the body as fed. For a moment, it is correct.';}
-      else if(input.id==='coat'){p.coat=true;p.warmth=clamp(p.warmth+12);message='The shroud carries three erased civic signatures. Your implant adds a fourth.';}
+      else if(input.id==='coat'){p.coat=true;p.ownedGear.push('coat');p.loadout.body='coat';p.warmth=clamp(p.warmth+12);message='The shroud carries three erased civic signatures. Your implant adds a fourth.';}
       else {p[input.id]=(p[input.id]||0)+1;message=`Bought ${g.name.toLowerCase()} for ${cost} credits. It’s in your bag.`;}break;
     }
     case 'consume':{
@@ -126,7 +142,7 @@ export async function act(db,owner,input,now=Date.now()){
     case 'upgrade':credit(45);need(!p.evicted,'Settle your rent debt first.');need(p.housing!=='room','You already have a room.');p.credits-=45;p.housing='room';p.warmth=clamp(p.warmth+25);message='A room with a lock. Forty-five credits never bought so little freedom.';break;
     case 'crime':{
       need(['steal','smuggle'].includes(input.id),'Unknown opportunity.');hours=input.id==='steal'?1:3;energy=input.id==='steal'?12:22;
-      const risk=clamp((input.id==='steal'?.3:.4)+(p.heat/200)+(w.inspection?.15:0)+(w.securityModifier||0),0,1);
+      const risk=clamp((input.id==='steal'?.3:.4)+(p.heat/200)+(w.inspection?.15:0)+(w.securityModifier||0)+gearEffects(p).captureRisk,0,1);
       const random=crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
       if(random<risk){const fine=Math.min(p.credits,input.id==='steal'?7:15);p.credits-=fine;p.rep=Math.max(0,p.rep-2);p.heat=clamp(p.heat+20);p.health=clamp(p.health-8);message=`Security caught you. ${fine} credits confiscated. They remember your face.`;}
       else {p.heat=clamp(p.heat+12);if(input.id==='steal'){p.scrap+=3;message='Three relay fragments slip into your shroud. The mnemonic sentinel keeps reciting its prayer.';}else {p.credits+=w.contrabandPay||24;p.role='Smuggler';message=`The sealed mnemonic package reaches the other side. ${w.contrabandPay||24} credits enter your implant.`;}}break;
@@ -168,7 +184,7 @@ export async function act(db,owner,input,now=Date.now()){
     default:throw Object.assign(new Error('Unknown action.'),{status:400});
   }
   need(p.energy>=energy,`You need ${energy} energy. Rest before taking this job.`);p.energy=clamp(p.energy-energy);p.clock+=hours;
-  p.fullness=clamp(p.fullness-hours*3);p.warmth=clamp(p.warmth-hours*Math.max(0,(p.coat?1:3)-(w.heating?1:0)));
+  p.fullness=clamp(p.fullness-hours*3);p.warmth=clamp(p.warmth-hours*coldRate(p,w));
   if(hours&&p.fullness<15)p.health=clamp(p.health-hours*2);if(hours&&p.warmth<15)p.health=clamp(p.health-hours);
   if(p.health===0){p.health=20;p.energy=20;p.credits=Math.max(0,p.credits-5);message+=' You collapse. The emergency ward patches you up and takes 5 credits.';}
   const final=settle(p,now);

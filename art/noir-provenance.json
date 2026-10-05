@@ -1,0 +1,76 @@
+{
+  "project": "SCHISM",
+  "mode": "built-in image_gen",
+  "generated_asset_count": 2,
+  "requests_per_asset": 1,
+  "parallel_batch": true,
+  "variants": 0,
+  "retries": 0,
+  "reference_images": [],
+  "prompt_assets": [
+    {
+      "filename": "city-noir.png",
+      "use_case": "stylized-concept",
+      "prompt": "Use case: stylized-concept\nAsset type: original wide environmental backdrop for SCHISM, a dystopian browser game.\nPrimary request: create one rain-soaked cyberpunk noir urban scene in the Ninth Stratum, an oppressive city where occult technology binds Order and Chaos.\nScene/backdrop: street level between cramped, enormous vertical housing and server towers; heavy rain; grimy hanging cables; stacked luminous panels displaying only abstract blocks of light; wet asphalt; smoky distant haze. At the end of the street a looming ritual server structure fuses severe geometric monolithic architecture with uncanny technological ring forms.\nSubject: the city is the main subject. A few ordinary tiny exhausted citizens beneath umbrellas or hoods travel through the street; anonymous civilians, never action heroes. Ominous surveillance lights watch from the towers.\nStyle/medium: atmospheric urban legacy-PC rendered game art, grainy late-1990s pre-rendered 3D background, imperfect low-resolution material textures and subtle dither, restrained cinematic depth. Original architecture, people and symbols. Dark futuristic noir mood; no copied movie or game imagery.\nComposition/framing: wide 2.2:1 horizontal canvas, approximately 2200 by 1000 pixels. Street-level camera, deep architectural scale, center perspective corridor with coherent central subject area that remains useful when center-cropped. Rain and foreground asphalt create depth; towers feel immense.\nLighting/mood: near-black shadows with readable cold midtones, cold teal scanner light, restrained magenta and deep red neon reflected on wet pavement, haze softening far architecture. Ominous, tired, oppressive.\nMaterials/textures: damp corroded metal, concrete, stained plastic panels, wet weathercoats, fine rain streaks, reflective asphalt and grain.\nConstraints: exactly one environmental scene, no text, no letters, no numbers, no labels, no logos, no brands, no watermarks, no interface elements.\nAvoid: steam-age machinery, 1930s clothing or city design, action heroes, guns, copied characters, familiar franchise symbols, bright saturated rainbow neon, ultra-clean modern digital illustration, excessive black crush.",
+      "transparent_background": false,
+      "source_generated_path": "/home/commander/.codex/generated_images/01a10ad3-26eb-7742-a193-e318fa5a1e22/exec-fa01f0f2-74b8-4398-975c-82167e0e30d4.png",
+      "saved_path": "/home/commander/schism-noir-assets/city-noir.png",
+      "dimensions": {
+        "width": 1860,
+        "height": 846
+      },
+      "aspect_ratio": 2.198581560283688,
+      "sha256": "06a62e0f6502bc60645f320dcb2a94104834b69f1fc77702932d319829dd3adf",
+      "description": "Rain-soaked vertical Ninth Stratum street, tiny anonymous civilians, teal and red light panels, and a distant ringed ritual server.",
+      "inspection": {
+        "tool": "view_image",
+        "status": "inspected",
+        "notes": "Composition, clothing, empty hands, rain/noir palette and absence of text or logos checked."
+      }
+    },
+    {
+      "filename": "citizen.png",
+      "use_case": "stylized-concept",
+      "prompt": "Use case: stylized-concept\nAsset type: original worker identity-scan character portrait for the SCHISM browser game's character loadout screen.\nPrimary request: one anonymous exhausted adult of indeterminate gender, an ordinary worker living under oppressive Order and Chaos occult technology.\nScene/backdrop: bleak neutral dark alley with a quiet studio-like identity photograph composition; faint rain atmosphere; no other people.\nSubject: single adult worker standing directly facing the camera, full body visible from head to scuffed boot soles, weary neutral expression, worn dark utilitarian weathercoat, plain trousers, scuffed boots. Subtle inexpensive cybernetic implant at one temple. A small respirator hangs unused at the collar. Both hands are visible, naturally resting, empty.\nStyle/medium: photograph-like legacy-PC rendered character image, grainy late-1990s pre-rendered 3D game art, lifelike imperfect face, worn fabric and coarse material textures, subtle dither, understated polygonal rendering character. Original person and original costume.\nComposition/framing: portrait 2:3 vertical canvas, approximately 1024 by 1536 pixels. Centered full-body frontal identity photo with clear readable silhouette, ample small margin around head and boots, character occupies most of the height. Body proportions and hands natural. No foreground obstructions.\nLighting/mood: near-black background, readable cool midtone skin and fabric, subtle cold teal rim light and restrained pink rain glow; exhausted, anonymous, quietly bleak.\nMaterials/textures: water-darkened coarse coat fabric, worn trouser seams, scuffed inexpensive boots, subtle grime and realistic fatigue.\nConstraints: exactly one adult and only one image; hands empty, no gun, no weapon, no extra inventory equipment. No labels, stats, text, letters, numbers, UI, frames, panels, logos, brands or watermarks. Actual rendered person, never a code-drawn silhouette.\nAvoid: heroic pose, fashion-model glamour, armor, trenchcoat detective styling, 1930s or steam-age aesthetic, copied movie or game characters, multiple people, dramatic action, glossy futuristic fashion, bright rainbow neon, cropped feet, excessive black crush.",
+      "transparent_background": false,
+      "source_generated_path": "/home/commander/.codex/generated_images/01a10ad3-26eb-7742-a193-e318fa5a1e22/exec-a92cb8af-43b9-4536-a125-41b5f288ca7b.png",
+      "saved_path": "/home/commander/schism-noir-assets/citizen.png",
+      "dimensions": {
+        "width": 1024,
+        "height": 1536
+      },
+      "aspect_ratio": 0.6666666666666666,
+      "sha256": "2d5bd8d9ba7233b5f3047caae00b68af0a16655a967cae310b4f11637f9d2de7",
+      "description": "Full-body exhausted anonymous adult worker with worn weathercoat, empty hands, temple implant and respirator at collar.",
+      "inspection": {
+        "tool": "view_image",
+        "status": "inspected",
+        "notes": "Composition, clothing, empty hands, rain/noir palette and absence of text or logos checked."
+      }
+    }
+  ],
+  "source_material": "Original generated artwork; no image references, brands, copied characters, copied places, or copied symbols.",
+  "provenance_status": "complete",
+  "generation_timing": {
+    "started_utc": "2026-10-05 06:51:05 UTC",
+    "completed_utc": "2026-10-05 06:52:34 UTC"
+  },
+  "generator": {
+    "tool": "image_gen.imagegen",
+    "mode": "built-in",
+    "model": "not exposed by tool"
+  },
+  "processing": "Original PNG files copied without visual edits, cropping, resizing, variants or retries.",
+  "deployed_assets": [
+    {
+      "path": "public/city-noir.webp",
+      "sha256": "6a1276d6e8ddebb0d8d5ac861a271621fd919616bbf3c5fa43d60401177435b8",
+      "conversion": "Resized and encoded WebP quality 87."
+    },
+    {
+      "path": "public/citizen.webp",
+      "sha256": "14ce12a005f1e96b68626e354585d7f991f3c0afe56a660329803198d5c59d09",
+      "conversion": "Resized and encoded WebP quality 87."
+    }
+  ]
+}
