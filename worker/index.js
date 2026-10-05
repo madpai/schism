@@ -1,9 +1,19 @@
 import { snapshot, act } from './game.js';
+import { resetCharacters } from './reset.js';
 import { page, assets } from './page.js';
 const headers={ 'Cache-Control':'no-store', 'X-Content-Type-Options':'nosniff' };
 export default {
   async fetch(request,env){
     const url=new URL(request.url);
+    // Temporary one-time operation. Sites' confirmed owner-private access boundary
+    // authenticates browser and service callers. Remove this route after execution.
+    if(url.pathname==='/api/maintenance/character-reset'){
+      if(request.method!=='POST')return Response.json({error:'Method not allowed.'},{status:405,headers});
+      const origin=request.headers.get('Origin');if(origin&&origin!==url.origin)return Response.json({error:'Request origin does not match the city.'},{status:403,headers});
+      if(!env.DB)return Response.json({error:'City registry unavailable.'},{status:503,headers});
+      try{return Response.json(await resetCharacters(env.DB),{headers});}
+      catch(error){console.error('Character reset:',error);return Response.json({error:'Character reset could not complete.'},{status:503,headers});}
+    }
     if(url.pathname==='/')return new Response(page,{headers:{'Content-Type':'text/html;charset=utf-8','X-Content-Type-Options':'nosniff'}});
     if(url.pathname.startsWith('/art/')){
       const a=assets[url.pathname];if(!a)return new Response('Not found',{status:404});
