@@ -22,6 +22,14 @@ Common food deliveries derive from cumulative completed production and freight. 
 
 The current prototype derives event state from the current aggregate thresholds, so collective remedies can lift emergencies. It does not implement historical climate reconstruction, real-time combat, direct player security powers, or an open public account audience. The hosted audience remains owner-private until explicitly changed.
 
+## One-time character reset
+
+Migration `0004_fluffy_selene.sql` adds `maintenance_runs`, an audit and idempotence receipt table. The owner-authorized reset `residency-fresh-start-2026-10-05` completed in production at 16:08:47 UTC on October 5, 2026, removing one existing citizen.
+
+`worker/reset.js` retains the tested maintenance implementation. One atomic D1 batch inserts the unique receipt, deletes player listings/posts/journals, cancels unfinished `city_activity` rows, and deletes citizens. Completed contributions and market/faction/project records remain. A failed deletion rolls back the receipt and all deletions. A repeated or concurrent call returns the existing receipt and preserves newly created characters. Fresh state reads use normal account creation and registration; neither gameplay nor schema migration invokes the reset.
+
+The reset ran through a temporary POST route behind the confirmed owner-private Sites access boundary. That route and the reset helper were removed from the production bundle immediately afterward. There is no reset HTTP endpoint or automatic reset on future deployments.
+
 ## Interface and build
 
 `public/residency.js` adds the train intake, composed SVG character scan, appearance editor, character sheet, activity countdowns, Revenue, Registry, security eligibility, and district conditions. `public/residency.css` extends the existing dark terminal and neon visual direction. The original art remains in `public/`, with generation provenance under `art/`.
@@ -32,6 +40,6 @@ Local development uses a Node SQLite D1 adapter and fixed QA identity. Gameplay 
 
 ## Verification
 
-The current suite has 197 gameplay assertions across core survival/trading, narratives/repairs, faction effects, equipment/careers, and residency/economy. It includes last-stock and player-listing races, duplicate faction actions, concurrent activity-completion reads, fractional tax, seller payment during a shift, gate restrictions, clearance, detention, indigence, offline city output, and legacy saves.
+The current suite has 217 assertions: 197 across core survival/trading, narratives/repairs, faction effects, equipment/careers, and residency/economy, plus 20 reset checks. It includes last-stock and player-listing races, duplicate faction actions, concurrent activity-completion reads, fractional tax, seller payment during a shift, gate restrictions, clearance, detention, indigence, offline city output, and legacy saves. Reset checks cover linked-record cleanup, fresh registration, retained shared state, idempotence, concurrent requests, and transaction rollback.
 
 Desktop/mobile browser checks verify intake, name and appearance persistence, all primary screens, profile editing, timed work, deferred pay, assignment reload, and no overflow or page errors. Native WebMCP registration is feature-detected and has not been verified in a supporting browser.

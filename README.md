@@ -14,7 +14,9 @@ The hosted game currently retains its owner-private audience. Sign-in and separa
 
 ChatGPT sign-in creates a durable account. Register one character: choose a name, gender, six skin tones, six hair colors, five hairstyles, and three builds. The same composed character scan appears in your papers, loadout, and overview. These choices are cosmetic and can be updated later.
 
-Every arrival comes by an import train into the **current** Ninth Stratum. New citizens start neutral with **0 credits**, worn equipment, and a bunk for one city cycle. Existing characters retain their money, gear, careers, relationships, and original arrival date.
+Every arrival comes by an import train into the **current** Ninth Stratum. New citizens start neutral with **0 credits**, worn equipment, and a bunk for one city cycle.
+
+The owner requested a fresh start after the residency update. On October 5, 2026, all existing characters and their personal records were reset once. Sign in again to create a new citizen under the harsher rules. The shared city clock, market, faction balance, repair projects, and completed district contributions continue. Future updates retain character progress.
 
 ## A clock you cannot outrun
 
@@ -77,7 +79,7 @@ npm run dev
 
 The development game runs at `http://127.0.0.1:4173`, uses a local QA identity, and resets its in-memory database on restart. Production uses Sites identity and durable D1 storage. Rebuild and restart development after changing source.
 
-**197 gameplay checks** cover registration, timed settlement, survival, branching stories, shared-stock and player-trade races, equipment, careers, fractional income tax, factory holds, administrative clearance, relief, arrests, late security progression, shared event causes, and legacy saves. Desktop and mobile browser checks cover character creation/editing, all screens, and assignment persistence. See the handoff for verification evidence.
+**217 checks** cover registration, timed settlement, survival, branching stories, shared-stock and player-trade races, equipment, careers, fractional income tax, factory holds, administrative clearance, relief, arrests, late security progression, shared event causes, legacy saves, and the one-time reset's cleanup, rollback, and retry safety. Desktop and mobile browser checks cover character creation/editing, all screens, and assignment persistence. See the handoff for verification evidence.
 
 ## Source and hosting
 

@@ -15,12 +15,11 @@ const css=await readFile('public/style.css','utf8')+'\n'+await readFile('public/
 const page=(await readFile('public/index.html','utf8')).replace('/* STYLES */',css).replace('/* APP */',app);
 const assets={};for(const name of ['city','factory','market','city-noir','citizen'])assets['/art/'+name+'.webp']=(await readFile('public/'+name+'.webp')).toString('base64');
 const residency=(await readFile('worker/residency.js','utf8')).replace(/export /g,'');
-const reset=(await readFile('worker/reset.js','utf8')).replace(/export /g,'');
 const citylife=(await readFile('worker/citylife.js','utf8')).replace(/export /g,'');
 const progression=(await readFile('worker/progression.js','utf8')).replace(/export /g,'');
 const stories=(await readFile('worker/stories.js','utf8')).replace(/export /g,'');
 const forces=(await readFile('worker/forces.js','utf8')).replace(/export /g,'');
 const game=(await readFile('worker/game.js','utf8')).replace(/^import .*;\n/gm,'').replace(/export /g,'');const entry=(await readFile('worker/index.js','utf8')).replace(/^import .*;\n/gm,'');
-await writeFile('dist/server/index.js',reset+'\n'+residency+'\n'+citylife+'\n'+forces+'\n'+progression+'\n'+stories+'\n'+game+'\nconst page='+JSON.stringify(page)+';\nconst assets='+JSON.stringify(assets)+';\n'+entry);
+await writeFile('dist/server/index.js',residency+'\n'+citylife+'\n'+forces+'\n'+progression+'\n'+stories+'\n'+game+'\nconst page='+JSON.stringify(page)+';\nconst assets='+JSON.stringify(assets)+';\n'+entry);
 await cp('.openai/hosting.json','dist/.openai/hosting.json');await cp('drizzle','dist/.openai/drizzle',{recursive:true});
 console.log('Built SCHISM Worker, 5 original art assets, and D1 migrations.');
