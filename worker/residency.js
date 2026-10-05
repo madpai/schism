@@ -30,7 +30,7 @@ export function institutionRequirements(p,now){
   return {administrative,security,shop};
 }
 export const timedActions=new Set(['work','rest','crime','organize','clinic','official_work','business_work','security_work','event_work','clearance']);
-export const onDutyActions=new Set(['buy','consume','rent','tax','post','rename','appearance','gear_buy','gear_equip','gear_remove','relief','list','trade','cancel','sell','collect']);
+export const onDutyActions=new Set(['buy','consume','rent','tax','post','rename','appearance','gear_buy','gear_equip','gear_remove','relief','list','trade','cancel','sell','collect','quick','craft','casino','network_job','network_post','use_craft']);
 export function accrueTax(p,gross){
   p.taxEarned+=gross;const amount=p.taxRemainder+gross*12;
   p.taxDebt+=Math.floor(amount/100);p.taxRemainder=amount%100;

@@ -1,5 +1,6 @@
 import { CITY_HOUR_MS, CITY_DAY_MS, appearanceOptions, defaultAppearance, validAppearance, residencyState, institutionRequirements, timedActions, onDutyActions, scheduleActivity, completeActivity, accrueTax, identityFlags } from './residency.js';
 import { cityLife, cityResponses, contributionFor } from './citylife.js';
+import { streetState, streetSnapshot, startQuick, finishQuick, quickSupplies, neuralChannels } from './street.js';
 import { encountersFor, personalState, resolveEncounter } from './stories.js';
 import { forceProfile, citizenForces } from './forces.js';
 import { gearCatalog, careerPaths, shiftTypes, specialistJobs, careerState, gearEffects, coldRate, jobQuote, recordShift, careerSnapshot, equipmentSnapshot, removeEquipment } from './progression.js';
@@ -49,6 +50,7 @@ export function settle(data, now=Date.now(),w=world(now)) {
   p.lastTick=start;
   if(p.activity&&p.activity.endsAt<=now){advance(p.activity.endsAt);completeActivity(p);}
   advance(now);
+  streetState(p,w.day);finishQuick(p,now,accrueTax);
   if(now>=p.nextRentAt){
     const bills=Math.floor((now-p.nextRentAt)/CITY_DAY_MS)+1;
     const charged=Math.min(bills,Math.max(0,4-p.rentCycles));
@@ -81,13 +83,14 @@ async function settledCitizen(db,owner,now,w){
   for(let retry=0;retry<4;retry++){
     const c=await ensureCitizen(db,owner,now),raw=JSON.parse(c.data),p=settle(raw,now,w);
     if(JSON.stringify(raw)===JSON.stringify(p))return {...c,data:JSON.stringify(p)};
-    if(raw.activity&&!p.activity){
+    const completions=[raw.activity&&!p.activity?raw.activity:null,raw.errand&&!p.errand?raw.errand:null].filter(Boolean);
+    if(completions.length){
       const guard=uid();
       try{
         await db.batch([
           stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM citizens WHERE id=? AND version=?),0))',guard,c.id,c.version),
           stmt(db,'UPDATE citizens SET data=?,version=version+1 WHERE id=?',JSON.stringify(p),c.id),
-          stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),c.id,raw.activity.message,raw.activity.endsAt),
+          ...completions.map(a=>stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),c.id,a.message,a.endsAt)),
           stmt(db,'DELETE FROM action_guards WHERE id=?',guard),
         ]);
         return {...c,version:c.version+1,data:JSON.stringify(p)};
@@ -126,7 +129,7 @@ export async function snapshot(db,owner,now=Date.now()){
   ]);
   return {citizen:{id:c.id,name:c.name,...citizen},world:{...w,now},cityLife:life,appearanceOptions,requirements:institutionRequirements(citizen,now),idFlags:identityFlags(citizen,now),project,forces:force,encounters:encountersFor(citizen),
     goods:stock.filter(s=>Object.hasOwn(goods,s.id)).map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j,quotes:Object.keys(shiftTypes).map(mode=>jobQuote(citizen,j,mode,w))})),
-    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),
+    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),streetLife:streetSnapshot(citizen,w),network:await all(db,'SELECT m.id,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen ORDER BY m.created DESC LIMIT 100'),
     log,board:board.map(p=>({id:p.id,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
     citizens:people.filter(p=>JSON.parse(p.data).registered!==false).map(p=>{const d=JSON.parse(p.data);return {id:p.id,name:p.name,role:d.role,rep:d.rep,shifts:d.shifts,union:d.union,appearance:d.appearance||defaultAppearance,daysInCity:Math.max(0,Math.floor((now-d.joined)/86400000)),online:now-p.updated<120000};}),listings:offers,totals};
 }
@@ -138,7 +141,8 @@ export async function act(db,owner,input,now=Date.now()){
   const project=await cityProject(db,w),c=await settledCitizen(db,owner,now,w),p=JSON.parse(c.data);
   need(p.registered||input.action==='register','Register your character at the arrival platform first.');
   need(!p.activity||onDutyActions.has(input.action),`You are busy: ${p.activity?.label}. Wait until it finishes.`);
-  need(!p.detainedUntil||p.detainedUntil<=now||['tax','rent','post','consume','relief'].includes(input.action),'Your sentence is still running. Check your release time.');
+  need(!p.errand||!timedActions.has(input.action),'Finish your short task before starting another assignment.');
+  need(!p.detainedUntil||p.detainedUntil<=now||['tax','rent','post','network_post','consume','use_craft','relief'].includes(input.action),'Your sentence is still running. Check your release time.');
   need(now-c.last_action>=650,'Give the city a moment before your next action.');
   await ensureMarket(db,w,life);personalState(p);
   const before=structuredClone(p);
@@ -149,6 +153,24 @@ export async function act(db,owner,input,now=Date.now()){
   const credit=n=>need(p.credits>=n,`You need ${n} credits. You have ${p.credits}.`);
   const job=typeof input.id==='string'&&Object.hasOwn(jobs,input.id)?jobs[input.id]:null;
   switch(input.action){
+    case 'quick':case 'craft':case 'casino':case 'network_job':{
+      const random=crypto.getRandomValues(new Uint32Array(1))[0]/4294967296;
+      const result=startQuick(p,input,w,random);message=result.message;
+      const metrics=['output','freight','crime','unrest','relief','patrols'].map(id=>result.metrics[id]||0);
+      if(metrics.some(Boolean))extra.push(stmt(db,'INSERT INTO city_activity (id,citizen,day,completes,output,freight,crime,unrest,relief,patrols) VALUES (?,?,?,?,?,?,?,?,?,?)',op,c.id,world(result.endsAt).day,result.endsAt,...metrics));
+      break;
+    }
+    case 'use_craft':{
+      need(typeof input.id==='string'&&Object.hasOwn(quickSupplies,input.id),'Choose a crafted supply.');need(p[input.id]>0,'You do not have that supply.');p[input.id]--;
+      if(input.id==='heatpack')p.warmth=clamp(p.warmth+14);if(input.id==='bandage')p.health=clamp(p.health+10);if(input.id==='neuralpatch')p.coherence=clamp(p.coherence+12);message=`Used ${quickSupplies[input.id].name.toLowerCase()}. ${quickSupplies[input.id].effect}.`;break;
+    }
+    case 'network_post':{
+      need(typeof input.channel==='string'&&Object.hasOwn(neuralChannels,input.channel),'Choose a neural channel.');
+      need(typeof input.body==='string'&&input.body.trim().length>=1&&input.body.trim().length<=320,'Write 1–320 characters.');
+      const last=await stmt(db,'SELECT max(created) latest,count(*) n FROM neural_messages WHERE citizen=? AND created>?',c.id,now-3600000).first();
+      need(!last.latest||now-last.latest>=15000,'Wait 15 seconds between network transmissions.');need(last.n<40,'Your implant permits 40 messages per real hour.');
+      extra.push(stmt(db,'INSERT INTO neural_messages (id,citizen,channel,body,created) VALUES (?,?,?,?,?)',uid(),c.id,input.channel,input.body.trim(),now));message='Transmission delivered to the district neural network.';break;
+    }
     case 'register':{
       need(!p.registered,'You already have a character.');
       need(typeof input.name==='string'&&/^[\p{L}\p{N} ._-]{2,24}$/u.test(input.name.trim()),'Use a name of 2–24 letters, numbers, spaces, or basic punctuation.');
@@ -161,7 +183,7 @@ export async function act(db,owner,input,now=Date.now()){
     case 'relief':need(p.reliefDay!==w.day,'One emergency meal per citizen each city day.');p.reliefDay=w.day;p.fullness=clamp(p.fullness+24);p.warmth=clamp(p.warmth+10);p.health=Math.max(25,p.health);p.energy=Math.max(20,p.energy);message='A queue, a stamped wrist, and one emergency meal. Enough to work again. Relief is consumed here and cannot be sold.';break;
     case 'tax':credit(p.taxDebt);need(p.taxDebt>0,'You have no unpaid income tax.');p.credits-=p.taxDebt;p.taxPaid+=p.taxDebt;message=`Revenue receives ${p.taxDebt} credits. ${p.taxHold?'Your ID remains flagged until the Registry completes a clearance review.':'Your tax record is current.'}`;p.taxDebt=0;p.taxDeadline=now+CITY_DAY_MS;break;
     case 'clearance':need(p.taxHold||p.criminalHold,'Your ID has no clearance hold.');need(p.taxDebt===0,'Pay your income tax debt before requesting clearance.');need(p.heat<=20,'Reduce security heat to 20 or below before requesting clearance.');need(!p.detainedUntil||p.detainedUntil<=now,'Serve your sentence first.');hours=p.credits>=2?1:2;energy=p.credits>=2?6:14;if(p.credits>=2)p.credits-=2;p.taxHold=false;p.criminalHold=false;message='Your number is finally called. The Registry clears your ID. Factory gates will accept your papers again.';break;
-    case 'security':requirement('security');need(!p.taxHold&&!p.criminalHold,'Security recruitment requires a cleared ID.');need(!p.security,'You already serve in the security forces.');p.security=true;p.role='Canon security recruit';message='Thirty shifts and a week in the district. The Canon issues you a badge. You now protect the laws you struggled to survive.';break;
+    case 'security':requirement('security');need(!p.taxHold&&!p.criminalHold,'Security recruitment requires a cleared ID.');need(!p.security,'You already serve in the security forces.');p.security=true;p.role='Canon security recruit';p.ownedGear.push('securityuniform');p.loadout.body='securityuniform';p.coat=false;message='Thirty shifts and a week in the district. The Canon issues you a badge. You now protect the laws you struggled to survive.';break;
     case 'security_work':need(p.security,'Join the security forces first.');need(!p.taxHold&&!p.criminalHold,'Clear your identity holds before reporting for duty.');hours=3;energy=24;p.credits+=20;p.rep++;p.alignment=clamp(p.alignment+2,-100,100);message='You patrol the rainline. Two incidents closed, twenty credits earned. The district lockdown weakens.';break;
     case 'event_work':{const response=typeof input.id==='string'&&Object.hasOwn(cityResponses,input.id)?cityResponses[input.id]:null;need(response,'Choose a published district response.');need(!p.taxHold&&!p.criminalHold||input.id==='relief','Factory and freight gates require a cleared ID.');need(p.scrap>=(response.scrap||0),'The boiler requires one relay fragment.');p.scrap-=response.scrap||0;hours=response.hours;energy=response.energy;p.credits+=response.pay;p.rep++;message=`Completed ${response.name.toLowerCase()}. Your work changes the district for everyone.`;break;}
 
@@ -192,7 +214,7 @@ export async function act(db,owner,input,now=Date.now()){
     case 'career':need(typeof input.id==='string'&&Object.hasOwn(careerPaths,input.id),'Choose a career path.');need(p.career!==input.id,'That career is already active.');p.career=input.id;message=`Your employment record now follows ${careerPaths[input.id].name.toLowerCase()}. Experience on every path is retained.`;break;
     case 'career_claim':need(typeof input.id==='string'&&Object.hasOwn(careerPaths,input.id),'Choose a career path.');need(p.dailyWork.day===w.day&&(p.dailyWork.counts[input.id]||0)>=3,'Finish three shifts on this path in one city day.');need(!p.dailyWork.claimed[input.id],'You already claimed this work quota.');p.dailyWork.claimed[input.id]=true;p.credits+=3;p.rep++;message='Three shifts recorded. Three quota credits enter your implant. One more trust in your employment file.';break;
     case 'gear_buy':{
-      const g=typeof input.id==='string'&&Object.hasOwn(gearCatalog,input.id)?gearCatalog[input.id]:null;need(g&&!g.starter,'That equipment is not for sale.');need(!p.ownedGear.includes(input.id),'You already own that equipment.');const cost=input.id==='coat'?price('coat',w):g.price;credit(cost);
+      const g=typeof input.id==='string'&&Object.hasOwn(gearCatalog,input.id)?gearCatalog[input.id]:null;need(g&&!g.starter&&!g.earned,'That equipment is not for sale.');need(!p.ownedGear.includes(input.id),'You already own that equipment.');const cost=input.id==='coat'?price('coat',w):g.price;credit(cost);
       checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM market WHERE id=? AND stock>0),0))',op+'stock',input.id));extra.push(stmt(db,'UPDATE market SET stock=stock-1 WHERE id=?',input.id));p.credits-=cost;p.ownedGear.push(input.id);message=`Bought ${g.name.toLowerCase()} for ${cost} credits. Equip it from your loadout.`;break;
     }
     case 'gear_equip':{
@@ -228,7 +250,7 @@ export async function act(db,owner,input,now=Date.now()){
     case 'organize':need(p.union,'Join the union first.');hours=2;energy=12;p.rep+=2;p.role='Union organizer';p.heat=clamp(p.heat+5);message='You organize the Uncounted for the next shift. Trust grows. So does the Canon’s interest.';break;
     case 'clinic':credit(8);p.credits-=8;p.health=clamp(p.health+40);p.coherence=clamp(p.coherence+15);hours=1;message='The Somatic Ward resets your implant and treats the body attached to it. Eight credits.';break;
     case 'bribe':credit(12);need(p.heat>0,'You don’t have a security record to clear.');p.credits-=12;p.heat=Math.max(0,p.heat-35);message='The clerk misfiles your record. Twelve credits disappear with it.';break;
-    case 'official':requirement('administrative');need(!p.taxHold&&!p.criminalHold,'The Bureau requires a cleared ID.');credit(60);need(!p.official,'You already hold a municipal post.');p.credits-=60;p.official=true;p.role='Municipal official';message='Your application is approved. The processing fee was non-refundable.';break;
+    case 'official':requirement('administrative');need(!p.taxHold&&!p.criminalHold,'The Bureau requires a cleared ID.');credit(60);need(!p.official,'You already hold a municipal post.');p.credits-=60;p.official=true;p.role='Municipal official';p.ownedGear.push('adminuniform');p.loadout.body='adminuniform';p.coat=false;message='Your application is approved. The processing fee was non-refundable.';break;
     case 'official_work':need(p.official,'You don’t hold a municipal post.');need(!p.taxHold&&!p.criminalHold,'The Bureau requires a cleared ID.');hours=2;energy=8;p.credits+=17;p.rep++;message='You process a stack of work permits. Seventeen credits for deciding who gets to wait.';break;
     case 'business':requirement('shop');need(!p.taxHold&&!p.criminalHold,'A trading license requires a cleared ID.');credit(90);need(!p.business,'You already own a stall.');p.credits-=90;p.business=true;p.role='Shop owner';message='The exchange terminal accepts your signature. No guarantee of customers.';break;
     case 'business_work':need(p.business,'You don’t own a market stall.');need(!p.taxHold&&!p.criminalHold,'Clear your ID to reopen the licensed stall.');if(p.shopDay!==w.day){p.shopDay=w.day;p.shopSessions=0;}need(p.shopSessions<2,'Two shop sessions per city day. Foot traffic has dried up.');p.shopSessions++;need(p.bread>0||p.scrap>0,'Stock your terminal with rations or relay fragments first.');hours=2;energy=8;{const item=p.bread?'bread':'scrap';p[item]--;p.credits+=item==='bread'?7:8;message=`You sell ${goods[item].name.toLowerCase()} at your stall. ${item==='bread'?7:8} credits from the morning foot traffic.`;}break;
@@ -269,6 +291,7 @@ export async function act(db,owner,input,now=Date.now()){
       need(p.labor.hours+hours<=8,'Eight working hours per city day. Your permit has no hours left.');p.labor.hours+=hours;
     }
     final=scheduleActivity(before,p,{action:input.action,label:input.action==='work'?job.name:input.action==='event_work'?cityResponses[input.id].name:input.action.replaceAll('_',' '),message,now,hours,energy,day:w.day});
+    if(input.action==='work')final.activity.job=input.id;
     if(taxable)final.activity.taxGross=gross;
     const metrics=contributionFor(input.action,input,job,hours),values=Object.values(metrics);
     if(values.some(Boolean))extra.push(stmt(db,'INSERT INTO city_activity (id,citizen,day,completes,output,freight,crime,unrest,relief,patrols) VALUES (?,?,?,?,?,?,?,?,?,?)',op,c.id,world(final.activity.endsAt).day,final.activity.endsAt,...values));

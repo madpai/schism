@@ -12,7 +12,7 @@ The hosted game currently retains its owner-private audience. Sign-in and separa
 
 ## Arrive as someone
 
-ChatGPT sign-in creates a durable account. Register one character: choose a name, gender, six skin tones, six hair colors, five hairstyles, and three builds. The same composed character scan appears in your papers, loadout, and overview. These choices are cosmetic and can be updated later.
+ChatGPT sign-in creates a durable account. Register one character: choose a name, gender, six skin tones, six hair colors, five hairstyles, and three builds. The same layered painted character portrait appears in your papers, loadout, and overview. These choices are cosmetic and can be updated later. Administration and security issue earned uniforms that appear when equipped.
 
 Every arrival comes by an import train into the **current** Ninth Stratum. New citizens start neutral with **0 credits**, worn equipment, and a bunk for one city cycle.
 
@@ -29,6 +29,16 @@ The owner requested a fresh start after the residency update. On October 5, 2026
 | Full sleep | 90 real minutes; once per city day |
 
 A job reserves energy and completes in the background. Pay, career XP, and benefits arrive at its deadline. Sleeping restores energy over time. Neither action fast-forwards the city. A permit allows **eight work hours per city day**. Hunger, cold, rent, and tax deadlines continue while you are away.
+
+## A few minutes in the city
+
+Long shifts have company now. Take **20–75 second** tasks: search municipal bins, strip dead electronics, clean public terminals, decode stray signals, and repair heating relays. Spend energy to recover fabric, copper, circuit parts, and signal traces. Ten short tasks per city cycle keep this from becoming an endless credit faucet.
+
+A separate short-task slot supports work breaks during ordinary shifts. Street scavenging requires you to be off duty. Craft warming packs, clean dressings, neural patches, and rebuilt relay fragments from what you find. Ingredients and energy are spent upfront; the item arrives when the timer ends.
+
+The **civic neural network** has persistent District IX, Exchange, and Uncounted chat channels. Public freight contracts and hidden Wound deliveries turn signal traces into small rewards and shared city consequences. The **Null House** offers four 20-second hands per cycle: stake 1–3 CR, spend 6 energy, and face a 45% chance of a double return.
+
+![A citizen repairs salvaged hardware at the cell workbench](public/workshop.webp)
 
 ## Obey, and still struggle
 
@@ -77,9 +87,9 @@ npm run validate
 npm run dev
 ```
 
-The development game runs at `http://127.0.0.1:4173`, uses a local QA identity, and resets its in-memory database on restart. Production uses Sites identity and durable D1 storage. Rebuild and restart development after changing source.
+The development game runs at `http://127.0.0.1:4173`, uses a local QA identity, and stores one shared city in ignored `.local-data/city.sqlite`. Each browser receives a separate signed local session. Production uses Sites identity and durable D1 storage. Local characters persist across server restarts. Set `SCHISM_TAILSCALE_IP` to bind the same city to your Tailscale address as well as loopback; see [local hosting](docs/LOCAL_HOSTING.md). Rebuild and restart development after changing source.
 
-**217 checks** cover registration, timed settlement, survival, branching stories, shared-stock and player-trade races, equipment, careers, fractional income tax, factory holds, administrative clearance, relief, arrests, late security progression, shared event causes, legacy saves, and the one-time reset's cleanup, rollback, and retry safety. Desktop and mobile browser checks cover character creation/editing, all screens, and assignment persistence. See the handoff for verification evidence.
+**272 checks** cover registration, timed settlement, survival, branching stories, shared-stock and player-trade races, equipment, careers, fractional income tax, factory holds, administrative clearance, relief, arrests, late security progression, shared event causes, legacy saves, the one-time reset's cleanup, rollback, and retry safety, and short activities/crafting/network/casino rules. Desktop and mobile browser checks cover character creation/editing, all screens, and assignment persistence. See the handoff for verification evidence.
 
 ## Source and hosting
 
@@ -94,10 +104,10 @@ drizzle/      Append-only production migrations
 docs/         Gameplay and architecture reference
 ```
 
-Build emits a Worker module with embedded interface and five original WebP assets, plus D1 migrations. Publishing uses the **Sites building and hosting skills** and preserves the existing Site and audience. Production requires the trusted `oai-authenticated-user-id` header forwarded by Sites. No browser-provided identity or balances are trusted.
+Build emits a Worker module with embedded interface and 23 WebP assets, including cropped portrait layers, plus D1 migrations. Publishing uses the **Sites building and hosting skills** and preserves the existing Site and audience. Production requires the trusted `oai-authenticated-user-id` header forwarded by Sites. No browser-provided identity or balances are trusted.
 
 ## Original artwork
 
-The rainy city banner above is part of SCHISM’s original artwork. Five generated scene assets depict the city, foundry, exchange, rainline, and worker archetype. Prompts and provenance live in [occult-provenance.json](art/occult-provenance.json) and [noir-provenance.json](art/noir-provenance.json). Custom citizen appearances are composed from native SVG layers rather than separate portrait files.
+The rainy city banner above is part of SCHISM’s original artwork. The original five generated scene assets depict the city, foundry, exchange, rainline, and worker archetype. Prompts and provenance live in [occult-provenance.json](art/occult-provenance.json) and [noir-provenance.json](art/noir-provenance.json). Eight new generated assets add seven city scenes and a transparent painted portrait kit. Ten cropped head/hair/uniform components compose the customizable portrait. New prompts and asset provenance live in [street-prompts.json](art/street-prompts.json) and [street-provenance.json](art/street-provenance.json). Mobile and desktop playtest findings are recorded in [the v0.6 critique](docs/playtests/V0.6.md).
 
 Browser agent tools are feature-detected. Native WebMCP registration remains unverified because the available QA browser does not support it.

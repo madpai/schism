@@ -1,0 +1,259 @@
+{
+  "generator": {
+    "tool": "image_gen.imagegen",
+    "mode": "built-in"
+  },
+  "date": "2026-10-05",
+  "processing": "Original PNGs archived; scene assets resized and encoded WebP quality 85; portrait atlas encoded with alpha preserved, no content edits. Individual portrait components cropped to separate files to prevent adjacent atlas cells bleeding through SVG filters.",
+  "assets": [
+    {
+      "id": "scavenge",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-42f5f401-76cf-4902-8fae-3d6ac0f2f0b6.png",
+      "original_archive": "/home/commander/schism-street-assets/scavenge.png",
+      "deployed_path": "public/scavenge.webp",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "deployed_dimensions": [
+        1000,
+        667
+      ],
+      "sha256": "7d7fef733be85cbebef6ce7b8131b42364e8bc4db94a9ddef00335d4233ec544",
+      "alpha_preserved": false,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    },
+    {
+      "id": "workshop",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-957dcdd7-6706-4f35-bf6a-6012bb2d9588.png",
+      "original_archive": "/home/commander/schism-street-assets/workshop.png",
+      "deployed_path": "public/workshop.webp",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "deployed_dimensions": [
+        1000,
+        667
+      ],
+      "sha256": "c450aaa9bfdf5807ff4baf3bc1665c19fcf49f33431b85d6b687c12871f9d544",
+      "alpha_preserved": false,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    },
+    {
+      "id": "neural",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-9bb39f6b-db24-43a6-a78b-74534dab5ff0.png",
+      "original_archive": "/home/commander/schism-street-assets/neural.png",
+      "deployed_path": "public/neural.webp",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "deployed_dimensions": [
+        1000,
+        667
+      ],
+      "sha256": "cb9058a936e8c48ea97bdf79034afab86554476b7d7317dced61ddb182064ff7",
+      "alpha_preserved": false,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    },
+    {
+      "id": "registry",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-826e3029-577f-4cce-8a87-6181a6fd28fd.png",
+      "original_archive": "/home/commander/schism-street-assets/registry.png",
+      "deployed_path": "public/registry.webp",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "deployed_dimensions": [
+        1000,
+        667
+      ],
+      "sha256": "4d783e4334b6400a52622ae419d91708043218f76aabe2c003a1336dbe15d77d",
+      "alpha_preserved": false,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    },
+    {
+      "id": "housing",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-71a5538c-d1e2-43d6-9074-5c643a3954f9.png",
+      "original_archive": "/home/commander/schism-street-assets/housing.png",
+      "deployed_path": "public/housing.webp",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "deployed_dimensions": [
+        1000,
+        667
+      ],
+      "sha256": "c7fbff599c788d0461ce9aaec0cadc3005c65864ce5ea2aa16dd59f19ecffebf",
+      "alpha_preserved": false,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    },
+    {
+      "id": "transit",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-d9d08578-15e5-4ef2-b815-2cae44086cce.png",
+      "original_archive": "/home/commander/schism-street-assets/transit.png",
+      "deployed_path": "public/transit.webp",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "deployed_dimensions": [
+        1000,
+        667
+      ],
+      "sha256": "0e903e9c931b29986b57cdc2e26d2279faac6a2eb282325e88b0d570cddbf583",
+      "alpha_preserved": false,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    },
+    {
+      "id": "casino",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-057c4291-ea44-454d-b31e-0a298923df21.png",
+      "original_archive": "/home/commander/schism-street-assets/casino.png",
+      "deployed_path": "public/casino.webp",
+      "source_dimensions": [
+        1536,
+        1024
+      ],
+      "deployed_dimensions": [
+        1000,
+        667
+      ],
+      "sha256": "aacc7197b1360de27b3698c21c7bb6c5b8feaecfb649c1fb3f00002bd8d3e6d8",
+      "alpha_preserved": false,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    },
+    {
+      "id": "portrait-kit",
+      "source": "/home/commander/.codex/generated_images/01a10c8b-4c6b-7500-9226-c697e02bfa54/exec-64792053-09f6-4a5a-a33f-d49010fed754.png",
+      "original_archive": "/home/commander/schism-street-assets/portrait-kit.png",
+      "deployed_path": "public/portrait-kit.webp",
+      "source_dimensions": [
+        1448,
+        1086
+      ],
+      "deployed_dimensions": [
+        1448,
+        1086
+      ],
+      "sha256": "4b96075bc3b217d9d2bcd6cff2349a153be7d13ab165ad4e7827e7c83a62b9ef",
+      "alpha_preserved": true,
+      "inspection": "Inspected generated output for composition, requested subject, readable light, and absent text/logos."
+    }
+  ],
+  "portrait_layers": [
+    {
+      "deployed_path": "public/portrait-woman.webp",
+      "crop": [
+        0,
+        0,
+        362,
+        374
+      ],
+      "sha256": "4f52ebea80e556eecb04a2257c0eb04107d556e9e07bb94a945a7edd2ac8f2fa",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-man.webp",
+      "crop": [
+        362,
+        0,
+        724,
+        374
+      ],
+      "sha256": "4d877888e8c7fd9effe3fae1152c3f49f00d76ac5b42346f699acc04209e1269",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-nonbinary.webp",
+      "crop": [
+        724,
+        0,
+        1086,
+        374
+      ],
+      "sha256": "707d1b4e4ecd0636caed1d56386d7679fdf37a33d712b8d42da511d4cc92d9c2",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-cropped.webp",
+      "crop": [
+        0,
+        386,
+        362,
+        748
+      ],
+      "sha256": "56113f72558831a934b4f65a38ae0503caac5de46368e0026dfc31b8c1302b10",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-swept.webp",
+      "crop": [
+        362,
+        386,
+        724,
+        748
+      ],
+      "sha256": "998718872f904502eedf453d30172d73069b03066cbf6f453c34d59f1caed6b1",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-bob.webp",
+      "crop": [
+        724,
+        386,
+        1086,
+        748
+      ],
+      "sha256": "1715c13ea60b58a1c0051e51923f7a1d018b3c5045b22a44f0a528b8e3ff99d3",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-braids.webp",
+      "crop": [
+        1086,
+        386,
+        1448,
+        748
+      ],
+      "sha256": "9a2ae927647faaf84db4efc6837c0d4d44a5871ad82bd4b2699e3c533f9b0ebe",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-weathercoat.webp",
+      "crop": [
+        0,
+        748,
+        362,
+        1086
+      ],
+      "sha256": "3819708f3d471025d6f5ef6fe0959153f3eccf685b3da6949b69feb171141348",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-adminuniform.webp",
+      "crop": [
+        362,
+        748,
+        724,
+        1086
+      ],
+      "sha256": "ed756984de9730ce7755c3b97e3183f4baee47c7cc49b148472551f2d8e83848",
+      "alpha_preserved": true
+    },
+    {
+      "deployed_path": "public/portrait-securityuniform.webp",
+      "crop": [
+        724,
+        748,
+        1086,
+        1086
+      ],
+      "sha256": "9eb2537498fd9aa4c6296eea809f03a6bc99e31a31c8d4e67c57b81f67864d07",
+      "alpha_preserved": true
+    }
+  ],
+  "prompt_file": "art/street-prompts.json"
+}

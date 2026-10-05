@@ -1,104 +1,72 @@
-# SCHISM session handoff — fresh character start
+# SCHISM session handoff — v0.6 short activities and painted citizens
 
-Updated October 5, 2026. The v0.5 residency release is complete. The owner then explicitly requested resetting all characters to remove their easier-economy head start. The live reset completed at 16:08:47 UTC. The temporary maintenance route has been removed, and current documentation records the fresh start.
+Updated October 5, 2026. Implementation and playtesting are complete. The final publication and GitHub synchronization IDs are recorded in `/home/commander/SCHISM_HANDOFF.md` after native deployment confirmation. The shared local city stays running for the owner's phone.
 
-## Latest operation: completed character reset
+## Locations and workflow
 
-- Receipt: `residency-fresh-start-2026-10-05`, `completed=1791216527324`, `citizens=1`, `applied=true`.
-- Native production reads verified zero rows in `citizens`, `listings`, `posts`, and `journal`, and the permanent receipt in `maintenance_runs`.
-- Pending district contributions were canceled. The shared city clock, market, faction balance, repair projects, and completed contributions continue.
-- The same signed-in account now receives a new unregistered citizen. Registering creates a neutral, 0-credit character with fresh residency, survival, tax, career, story, and institution state.
-- Append-only migration `0004_fluffy_selene.sql` adds the receipt table. The reset is an atomic explicit operation, never a migration side effect or a gameplay action.
-- Temporary reset source: `3eb94772cd93b00240e8a65fd1dad5dbbda06108`; deployment `appgdep_6ac3cb77cfa48191a15a0257a5ebf885`, native status **succeeded**. A following publication removes its route and excludes the maintenance helper from the Worker bundle. Consult current Sites history or `/home/commander/SCHISM_HANDOFF.md` for final publication IDs.
-- Do not repeat the reset or restore old characters. Future updates preserve the newly created characters. This explicit fresh-start instruction supersedes the prior keep-existing-characters direction for this one operation.
-- Verification: all **217 checks passed**, including 20 reset assertions for linked-record cleanup, fresh registration, shared state retention, retry/concurrency safety, and rollback. Build and ESM validation also pass.
-- Final built-Worker checks verify that the temporary reset route returns 404, maintenance code is absent from the bundle, and a new account can register a neutral, zero-credit character with zero days of residency.
+- Shared local city: http://100.89.1.14:4173 with Tailscale connected. Loopback: http://127.0.0.1:4173. Both listeners use one database.
+- Local service: `schism-local.service` in the user's systemd manager; enabled and running, working directory `/home/commander/ashfall`.
+- Persistent local data: `/home/commander/ashfall/.local-data/city.sqlite`. Session key and QA browser state are in that ignored directory. Preserve it during updates.
+- Live Sites game: https://schism.williamschultz903.chatgpt.site.
+- Exact Sites project: `appgprj_6ac325aa83348191bf144ff590881fd4`.
+- Sites source checkout: `/home/commander/ashfall` (historical directory name).
+- Private GitHub repository: https://github.com/madpai/schism, checkout `/home/commander/schism`, branch `main`.
+- Opening source before v0.6: `a91e9264caeee0c7bef6a1795d81e0cfbac4815a`. Previous final deployment: `appgdep_6ac3cc5c38b48191be6dd182bf33489b`.
+- Hosting audience remains owner-private. Do not change it without a user request.
 
-## Locations and established workflow
+For hosted changes, open the existing project through the Sites source-opening workflow before editing, retain that result, and publish the exact checked source through an archive-backed deployment. Use the Sites building/hosting skills. Obtain fresh credentials through native tools; keep them in session memory and hidden workflow stdin, never in source, arguments, or handoffs. Merge Sites source into GitHub `main` with an ordinary non-force push, preserving both histories and remote changes.
 
-- Live game: https://schism.williamschultz903.chatgpt.site
-- GitHub: https://github.com/madpai/schism — private repository, account `madpai`, default branch `main`.
-- GitHub checkout: `/home/commander/schism`.
-- Sites checkout: `/home/commander/ashfall` (historical directory name; the product is SCHISM).
-- Existing project: `appgprj_6ac325aa83348191bf144ff590881fd4`.
-- Hosting stays owner-private; current audience was read and preserved. Do not make the game public without a request.
-- Verified v0.5 gameplay source: `577d76fa2943cda752e5f49e01fa65d251340c98`.
-- Verified v0.5 gameplay deployment: `appgdep_6ac3c2ed2adc81918e0ec023e2e87348` (native status **succeeded**, October 5, 2026, 15:32 UTC).
-- Its saved version: `appgprj_6ac325aa83348191bf144ff590881fd4~appgver_3ed1ba85cc7c8191a6bc543ed8d155ce`.
-- A following documentation-only publication may have a newer source/deployment ID; consult current native Sites history.
-- Prior deployed source, before this update: `1179e8a19c44e392af032fc5dcf11073de274198`.
-- Prior deployment: `appgdep_6ac34ebe3c588191a613a21bab89c4b8`.
-- No credentials belong in source, this file, arguments, or handoffs. Obtain fresh Sites credentials and pass them through workflow stdin.
+This machine requires `PATH=/home/commander/.local/node-runtime/bin:$PATH` for Node/npm. Read [local hosting](docs/LOCAL_HOSTING.md) before restarting the service. Rebuild before restart, preserve `.local-data`, and **leave the shared local service running** for phone testing.
 
-For hosted edits, use the Sites building and hosting skills. Open this existing project with its exact ID and the bundled source-opening workflow **before editing** its Sites checkout, retaining the opening result. Publish the checked source using the archive-backed workflow and verify native terminal deployment status. Synchronize GitHub by fetching the local Sites branch, merging into GitHub `main`, and using an ordinary non-force push. Preserve both distinct repository histories and any remote changes.
+## Latest user direction
 
-## User direction
+The user wants a harsh asynchronous MMORPG city with more meaningful actions between long jobs, stylized illustrations for locations/jobs/events, attractive customizable painted characters, visible earned uniforms, and a neural-network-style social space. They test primarily on mobile but want desktop too. They explicitly asked for agent playthroughs, pacing/visual critique, and multiple characters testing **the same local city**. Each browser has a separate local signed session; there is no second QA world.
 
-SCHISM is a persistent dystopian city RPG about ordinary people, with the asynchronous multiplayer depth of games such as Torn and Arclight City. Citizens arrive by import train into an already-running city, start neutral and broke, and choose lawful work/administration, trade, or crime. Security is a much later Order career.
+They reported hair misplaced on the chest, floating/disconnected heads, and misaligned braids in the first painted prototype. These were corrected with independently cropped alpha layers and collar/neck draw order. All five hairstyles on all three faces were visually checked. Do not restore the pixel character or the leaking nested-atlas implementation.
 
-The user explicitly requested taxes, identity flags that block factory access, debt repayment and time/energy spent obtaining administrative clearance, a pull toward crime/Chaos, and collective events driven by what players do. They also requested continued publication, current documentation/handoffs, and a nice GitHub README featuring original artwork.
+Keep the Canon/Wound setting, rainy neon noir art, near-black/cyan/crimson palette, and terminal typography. Preserve the existing vanilla HTML/CSS/JavaScript, Worker, Sites identity, and D1 architecture.
 
-Keep the established Canon/Wound occult setting, rainy neon noir artwork, near-black/cyan/crimson palette, and legacy terminal typography. Existing assets are suitable. Preserve the current vanilla stack and newly created citizens after the explicit one-time reset above.
+## v0.6 behavior
 
-## Shipped source behavior
+- Separate short-task slot `errand`: server-owned 20–75 second tasks, energy and materials reserved at start, additive rewards at completion. It can coexist with ordinary paid work. Street scavenging and gambling require off-duty time; other long assignments need full attention.
+- Ten short-task starts per six-hour city cycle, including crafts, neural contracts, and casino hands. Long work retains its existing eight-hour daily permit; there is no career/residency shortcut.
+- Five tasks: bins (25s/6 energy, two fabric or wire), electronics (45s/8, two wire and a circuit with a 20% chance of 2 damage), terminal cleaning (20s/5, 1 taxable CR), signal decoding (35s/7, one trace), heating relay (60s/9, one wire consumed, 2 taxable CR and one relief).
+- Four recipes: warming pack, field dressing, rebuilt relay fragment, neural grounding patch. Crafted consumables improve warmth, health, or coherence; ordinary fragments retain existing trade/repair use. Workshop XP records crafts separately from career XP.
+- Civic neural network: three persistent chat channels, sender names from the server, 1–320 characters, 15 seconds between messages, 40 per real hour. Polls every ten seconds while visible; polling and completion refreshes pause for focused inputs.
+- Two once-per-cycle contracts, each one trace/8 energy/50s. Public freight: 2 taxable CR, 1 trust, one shared freight. Hidden Wound echo: 3 unreported CR, +4 heat, −1 alignment, one shared crime. Commitments affect the city at completion without requiring owner return.
+- Null House: 20s/6 energy, stakes 1–3 CR, 45% chance of double return, expected loss 10% of stake, four hands per cycle. Stake held at start; no cancellation/reroll/debt or client-selected outcome.
+- Earned administration/security uniforms are awarded and equipped on appointment/recruitment; legacy owners receive them through compatibility. They are not for sale and do not replace insulation. Equipped body gear drives the painted wardrobe.
+- Three painted faces, four painted hairstyles plus Shaved, independent six skin/six hair colors, and three torso builds. Portraits use cropped generated alpha layers and runtime tint filters. Clothing draws in front of the lower neck.
+- Seven new city scene illustrations appear in areas, job tracks, assignments, and shared events. Build embeds 23 WebP assets total, including portrait crops.
+- Long-assignment panels collapse to a concise timer on other screens; Find work retains the full illustrated assignment. This keeps mobile tasks and chat within reach.
 
-- ChatGPT sign-in owns one durable citizen. Unregistered accounts see character intake and an arriving train window rather than a generated playable character. Name, gender, six skin tones, six hair colors, five hairstyles, and three builds are validated and saved. Composed native SVG scans appear throughout the character UI. Appearance is cosmetic and editable.
-- New characters have 0 credits, neutral alignment/trust, worn clothing/boots/implant, and one six-hour cycle before the first rent bill. Registration cannot be replayed. Legacy-save compatibility retains progress during normal upgrades; the explicitly requested fresh start above removed the old live citizens.
-- One common city hour is 15 real minutes; common city days remain six real hours from the existing epoch. Displayed `daysInCity` counts complete real 24-hour days since registration. Personal actions never fast-forward time.
-- Jobs, rest, crime, organizing, clinic, shops, official/security duty, event work, and registry clearance are persistent timed assignments. Energy, fees, and consumed stock are reserved. Positive pay, XP, and benefits wait for completion. Shopping, eating, rent, taxes, equipment, and direct trade remain possible during an assignment. Completion and its journal entry are atomic and exactly once under concurrent reads.
-- Employment/official/security/event work is capped at eight city hours per starting shared day. Sleep once per starting day, crime three attempts/day, and shop sessions twice/day. Work quotas use completion day. Career ranks slowed to 24/80/180 XP; three-shift quota reduced from 8 CR to 3 CR.
-- Hunger, cold, energy, heat, rent, and taxes settle in elapsed shared time. Working has higher exposure; private housing and insulation protect idle/sleep warmth. Passive health has a floor of 10. Four unpaid rent bills evict; arrears stop at four bills. Daily nontradeable relief restores fullness/warmth and enough health/energy to recover from being broke.
-- Earned-income tax is 12%, manually paid. Whole-credit assessments carry fractional hundredths across wages, quotas, rent income, broker sales, player sales, and reported story wages. Seller tax is part of the atomic player-trade transaction. Unreported crime/Wound/story money bypasses Revenue.
-- Missing a tax deadline flags the ID. Unresolved arrest also flags it. Factory jobs, emergency factory/freight work, licensed shops, administration, and security require a cleared ID. Public custodial work and communal boiler work remain debt-recovery options after detention.
-- Paying tax or serving a sentence alone does not clear a hold. Registry review requires no tax debt, heat at most 20, and no active sentence; costs 2 CR, 6 energy, and 15 real minutes. With less than 2 CR, an indigence appeal costs no fee but takes 14 energy and 30 minutes. Clearance happens on completion.
-- Crime grants underground XP/titles and private Chaos alignment. Arrest imposes a fine, injury, lost trust, an ID hold, and two city hours of detention after the operation. Success is untaxed and can be more lucrative than basic work.
-- Shop license: 1 real residency day, 10 trust, cleared ID, 90 CR. Administration: 2 real days, 25 trust, 80 civic XP, low heat, cleared ID, 60 CR. Security: 7 real days, 30 shifts, 60 trust, 180 civic XP, Order +40, heat at most 10, cleared ID. Existing institutions are retained.
-- New heated apartment: 180-CR deposit, 32-CR cycle rent, 2 real days and 20 trust, currently living in a private room.
-- Collective metrics: production, freight, crime, unrest, relief, and patrols. Completed commitments influence everybody even when the starting player has not returned. Production shortfalls and neglected trains raise food prices; production failure cuts wages. Restored output and unloaded freight deliver shared stock exactly once. Criminal pressure triggers lockdowns. Organizing earns a shared wage increase. Boilers reduce cold. Security patrols counter lockdowns.
-- Five existing branching stories, Order/Chaos effects, equipment/loadouts, all twelve jobs, direct player trades, noticeboard, unions, leases, and the shared thermal-lattice project remain.
+## Preserved v0.5 rules and the completed reset
 
-This is asynchronous multiplayer, with no real-time movement/combat or direct security powers over another player's character. No public sharing or standalone password-auth system was added. Offline weather/heating settlement uses the current district modifiers rather than reconstructing every historical event.
+New citizens arrive by train into the current server day, neutral with zero credits. One city hour is 15 real minutes; a shared cycle is six real hours. Days in the city count complete real 24-hour days since registration. Timed pay, XP, and completion journals are guarded and exactly once. Hunger, warmth, rent, taxes, and city events continue offline.
 
-## Files and persistence
+Earned-income tax is 12%, manually paid with fractional carry. Overdue tax/arrest holds block factory/institution access. Payment and Registry clearance are separate; fee review and indigence appeal remain. Crime, cooperative repairs, collective production/freight/unrest/relief/patrol effects, twelve jobs, equipment/careers, housing, trade, and five personal stories remain. Shops, administration, and security retain one/two/seven-day residency gates and their training/trust requirements. Complete rules are in `docs/GAMEPLAY.md`.
 
-- `worker/game.js`: authoritative actions, shared-time survival, billing, income, guarded settlement, and completion journal entries.
-- `worker/residency.js`: appearance, old-save defaults, real residence age, civic requirements, tax fractions, flags, timed reservations, and completion deltas.
-- `worker/citylife.js`: immutable city contributions, event causes/modifiers, and collective responses.
-- `worker/progression.js`: gear, revised career thresholds, shared-condition quotes, and smaller quotas.
-- `public/residency.js` / `.css`: train intake, customizable citizen scans, character sheet, countdowns, Revenue/Registry/security interfaces, city metrics and responses.
-- Existing app/character UI integrates these systems. Displayed version is v0.5.
-- `db/schema.ts` and append-only `drizzle/0003_slippery_zaran.sql`: new indexed city-activity table and market `delivered` counter. Older migrations and their snapshots were not changed.
-- `worker/reset.js`, `scripts/test-reset.mjs`, and append-only `drizzle/0004_fluffy_selene.sql`: tested one-time reset and permanent receipt. The helper remains as auditable source and is excluded from the production Worker; there is no reset route.
-- `scripts/build.mjs` embeds new modules and UI alongside existing assets; Worker entry remains `dist/server/index.js`.
-- `scripts/test-harness.mjs`: explicit injected-time/legacy-fixture helper. Production accepts no caller-supplied clock.
-- `README.md`: original rainy city artwork, player-facing product explanation, mechanics/timings, setup and verification.
-- `docs/GAMEPLAY.md`: complete rule reference and event thresholds.
-- `docs/ARCHITECTURE.md`: authority, concurrency, schema, UI/build, and prototype boundaries.
+The owner explicitly requested a one-time fresh start after the earlier easier economy. Live receipt `residency-fresh-start-2026-10-05`, `completed=1791216527324`, `citizens=1`, confirms reset at 16:08:47 UTC on October 5, 2026. Old personal records/pending contributions were removed; shared clock, market, factions/projects, and completed history continued. Temporary reset route was removed and maintenance code excluded from the Worker. **Do not reset again or restore old characters.** v0.6 preserves all new local and hosted citizens.
 
-## Verification
+## Source and schema
 
-All **217 checks passed**: 41 core, 27 narratives/repairs, 26 factions, 31 equipment/careers, 72 residency/economy, and 20 reset checks. They include delayed wages/XP, exact-once completion/journaling, balance additions while trading during work, fractional tax, deadline holds, factory gates, paid and indigent clearance, arrest/sentence/clearance, daily limits, relief recovery, shared contributions without owner return, stock delivery idempotence, civic/security age gates, legacy migration, reset cleanup, retained shared state, retry/concurrency safety, and reset rollback.
+- `worker/street.js`: short tasks, salvage, crafting, neural contracts, casino, eligibility and delayed settlement.
+- `worker/game.js`: integrates both activity slots, concurrent/combined completion journals, chat writes, and immutable quick contributions.
+- `worker/progression.js`: earned uniform catalog, compatibility, and short-task job blocking.
+- `public/street.js` / `.css`: short activities, workbench, materials, supplies, neural channels/contracts, casino, area gallery, art integration, compact assignment display.
+- `public/residency.js`: generated portrait layers, independent tinting, collar order, five styles, countdown/focused-input behavior.
+- `db/schema.ts`, append-only `drizzle/0005_complex_kree.sql`, and new metadata: indexed `neural_messages`. No prior migration changed.
+- `scripts/dev.mjs`, `scripts/local-db.mjs`: shared persistent local city, per-browser signed sessions, loopback/Tailscale listeners, once-only local migrations. These stay outside the production bundle.
+- `scripts/test-street.mjs`: 55 rule assertions. `scripts/playtest-browser.mjs`: optional real-time shared-city mobile/desktop playthrough; `playwright-core` is a pinned dev dependency.
+- `README.md`, `docs/GAMEPLAY.md`, `docs/ARCHITECTURE.md`, `docs/LOCAL_HOSTING.md`, and `docs/playtests/V0.6.md`: current rules, local operation, verification, and candid critique.
+- `art/street-prompts.json` / `street-provenance.json`: built-in imagegen prompts, paths, alpha crops, conversion, and hashes. Original new PNGs remain at `/home/commander/schism-street-assets/` and default generated-images paths.
 
-Build and ESM artifact validation passed. Built Worker boundary checks passed for missing identity, spoofed owner input without identity, cross-origin writes, wrong content type, invalid and oversized JSON, authenticated state, and artwork routes.
+## Verification and known limits
 
-Playwright checked 1440px desktop and 390px mobile: train intake, live character choices, registration, name preservation while choosing swatches, every primary screen, no overflow, profile appearance save/reload, starting work, deferred pay, assignment reload, and no page errors.
+All **272 assertions passed**: 41 core, 27 narratives, 26 factions, 31 equipment/careers, 72 residency/economy, 20 reset, and 55 street/network/wardrobe checks. Build, ESM validation, and diff whitespace checks passed.
 
-QA script: `/tmp/schism-qa/residency-check.mjs`, using its existing `playwright-core` installation and `/opt/brave-bin/brave`. Screenshots: `/tmp/schism-arrival-{desktop,mobile}.png`, `/tmp/schism-city-{1440,390}.png`, `/tmp/schism-bureau-{1440,390}.png`, `/tmp/schism-character-sheet.png`. Do not assume the QA dev database survives a restart.
+Actual browser playthroughs used ordinary Iona/Cato/Null Tester characters in the shared Tailscale city. Real scavenging, crafting during a paid shift, decoding, public freight contract, chat across two sessions, and a losing casino hand were checked. Saved appearance, assignments, data, and signed sessions survived reload/restart. All 16 screens fit 360px, 390px, and 1440px with no page errors. A focused mobile chat draft survived a real short-task deadline; automatic completion refreshed after blur. Final portrait and uniform visuals were inspected.
 
-Native WebMCP remains unverified in a browser that supports it. Existing feature detection is preserved, and the shift tool now describes starting a timed assignment.
+Selected screenshots and critique are committed under `docs/playtests/`. Raw QA scripts/images remain in `/tmp/schism-qa`; Iona Vex browser state remains in ignored `.local-data/qa-browser.json`. These citizens remain available as ordinary city residents; no test grants were applied to their server records.
 
-## Useful commands
-
-This machine needs `PATH=/home/commander/.local/node-runtime/bin:$PATH` for Node/npm. Requires Node 22.20 or newer.
-
-```sh
-npm ci
-npm test
-npm run build
-npm run validate
-npm run dev
-```
-
-Local development serves 127.0.0.1:4173 with a fixed QA identity and an in-memory SQLite database. Rebuild/restart after source changes. Stop development sessions after publication. Do not expose that development identity in production.
-
-No new image generation was needed: the existing original rainline scene is used as the README art and train-window view. Asset prompts/provenance remain in `art/`; original PNG/ZIP archives remain under `/home/commander/schism-*-assets/`.
+Energy can run out before the ten-task quota, by design. The played five-task route left about six energy; UI advises keeping energy for wages. Further tuning should use the owner's phone sessions and multi-day food/warmth histories. Short contracts currently repeat once each per cycle. Chat is polling with a recent-message window, without private messaging or notifications. Native WebMCP remains unverified. Long deadlines and week-long institutional gates were checked with injected time; a week-long human career was not played.
