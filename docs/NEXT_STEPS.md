@@ -1,45 +1,41 @@
-# Where SCHISM should go next
+# SCHISM priorities after v0.7
 
-Assessment from the October 5, 2026 shared-city playtests. These are proposed priorities, not released mechanics. The portrait collar correction is released separately; [the v0.6 playtest](playtests/V0.6.md) records current behavior and evidence.
+The five priorities accepted by the owner now have playable implementations. [Gameplay](GAMEPLAY.md) describes their exact costs and limits; [the v0.7 playtest](playtests/V0.7.md) separates real browser evidence from simulated deadlines and earned-role previews. Existing citizens and the shared city are preserved.
 
-The setting is SCHISM's strongest feature. Train intake, civic papers, taxes, clothing, cold, and district shortages describe the same harsh city. A neighbor's work or crime can change your conditions. The painted citizens and illustrated locations give those systems a recognizable place to live.
+The setting remains the strongest part: the train, civic papers, heating, wages, clothes, and shortages describe one harsh place. v0.7 gives a visit more decisions without increasing regular wages, removing ID consequences, or shortening residency gates. The next content should build on player histories and economic evidence rather than adding another independent currency or timer.
 
-The weaker part is what happens within a visit. Short tasks fill the space between wages, but many still reduce to spending energy and waiting for a small reward. The tested five-task route nearly exhausted the starting energy. More buttons with the same costs would make visits longer only briefly. The next work should create decisions, relationships, and demand for what players produce.
+## 1. Encounters tied to ordinary actions — implemented
 
-## 1. Encounters attached to ordinary actions
+Bins, salvage, decoding, and a completed shift reveal four authored branching encounters. Neri, Esra, Voss, and Rook remember choices; follow-up replies arrive after a minute. Returning a card, reporting sabotage, fixing a permit, or leaking a log has a stated immediate consequence and persistent history. Repeated tasks do not reroll them.
 
-Make scavenging, work breaks, and neighborhood visits sometimes reveal a small authored encounter. A found ration card might belong to an injured worker: return it for a contact, sell it for immediate money, or forge it for a risky follow-up. A broken heating relay could contain evidence of deliberate sabotage. Keep the initial decision short, with later consequences arriving through the neural relay or the character's story.
+Next: add encounters that use established contacts, current emergency history, housing, and repeated choices. The four initial stories are finite and will run out. Repeating the same reward branch would weaken the economy and the fiction; later encounters should change relationships and access, with occasional costly decisions and bounded material rewards.
 
-Use named contacts with memory and a bounded pool of branching encounters. Choices need clear immediate costs and understandable risks; secret later consequences should follow the fiction. Store offers and outcomes on the server so reloads cannot reroll them. Most encounters should develop relationships or unlock options, with restrained material rewards.
+## 2. Useful visits and low-energy activity — implemented
 
-This is the best next implementation slice: a handful of encounters tied to existing tasks, followed by phone playtests. It makes the present mechanics more interesting without requiring a new combat system.
+Short tasks and crafts cost less energy; public/hidden contract costs are 5/6. Regular wages, permits, rent, food, tax, sleep, and residency requirements retain their previous values. The overview offers immediate survival, work-break, ID recovery, and savings objectives. Free bulletins, encounter replies, case review, trade, and chat are available without energy. Quiet routes reduce one crime's capture risk but expire with the cycle.
 
-## 2. Pacing that supports a useful visit
+Next: observe real multi-day visits, net wages after survival costs, exhausted returnees, and how often recovery consumes a whole visit. The isolated 24-hour-return check proves relief can reopen work after eviction; it does not establish that this experience feels good over a week. Low-energy time should offer meaningful relationships and planning, while sleep still matters.
 
-Measure a fresh citizen's first 20 minutes and the experience of returning the next real day. Track energy spent, net wages after food/rent/tax, useful available actions, and time until the next meaningful choice. Record city conditions alongside those results; the same route should not be balanced solely for a quiet district.
+## 3. Demand for player-made supplies — implemented
 
-Give the overview a few practical objectives: secure a meal, begin a paid shift, prepare rent and tax money. Show what can be done during the current assignment and what remains affordable afterward. A citizen without energy should still be able to read leads, negotiate a trade, message contacts, and plan the next visit. Keep paid physical activity constrained; tune costs from observed sessions instead of broadly raising payouts or energy.
+Funded buy orders accept ten supply types, partial deliveries, taxable supplier payments, and remaining-escrow refunds. Citizen demand uses actual credits and inventory. A small municipal floor buys one unit from each participating citizen per cycle, with finite shared quantities. Shops choose consumable stock and can hold more open orders. Crisis repairs consume those same items.
 
-## 3. Citizens who need each other
+Next: measure fill rates, traded prices, shortages, and whether specialized scavenging/crafting is worthwhile after tax and energy. Add persistent deliveries or tenant requests when actual participation supports them. Crews and mutual-aid funds need rules for ownership and contributed goods before they can become useful cooperation tools.
 
-Extend the existing exchange with requests for salvaged materials and crafted supplies. A worker can place an order for warming packs; a workshop specialist can fill it; a shop can stock the result. Shared repair campaigns can consume those same items. Reserve payment and goods transactionally, and apply existing income-tax rules to completed sales.
+## 4. Emergencies with phases and memory — implemented
 
-Start with orders and a reason to buy what others make. Groups, crews, tenant associations, and mutual-aid funds can follow once people have something concrete to cooperate over. Low population needs a small municipal demand floor so the economy still works when the city is quiet.
+The boiler and freight convoy alternate by shared city cycle. Warning leads to active pressure, possible stabilization, and a secured/failed record at a five-hour deadline. Fixed goals scale from recent completed contributors. Authorized work adds repair units; criminal diversions remove progress. Fast responses consume supplies and have bounded personal starts. Late arrivals inherit the city's phase.
 
-## 4. Events with a developing story
+Next: vary the emergency stories, show more concrete attribution, and connect later incidents to recorded outcomes. Outcomes currently affect the last hour of their cycle; longer consequences need recovery routes so a weakly populated city remains playable. The two types are a first content slice, not a complete event generator.
 
-Current district events derive from aggregate thresholds. Give selected emergencies a warning, an active phase, and a recovery record: a boiler begins failing, citizens repair or exploit it, and the district remembers how it ended. Show the deadline, remaining need, affected conditions, and available responses together.
+## 5. Distinct earned institutional work — implemented
 
-Offer competing opportunities. Order earns trust through authorized repairs; the underground can divert scarce parts for better immediate income and greater heat. Both should change the same emergency. Calibrate goals against active participation so new arrivals do not inherit impossible demands.
+Administration handles disputed permits; security handles evidence and repair cargo; shops choose a crew sale or private buyer; underground contacts restore or divert a manifest. Free case review precedes a timed response. Lawful options favor trust and shared output; illicit options favor immediate income with heat and Chaos. Existing appointment gates, ID holds, earned uniforms, and crime consequences remain.
 
-## 5. Institutions with distinct work and visible identity
+Next: expand case variety and connect prior decisions to later work. Players should see their civic record affect opportunities before giving them powers over other citizens. No direct player detention or competitive combat is introduced. Combat needs a separate design for fairness, injury recovery, asynchronous participation, and city consequences.
 
-Following the law should offer reliable access and long-term influence. Crime should offer tempting immediate opportunities with preparation, contacts, and exposure. Use paperwork disputes, evidence, forged access, inspections, and supply diversion to express those differences. Existing tax holds and clearance queues already supply the consequences; show practical recovery routes beside a denial.
+## Presentation
 
-Later administration and security need their own decisions, not just larger wage buttons. Permits, freight inspections, and repair priorities can create civic work without giving players unchecked power over other characters. Shops should choose stock and orders. Earned clothing, identification, and rooms should make each career visible.
+Keep the corrected painted portrait composition: independent face/hair crops, neck inside the rear/front garment collar, and no hair layer for Shaved. Reuse the existing scene art where it fits; add faces, clothing wear, and institution-specific art as content expands. Dark skin tint choices still deserve more lighting variation. Mobile emergencies now lead the city page, with area artwork available in an expandable gallery.
 
-## Presentation work alongside those changes
-
-Continue using the current painted style, with consistent head, hair, neck, and garment registration across future assets. Add face variety, clothing wear, and stronger facial lighting for the darkest tint choices. On mobile, bring the next useful action and current constraints near the top, shorten repeated explanations, and keep detailed rules available on demand.
-
-The goal is a city that is hard to survive in and interesting to participate in. Each release should be played through with ordinary citizens in the same city, then checked again after its deadlines and consequences have had time to unfold.
+Long screens remain a weakness. Progressive disclosure and clearer labels should accompany future content so the next useful action stays close to the top. Inspect screenshots and actual phone sessions; passing an overflow check cannot establish visual quality or enjoyable pacing.

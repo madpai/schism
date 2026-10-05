@@ -1,17 +1,17 @@
 // Short activities use their own server-timed slot. No client outcomes or clocks.
 export const materials={cloth:{name:'Salvaged fabric',icon:'coat',description:'Clean strips cut from discarded civic textiles.'},wire:{name:'Copper wire',icon:'energy',description:'Enough live copper for one more improvised repair.'},circuit:{name:'Circuit parts',icon:'box',description:'Small components recovered from dead terminals.'},data:{name:'Signal traces',icon:'energy',description:'Fragments of the district network waiting to be decoded.'}};
 export const streetTasks={
- bins:{name:'Search collection bins',area:'Reclamation alley',art:'scavenge',seconds:25,energy:6,break:false,description:'Recover fabric or copper from municipal waste. No credits guaranteed.'},
- salvage:{name:'Strip dead electronics',area:'Service tunnels',art:'scavenge',seconds:45,energy:8,break:false,description:'Recover two wire and one circuit part. Exposed contacts can cost 2 health.'},
- sweep:{name:'Clean a public terminal',area:'Civic concourse',art:'registry',seconds:20,energy:5,break:true,description:'Earn 1 taxable credit. Small work with no career or trust shortcut.'},
- decode:{name:'Decode a stray signal',area:'Neural relay',art:'neural',seconds:35,energy:7,break:true,description:'Recover one signal trace for network contracts or neural patching.'},
- repair:{name:'Patch a heating relay',area:'Cell Stack IX',art:'workshop',seconds:60,energy:9,break:true,cost:{wire:1},description:'Spend one wire. Earn 2 taxable credits and add one district relief.'},
+ bins:{name:'Search collection bins',area:'Reclamation alley',art:'scavenge',seconds:25,energy:4,break:false,description:'Recover fabric or copper from municipal waste. No credits guaranteed.'},
+ salvage:{name:'Strip dead electronics',area:'Service tunnels',art:'scavenge',seconds:45,energy:5,break:false,description:'Recover two wire and one circuit part. Exposed contacts can cost 2 health.'},
+ sweep:{name:'Clean a public terminal',area:'Civic concourse',art:'registry',seconds:20,energy:3,break:true,description:'Earn 1 taxable credit. Small work with no career or trust shortcut.'},
+ decode:{name:'Decode a stray signal',area:'Neural relay',art:'neural',seconds:35,energy:4,break:true,description:'Recover one signal trace for network contracts or neural patching.'},
+ repair:{name:'Patch a heating relay',area:'Cell Stack IX',art:'workshop',seconds:60,energy:6,break:true,cost:{wire:1},description:'Spend one wire. Earn 2 taxable credits and add one district relief.'},
 };
 export const recipes={
- heatpack:{name:'Improvised warming pack',seconds:45,energy:5,cost:{cloth:2,wire:1},effect:'+14 warmth',description:'An exothermic pouch stitched from salvaged lining.'},
- bandage:{name:'Clean field dressing',seconds:35,energy:5,cost:{cloth:2},effect:'+10 health',description:'A stopgap until you can afford the Somatic Ward.'},
- scrap:{name:'Rebuilt relay fragment',seconds:75,energy:10,cost:{wire:3,circuit:1},effect:'One relay fragment',description:'Rebuild a small part for district repairs or sale.'},
- neuralpatch:{name:'Neural grounding patch',seconds:60,energy:8,cost:{circuit:2,data:2},effect:'+12 coherence',description:'Anchor your implant against the voices behind the signal.'},
+ heatpack:{name:'Improvised warming pack',seconds:45,energy:3,cost:{cloth:2,wire:1},effect:'+14 warmth',description:'An exothermic pouch stitched from salvaged lining.'},
+ bandage:{name:'Clean field dressing',seconds:35,energy:3,cost:{cloth:2},effect:'+10 health',description:'A stopgap until you can afford the Somatic Ward.'},
+ scrap:{name:'Rebuilt relay fragment',seconds:75,energy:6,cost:{wire:3,circuit:1},effect:'One relay fragment',description:'Rebuild a small part for district repairs or sale.'},
+ neuralpatch:{name:'Neural grounding patch',seconds:60,energy:5,cost:{circuit:2,data:2},effect:'+12 coherence',description:'Anchor your implant against the voices behind the signal.'},
 };
 export const quickSupplies={heatpack:{name:'Improvised warming pack',effect:'+14 warmth',icon:'temp'},bandage:{name:'Clean field dressing',effect:'+10 health',icon:'health'},neuralpatch:{name:'Neural grounding patch',effect:'+12 coherence',icon:'energy'}};
 export const neuralChannels={district:{name:'District IX',description:'Citizen conversation, questions, and warnings.'},exchange:{name:'Exchange wire',description:'Trade offers and wanted supplies.'},uncounted:{name:'The Uncounted',description:'Workers, mutual aid, and organizing.'}};
@@ -24,8 +24,8 @@ export function streetState(p,day){
  if(p.street.day!==day)p.street={day,count:0,games:0,leads:[]};return p;
 }
 export function networkLeads(w){return [
- {id:'public',name:'Reconcile a freight manifest',seconds:50,energy:8,art:'transit',cost:{data:1},description:'Send one signal trace to the public relay. Earn 2 taxable credits, 1 trust, and one freight contribution.'},
- {id:'wound',name:'Deliver an unregistered echo',seconds:50,energy:8,art:'neural',cost:{data:1},description:'Send one signal trace through a hidden route. Earn 3 unreported credits, +4 heat, −1 alignment, and one criminal contribution.'},
+ {id:'public',name:'Reconcile a freight manifest',seconds:50,energy:5,art:'transit',cost:{data:1},description:'Send one signal trace to the public relay. Earn 2 taxable credits, 1 trust, and one freight contribution.'},
+ {id:'wound',name:'Deliver an unregistered echo',seconds:50,energy:6,art:'neural',cost:{data:1},description:'Send one signal trace through a hidden route. Earn 3 unreported credits, +4 heat, −1 alignment, and one criminal contribution.'},
  ];}
 export function quickBlocked(p,item,now){
  return !p.registered?'Register your character first.':p.errand?'Finish your current short task.':p.detainedUntil>now?'Your sentence is still running.':p.activity&&p.activity.action!=='work'?'This assignment needs your full attention.':p.activity&&item.break===false?'Leave the street until your shift is over.':p.street.count>=10?'Ten short tasks per city cycle. The district has no more work for you.':p.health<15?'Treatment needed.':p.energy<item.energy?`Need ${item.energy} energy.`:Object.entries(item.cost||{}).some(([id,n])=>(p.materials[id]||0)<n)?'Missing materials.':null;

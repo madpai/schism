@@ -1,3 +1,4 @@
+import {districtCrisis} from './crises.js';
 // Each row is an immutable commitment. Completed contributions affect the whole city,
 // even if the citizen who started the shift has not come back to collect their pay.
 export const cityResponses={
@@ -23,7 +24,8 @@ export async function cityLife(db,w,now){
   if(metrics.relief>=4){cold--;add('boiler','Communal boilers lit',`${metrics.relief} relief from citizen boiler crews.`,'Every citizen loses 1 less warmth per city hour.','positive');}
   if(metrics.freight>=3)add('arrival','Relief train unloaded',`${metrics.freight} freight delivered by citizens.`,'Border surcharge lifted. Completed freight adds common food stock.','positive');
   Object.assign(w,{foodModifier:food,wageModifier:wages,citySecurityModifier:security,coldModifier:cold});
-  return {metrics,target,events,responses:cityResponses,nextCycleAt:(Math.floor(now/21600000)+1)*21600000,workLimit:8,crimeLimit:3};
+  const crisis=await districtCrisis(db,w,population.n);
+  return {metrics,target,events,crisis,responses:cityResponses,nextCycleAt:(Math.floor(now/21600000)+1)*21600000,workLimit:8,crimeLimit:3};
 }
 export function contributionFor(action,input,job,hours){
   const m={output:0,freight:0,crime:0,unrest:0,relief:0,patrols:0};

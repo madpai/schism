@@ -9,7 +9,7 @@ const reject=async(fn,pattern)=>{await assert.rejects(fn,pattern);checks++;};
 const h=harness();await h.register('mara','Mara Vale');let s=await h.read('mara');
 check(Object.values(s.citizen.materials).every(n=>n===0)&&s.streetLife.used===0,'Fresh citizens have no scavenged resources or spent short-task quota');
 s=await h.start('mara',{action:'quick',id:'bins'});const binDeadline=s.citizen.errand.endsAt;
-check(s.citizen.energy<53&&s.citizen.credits===0,'Scavenging reserves energy immediately without instant money');
+check(s.citizen.energy<55&&s.citizen.credits===0,'Scavenging reserves energy immediately without instant money');
 check(Object.values(s.citizen.materials).every(n=>n===0),'Scavenged rewards are unavailable before the deadline');
 check(s.jobs.every(j=>j.quotes.every(q=>q.blocked==='Finish your short task.')),'Job offers explain the active short-task restriction');
 await reject(()=>h.start('mara',{action:'quick',id:'decode'}),/Finish your current short task/);
@@ -41,7 +41,7 @@ s=await h.start('mara',{action:'network_job',id:'wound'});const gross=s.citizen.
 check((await h.read('neighbor')).cityLife.metrics.crime===1,'Hidden network delivery contributes to shared criminal pressure');
 await h.patch('mara',{energy:100,street:{day:s.world.day,count:10,games:0,leads:[]}});await reject(()=>h.start('mara',{action:'quick',id:'sweep'}),/Ten short tasks/);
 h.now+=21600000;s=await h.read('mara');check(s.streetLife.used===0,'Daily short-task quota resets on the shared cycle');
-await h.patch('mara',{energy:1});await reject(()=>h.start('mara',{action:'quick',id:'decode'}),/Need 7 energy/);
+await h.patch('mara',{energy:1});await reject(()=>h.start('mara',{action:'quick',id:'decode'}),/Need 4 energy/);
 await h.patch('mara',{energy:100,detainedUntil:h.now+60000});await reject(()=>h.start('mara',{action:'quick',id:'bins'}),/sentence/);
 await h.patch('mara',{detainedUntil:0});await h.start('mara',{action:'rest'});await reject(()=>h.start('mara',{action:'quick',id:'decode'}),/full attention/);
 const gambling=()=>{const p=residencyState(careerState({...initial(h.now),registered:true,credits:10,energy:100}),h.now);streetSnapshot(p,world(h.now));return p;};

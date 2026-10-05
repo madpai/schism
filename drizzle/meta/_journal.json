@@ -43,6 +43,13 @@
       "when": 1791220218180,
       "tag": "0005_complex_kree",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1791230283759,
+      "tag": "0006_wealthy_garia",
+      "breakpoints": true
     }
   ]
 }
