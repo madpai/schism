@@ -1,11 +1,14 @@
 import { readFile, writeFile, mkdir, rm, cp } from 'node:fs/promises';
 import { initial, world, goods, jobs } from '../worker/game.js';
+import { encountersFor, personalState } from '../worker/stories.js';
 await rm('dist',{recursive:true,force:true});await mkdir('dist/server',{recursive:true});await mkdir('dist/.openai',{recursive:true});
 const seed={citizen:{id:'pending',name:'Unregistered citizen',...initial()},world:world(),goods:Object.entries(goods).map(([id,g])=>({id,...g})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j})),log:[],board:[],citizens:[],listings:[],totals:{citizens:0,members:0}};
-const css=await readFile('public/style.css','utf8');const app=(await readFile('public/app.js','utf8')).replace('/* SEED */','const SEED='+JSON.stringify(seed)+';');
+personalState(seed.citizen);seed.encounters=encountersFor(seed.citizen);seed.project={progress:0,target:12,complete:false};
+const css=await readFile('public/style.css','utf8')+'\n'+await readFile('public/terminal.css','utf8');const app=(await readFile('public/app.js','utf8')).replace('/* SEED */','const SEED='+JSON.stringify(seed)+';');
 const page=(await readFile('public/index.html','utf8')).replace('/* STYLES */',css).replace('/* APP */',app);
 const assets={};for(const name of ['city','factory','market'])assets['/art/'+name+'.webp']=(await readFile('public/'+name+'.webp')).toString('base64');
-const game=(await readFile('worker/game.js','utf8')).replace(/export /g,'');const entry=(await readFile('worker/index.js','utf8')).replace(/^import .*;\n/gm,'');
-await writeFile('dist/server/index.js',game+'\nconst page='+JSON.stringify(page)+';\nconst assets='+JSON.stringify(assets)+';\n'+entry);
+const stories=(await readFile('worker/stories.js','utf8')).replace(/export /g,'');
+const game=(await readFile('worker/game.js','utf8')).replace(/^import .*;\n/gm,'').replace(/export /g,'');const entry=(await readFile('worker/index.js','utf8')).replace(/^import .*;\n/gm,'');
+await writeFile('dist/server/index.js',stories+'\n'+game+'\nconst page='+JSON.stringify(page)+';\nconst assets='+JSON.stringify(assets)+';\n'+entry);
 await cp('.openai/hosting.json','dist/.openai/hosting.json');await cp('drizzle','dist/.openai/drizzle',{recursive:true});
 console.log('Built SCHISM Worker, 3 original art assets, and D1 migrations.');

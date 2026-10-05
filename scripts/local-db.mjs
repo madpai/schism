@@ -1,8 +1,9 @@
 import { DatabaseSync } from 'node:sqlite';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 export function localDB(filename=':memory:'){
   const sqlite=new DatabaseSync(filename);
-  sqlite.exec(readFileSync(new URL('../drizzle/0000_regular_sugar_man.sql',import.meta.url),'utf8'));
+  const migrations=new URL('../drizzle/',import.meta.url);
+  for(const filename of readdirSync(migrations).filter(f=>f.endsWith('.sql')).sort())sqlite.exec(readFileSync(new URL(filename,migrations),'utf8'));
   const prepare=(sql,args=[])=>({
     bind(...values){return prepare(sql,values);},
     async first(){return sqlite.prepare(sql).get(...args)||null;},

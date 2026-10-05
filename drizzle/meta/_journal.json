@@ -8,6 +8,13 @@
       "when": 1791174600577,
       "tag": "0000_regular_sugar_man",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1791178215044,
+      "tag": "0001_living_luckman",
+      "breakpoints": true
     }
   ]
 }

@@ -6,7 +6,7 @@
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-artifact.mjs",
     "db:generate": "drizzle-kit generate",
-    "test": "node --experimental-sqlite scripts/test-game.mjs"
+    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2"

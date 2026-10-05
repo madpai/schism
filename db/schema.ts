@@ -21,3 +21,6 @@ export const listings = sqliteTable('listings', {
 export const guards = sqliteTable('action_guards', {
   id: text('id').primaryKey(), valid: integer('valid').notNull(),
 }, t => [check('guard_valid', sql`${t.valid} = 1`)]);
+export const projects = sqliteTable('projects', {
+  id: text('id').primaryKey(), day: integer('day').notNull(), progress: integer('progress').notNull().default(0),
+}, t => [check('project_progress_bounds', sql`${t.progress} >= 0 AND ${t.progress} <= 12`)]);

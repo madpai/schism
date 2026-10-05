@@ -1,3 +1,4 @@
+import { encountersFor, personalState, resolveEncounter } from './stories.js';
 const EPOCH = Date.UTC(2026,9,5);
 const clamp = (n, min=0, max=100) => Math.max(min,Math.min(max,n));
 export const goods = {
@@ -43,9 +44,17 @@ export async function ensureCitizen(db,owner,now=Date.now()){
 async function ensureMarket(db,w){
   await db.batch(Object.entries(goods).map(([id,g])=>stmt(db,'INSERT INTO market (id,stock,day) VALUES (?,?,?) ON CONFLICT(id) DO UPDATE SET stock=min(?,market.stock+max(0,excluded.day-market.day)*?), day=max(market.day,excluded.day)',id,g.stock,w.day,g.stock,g.stock)));
 }
+async function cityProject(db,w){
+  const id='heating-'+w.day;
+  await stmt(db,'INSERT OR IGNORE INTO projects (id,day,progress) VALUES (?,?,0)',id,w.day).run();
+  const row=await stmt(db,'SELECT * FROM projects WHERE id=?',id).first();
+  w.heating=row.progress>=12;
+  return {...row,target:12,complete:w.heating};
+}
 export async function snapshot(db,owner,now=Date.now()){
   const c=await ensureCitizen(db,owner,now),w=world(now);
   await ensureMarket(db,w);
+  const project=await cityProject(db,w),citizen=settle(JSON.parse(c.data),now);personalState(citizen);
   const [stock,log,board,people,offers,totals]=await Promise.all([
     all(db,'SELECT * FROM market'),all(db,'SELECT body,created FROM journal WHERE citizen=? ORDER BY created DESC LIMIT 12',c.id),
     all(db,'SELECT p.id,p.body,p.created,c.name,c.data FROM posts p JOIN citizens c ON c.id=p.citizen ORDER BY p.created DESC LIMIT 20'),
@@ -53,7 +62,7 @@ export async function snapshot(db,owner,now=Date.now()){
     all(db,'SELECT l.*,c.name FROM listings l JOIN citizens c ON c.id=l.seller WHERE l.sold=0 ORDER BY l.created DESC LIMIT 30'),
     stmt(db,"SELECT count(*) AS citizens, sum(CASE WHEN json_extract(data,'$.union')=1 THEN 1 ELSE 0 END) AS members FROM citizens").first(),
   ]);
-  return {citizen:{id:c.id,name:c.name,...settle(JSON.parse(c.data),now)},world:w,
+  return {citizen:{id:c.id,name:c.name,...citizen},world:w,project,encounters:encountersFor(citizen),
     goods:stock.map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j})),
     log,board:board.map(p=>({id:p.id,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
     citizens:people.map(p=>{const d=JSON.parse(p.data);return {id:p.id,name:p.name,role:d.role,rep:d.rep,shifts:d.shifts,union:d.union,online:now-p.updated<120000};}),listings:offers,totals};
@@ -64,10 +73,18 @@ export async function act(db,owner,input,now=Date.now()){
   const c=await ensureCitizen(db,owner,now),p=settle(JSON.parse(c.data),now),w=world(now);
   need(now-c.last_action>=650,'Give the city a moment before your next action.');
   await ensureMarket(db,w);
+  const project=await cityProject(db,w);personalState(p);
   const extra=[],checks=[],op=uid();let message='',hours=0,energy=0;
   const credit=n=>need(p.credits>=n,`You need ${n} credits. You have ${p.credits}.`);
   const job=typeof input.id==='string'&&Object.hasOwn(jobs,input.id)?jobs[input.id]:null;
   switch(input.action){
+    case 'encounter':{const resolved=resolveEncounter(p,input,now);message=resolved.message;hours=resolved.hours;energy=resolved.energy;break;}
+    case 'contribute':{
+      need(p.scrap>0,'You need one piece of scrap to repair the generator.');need(!project.complete,'The district generator is already repaired for this city day.');
+      checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM projects WHERE id=? AND progress<12),0))',op+'project',project.id));
+      extra.push(stmt(db,'UPDATE projects SET progress=progress+1 WHERE id=?',project.id));p.scrap--;p.rep++;p.story.flags.helpedDistrict=true;
+      message='You add a spare part to the district generator. One less freezing room, if enough citizens join you.';break;
+    }
     case 'work':{
       need(job,'That job is no longer available.');need(p.rep>=job.requires,`You need ${job.requires} trust for this job.`);need(p.health>=15,'Visit the clinic or find medicine before another shift.');
       hours=job.hours;energy=job.energy;p.credits+=job.pay+(p.union?1:0);p.rep+=job.rep;p.shifts++;
@@ -134,14 +151,14 @@ export async function act(db,owner,input,now=Date.now()){
     default:throw Object.assign(new Error('Unknown action.'),{status:400});
   }
   need(p.energy>=energy,`You need ${energy} energy. Rest before taking this job.`);p.energy=clamp(p.energy-energy);p.clock+=hours;
-  p.fullness=clamp(p.fullness-hours*3);p.warmth=clamp(p.warmth-hours*(p.coat?1:3));
+  p.fullness=clamp(p.fullness-hours*3);p.warmth=clamp(p.warmth-hours*Math.max(0,(p.coat?1:3)-(w.heating?1:0)));
   if(hours&&p.fullness<15)p.health=clamp(p.health-hours*2);if(hours&&p.warmth<15)p.health=clamp(p.health-hours);
   if(p.health===0){p.health=20;p.energy=20;p.credits=Math.max(0,p.credits-5);message+=' You collapse. The emergency ward patches you up and takes 5 credits.';}
   const final=settle(p,now);
   const statements=[stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM citizens WHERE id=? AND version=?),0))',op,c.id,c.version),...checks,
     stmt(db,'UPDATE citizens SET data=?,version=version+1,last_action=?,updated=? WHERE id=?',JSON.stringify(final),now,now,c.id),...extra,
     stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),c.id,message,now),
-    stmt(db,'DELETE FROM action_guards WHERE id=? OR id=? OR id=?',op,op+'stock',op+'offer')];
+    stmt(db,'DELETE FROM action_guards WHERE id=? OR id=? OR id=? OR id=?',op,op+'stock',op+'offer',op+'project')];
   try{await db.batch(statements);}catch(e){if(String(e).includes('guard_valid'))throw Object.assign(new Error('That offer or your balance just changed. Refresh and try again.'),{status:409});throw e;}
   return {message,...await snapshot(db,owner,now)};
 }
