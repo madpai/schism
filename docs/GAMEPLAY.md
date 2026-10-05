@@ -10,6 +10,8 @@ Appearance: Woman/Man/Nonbinary; Porcelain/Sand/Olive/Bronze/Umber/Ebony skin; B
 
 Existing saves without a registration field are established residents. They receive default editable appearance and civic ledger fields while retaining possessions and progress. Residence age uses the original saved `joined` timestamp.
 
+After the residency release, the owner explicitly requested resetting the old characters to remove their easier-economy head start. The one-time live reset completed October 5, 2026, at 16:08:47 UTC. It cleared all citizens, player listings, noticeboard posts, personal journals, and unfinished district commitments. The next sign-in creates an unregistered citizen with no inherited credits, careers, housing, tax debt, or story progress. Registration starts the new character's residence age. The shared clock, market, faction/project state, and completed contributions continue; regular updates do not reset characters.
+
 ## Shared time and activity
 
 The server epoch remains October 5, 2026, 00:00 UTC. A shared day is six real hours and contains 24 fifteen-minute city hours. Residence age counts complete real 24-hour days since registration; it is separate from server day.

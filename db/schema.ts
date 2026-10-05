@@ -34,3 +34,6 @@ export const cityActivity = sqliteTable('city_activity', {
   output:integer('output').notNull().default(0), freight:integer('freight').notNull().default(0), crime:integer('crime').notNull().default(0),
   unrest:integer('unrest').notNull().default(0), relief:integer('relief').notNull().default(0), patrols:integer('patrols').notNull().default(0),
 },t=>[index('idx_city_activity_day_completes').on(t.day,t.completes)]);
+export const maintenanceRuns = sqliteTable('maintenance_runs', {
+  id:text('id').primaryKey(), completed:integer('completed').notNull(), citizens:integer('citizens').notNull(),
+});

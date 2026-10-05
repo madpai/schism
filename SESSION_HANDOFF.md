@@ -1,6 +1,18 @@
-# SCHISM session handoff — v0.5 residency update
+# SCHISM session handoff — fresh character start
 
-Updated October 5, 2026. The v0.5 gameplay release was successfully published. All requested game changes, the illustrated README, and rule/architecture documentation are complete. GitHub synchronization and this final release record accompany the publication; no additional feature work is pending.
+Updated October 5, 2026. The v0.5 residency release is complete. The owner then explicitly requested resetting all characters to remove their easier-economy head start. The live reset completed at 16:08:47 UTC. The temporary maintenance route has been removed, and current documentation records the fresh start.
+
+## Latest operation: completed character reset
+
+- Receipt: `residency-fresh-start-2026-10-05`, `completed=1791216527324`, `citizens=1`, `applied=true`.
+- Native production reads verified zero rows in `citizens`, `listings`, `posts`, and `journal`, and the permanent receipt in `maintenance_runs`.
+- Pending district contributions were canceled. The shared city clock, market, faction balance, repair projects, and completed contributions continue.
+- The same signed-in account now receives a new unregistered citizen. Registering creates a neutral, 0-credit character with fresh residency, survival, tax, career, story, and institution state.
+- Append-only migration `0004_fluffy_selene.sql` adds the receipt table. The reset is an atomic explicit operation, never a migration side effect or a gameplay action.
+- Temporary reset source: `3eb94772cd93b00240e8a65fd1dad5dbbda06108`; deployment `appgdep_6ac3cb77cfa48191a15a0257a5ebf885`, native status **succeeded**. A following publication removes its route and excludes the maintenance helper from the Worker bundle. Consult current Sites history or `/home/commander/SCHISM_HANDOFF.md` for final publication IDs.
+- Do not repeat the reset or restore old characters. Future updates preserve the newly created characters. This explicit fresh-start instruction supersedes the prior keep-existing-characters direction for this one operation.
+- Verification: all **217 checks passed**, including 20 reset assertions for linked-record cleanup, fresh registration, shared state retention, retry/concurrency safety, and rollback. Build and ESM validation also pass.
+- Final built-Worker checks verify that the temporary reset route returns 404, maintenance code is absent from the bundle, and a new account can register a neutral, zero-credit character with zero days of residency.
 
 ## Locations and established workflow
 
@@ -26,12 +38,12 @@ SCHISM is a persistent dystopian city RPG about ordinary people, with the asynch
 
 The user explicitly requested taxes, identity flags that block factory access, debt repayment and time/energy spent obtaining administrative clearance, a pull toward crime/Chaos, and collective events driven by what players do. They also requested continued publication, current documentation/handoffs, and a nice GitHub README featuring original artwork.
 
-Keep the established Canon/Wound occult setting, rainy neon noir artwork, near-black/cyan/crimson palette, and legacy terminal typography. Existing assets are suitable. Preserve the current vanilla stack and established citizens.
+Keep the established Canon/Wound occult setting, rainy neon noir artwork, near-black/cyan/crimson palette, and legacy terminal typography. Existing assets are suitable. Preserve the current vanilla stack and newly created citizens after the explicit one-time reset above.
 
 ## Shipped source behavior
 
 - ChatGPT sign-in owns one durable citizen. Unregistered accounts see character intake and an arriving train window rather than a generated playable character. Name, gender, six skin tones, six hair colors, five hairstyles, and three builds are validated and saved. Composed native SVG scans appear throughout the character UI. Appearance is cosmetic and editable.
-- New characters have 0 credits, neutral alignment/trust, worn clothing/boots/implant, and one six-hour cycle before the first rent bill. Registration cannot be replayed. Old citizens bypass new intake and retain possessions, institutions, careers, stories, and their original `joined` date.
+- New characters have 0 credits, neutral alignment/trust, worn clothing/boots/implant, and one six-hour cycle before the first rent bill. Registration cannot be replayed. Legacy-save compatibility retains progress during normal upgrades; the explicitly requested fresh start above removed the old live citizens.
 - One common city hour is 15 real minutes; common city days remain six real hours from the existing epoch. Displayed `daysInCity` counts complete real 24-hour days since registration. Personal actions never fast-forward time.
 - Jobs, rest, crime, organizing, clinic, shops, official/security duty, event work, and registry clearance are persistent timed assignments. Energy, fees, and consumed stock are reserved. Positive pay, XP, and benefits wait for completion. Shopping, eating, rent, taxes, equipment, and direct trade remain possible during an assignment. Completion and its journal entry are atomic and exactly once under concurrent reads.
 - Employment/official/security/event work is capped at eight city hours per starting shared day. Sleep once per starting day, crime three attempts/day, and shop sessions twice/day. Work quotas use completion day. Career ranks slowed to 24/80/180 XP; three-shift quota reduced from 8 CR to 3 CR.
@@ -56,6 +68,7 @@ This is asynchronous multiplayer, with no real-time movement/combat or direct se
 - `public/residency.js` / `.css`: train intake, customizable citizen scans, character sheet, countdowns, Revenue/Registry/security interfaces, city metrics and responses.
 - Existing app/character UI integrates these systems. Displayed version is v0.5.
 - `db/schema.ts` and append-only `drizzle/0003_slippery_zaran.sql`: new indexed city-activity table and market `delivered` counter. Older migrations and their snapshots were not changed.
+- `worker/reset.js`, `scripts/test-reset.mjs`, and append-only `drizzle/0004_fluffy_selene.sql`: tested one-time reset and permanent receipt. The helper remains as auditable source and is excluded from the production Worker; there is no reset route.
 - `scripts/build.mjs` embeds new modules and UI alongside existing assets; Worker entry remains `dist/server/index.js`.
 - `scripts/test-harness.mjs`: explicit injected-time/legacy-fixture helper. Production accepts no caller-supplied clock.
 - `README.md`: original rainy city artwork, player-facing product explanation, mechanics/timings, setup and verification.
@@ -64,7 +77,7 @@ This is asynchronous multiplayer, with no real-time movement/combat or direct se
 
 ## Verification
 
-All **197 gameplay checks passed**: 41 core, 27 narratives/repairs, 26 factions, 31 equipment/careers, 72 residency/economy. They include delayed wages/XP, exact-once completion/journaling, balance additions while trading during work, fractional tax, deadline holds, factory gates, paid and indigent clearance, arrest/sentence/clearance, daily limits, relief recovery, shared contributions without owner return, stock delivery idempotence, civic/security age gates, and legacy migration.
+All **217 checks passed**: 41 core, 27 narratives/repairs, 26 factions, 31 equipment/careers, 72 residency/economy, and 20 reset checks. They include delayed wages/XP, exact-once completion/journaling, balance additions while trading during work, fractional tax, deadline holds, factory gates, paid and indigent clearance, arrest/sentence/clearance, daily limits, relief recovery, shared contributions without owner return, stock delivery idempotence, civic/security age gates, legacy migration, reset cleanup, retained shared state, retry/concurrency safety, and reset rollback.
 
 Build and ESM artifact validation passed. Built Worker boundary checks passed for missing identity, spoofed owner input without identity, cross-origin writes, wrong content type, invalid and oversized JSON, authenticated state, and artwork routes.
 
