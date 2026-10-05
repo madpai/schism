@@ -8,7 +8,8 @@
     "db:generate": "drizzle-kit generate",
     "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs && node --experimental-sqlite scripts/test-reset.mjs && node --experimental-sqlite scripts/test-street.mjs",
     "dev": "node --experimental-sqlite scripts/dev.mjs",
-    "test:browser": "node scripts/playtest-browser.mjs"
+    "test:browser": "node scripts/playtest-browser.mjs",
+    "test:portraits": "node scripts/playtest-portraits.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2"

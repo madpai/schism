@@ -45,3 +45,5 @@ SCHISM_QA_URL=http://100.89.1.14:4173 npm run test:browser
 ```
 
 Set `SCHISM_BROWSER` to a Chromium-family browser executable when `/opt/brave-bin/brave` is unavailable. Screenshots default to ignored `.local-data/qa-screenshots`; `SCHISM_QA_OUTPUT` can override that directory. Unit tests inject server time in isolated in-memory databases and do not touch phone characters.
+
+For a bounded portrait review, run `npm run test:portraits` against the existing Tailscale service. It uses the saved Iona Vex session at `.local-data/qa-browser.json`, renders 135 face/build/hair/outfit combinations and six color pairs, checks 360/390/1440px profiles, and previews shaved/braided mobile intake without submitting registration. It does not post gameplay actions or change saved appearance/equipment. `SCHISM_QA_SESSION` can select another private Playwright storage-state file for an existing registered local citizen; its cookies must belong to `SCHISM_QA_URL`. Outputs default to ignored `.local-data/portrait-review`. Inspect the generated images as well as the automation result: rendering checks alone cannot establish anatomical correctness.
