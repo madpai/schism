@@ -51,3 +51,25 @@ export const districtCrises = sqliteTable('district_crises', {
 export const crisisActions = sqliteTable('crisis_actions', {
  id:text('id').primaryKey(), crisis:text('crisis').notNull(), citizen:text('citizen').notNull(), completes:integer('completes').notNull(), repair:integer('repair').notNull().default(0), diversion:integer('diversion').notNull().default(0),
 },t=>[index('idx_crisis_actions_completion').on(t.crisis,t.completes),check('crisis_units_nonnegative',sql`${t.repair} >= 0 AND ${t.diversion} >= 0`)]);
+
+export const tenantBlocks = sqliteTable('tenant_blocks', {
+ id:text('id').primaryKey(),name:text('name').notNull(),founder:text('founder').notNull().unique(),stock:text('stock').notNull().default('{}'),progress:integer('progress').notNull().default(0),round:integer('round').notNull().default(1),heatUntil:integer('heat_until').notNull().default(0),version:integer('version').notNull().default(0),created:integer('created').notNull(),
+},t=>[check('tenant_progress_bounds',sql`${t.progress} >= 0 AND ${t.progress} <= 6`)]);
+export const tenantMembers = sqliteTable('tenant_members', {
+ citizen:text('citizen').primaryKey(),block:text('block').notNull(),joined:integer('joined').notNull(),
+},t=>[index('idx_tenant_members_block').on(t.block)]);
+export const tenantMessages = sqliteTable('tenant_messages', {
+ id:text('id').primaryKey(),block:text('block').notNull(),citizen:text('citizen').notNull(),body:text('body').notNull(),created:integer('created').notNull(),
+},t=>[index('idx_tenant_messages_block_created').on(t.block,t.created),index('idx_tenant_messages_citizen_created').on(t.citizen,t.created)]);
+export const tenantTransfers = sqliteTable('tenant_transfers', {
+ id:text('id').primaryKey(),block:text('block').notNull(),citizen:text('citizen').notNull(),item:text('item').notNull(),quantity:integer('quantity').notNull(),kind:text('kind').notNull(),created:integer('created').notNull(),
+},t=>[index('idx_tenant_transfers_block_created').on(t.block,t.created),check('tenant_transfer_bounds',sql`${t.quantity} >= 1 AND ${t.quantity} <= 5`)]);
+export const tenantRepairs = sqliteTable('tenant_repairs', {
+ id:text('id').primaryKey(),block:text('block').notNull(),citizen:text('citizen').notNull(),round:integer('round').notNull(),completes:integer('completes').notNull(),
+},t=>[index('idx_tenant_repairs_completion').on(t.block,t.round,t.completes)]);
+export const recoveryActions = sqliteTable('recovery_actions', {
+ id:text('id').primaryKey(),crisis:text('crisis').notNull(),citizen:text('citizen').notNull(),completes:integer('completes').notNull(),
+},t=>[index('idx_recovery_actions_completion').on(t.crisis,t.completes)]);
+export const districtNews = sqliteTable('district_news', {
+ id:text('id').primaryKey(),day:integer('day').notNull(),headline:text('headline').notNull(),body:text('body').notNull(),data:text('data').notNull(),published:integer('published').notNull(),
+},t=>[index('idx_district_news_published').on(t.published)]);

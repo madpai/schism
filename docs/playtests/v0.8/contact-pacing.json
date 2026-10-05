@@ -1,0 +1,34 @@
+{
+  "started": "2026-10-05T21:36:34.923Z",
+  "ended": "2026-10-05T21:39:05.014Z",
+  "character": "Quin 676e0",
+  "elapsedSeconds": 150,
+  "energy": 54.32292333333333,
+  "credits": 0,
+  "shortTasks": 1,
+  "mendingLesson": true,
+  "contact": 5,
+  "choices": {
+    "ration": {
+      "node": "done",
+      "readyAt": 1791236282983,
+      "discoveredAt": 1791236220771,
+      "choices": [
+        "return",
+        "visit"
+      ]
+    },
+    "neri_return": {
+      "template": "neri_return",
+      "node": "done",
+      "readyAt": 1791236345014,
+      "discoveredAt": 1791236282983,
+      "choices": [
+        "learn",
+        "answer"
+      ]
+    }
+  },
+  "errors": [],
+  "notes": "Real bin discovery and two real sixty-second replies; reloaded the saved session to verify persistence after correcting a test selector for the preserved encounter tab."
+}

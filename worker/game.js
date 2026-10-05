@@ -1,3 +1,7 @@
+import {offerContacts} from './contacts.js';
+import {tenantMembership,tenantSnapshot,tenantAction,neighborState} from './tenants.js';
+import {recoveryBlocked,startRecovery} from './aftermath.js';
+import {livingCold,livingSleep,settleBills,livingAction,startLivingTask,livingSnapshot,housingTypes,reportedPaymentStatement} from './living.js';
 import { CITY_HOUR_MS, CITY_DAY_MS, appearanceOptions, defaultAppearance, validAppearance, residencyState, institutionRequirements, timedActions, onDutyActions, scheduleActivity, completeActivity, accrueTax, identityFlags } from './residency.js';
 import { cityLife, cityResponses, contributionFor } from './citylife.js';
 import { streetState, streetSnapshot, startQuick, finishQuick, quickSupplies, neuralChannels } from './street.js';
@@ -38,29 +42,29 @@ export function settle(data, now=Date.now(),w=world(now)) {
   // Resolve at a precise boundary: completion rewards cannot be used before the shift ends.
   const start=Math.max(p.lastTick,now-168*3600000);
   const advance=until=>{
+    // Shared repairs apply only during their actual completed protection window.
+    // Splitting offline exposure avoids granting heat before completion or losing
+    // protection merely because the resident returns after it expired.
+    const boundary=(w.tenantHeatWindows||[]).flatMap(r=>[r.from,r.until]).sort((a,b)=>a-b).find(t=>Number.isFinite(t)&&t>p.lastTick&&t<until);
+    if(boundary){advance(boundary);advance(until);return;}
+    const tenantHeat=(w.tenantHeatWindows||[]).some(r=>r.from<=p.lastTick&&p.lastTick<r.until)?.75:0;
     const hours=Math.max(0,(until-p.lastTick)/CITY_HOUR_MS);
     if(!hours)return;
     const sleeping=p.activity?.action==='rest',working=!!p.activity&&!sleeping;
-    const rate=working?Math.max(.2,coldRate(p,w)+(w.coldModifier||0)):Math.max(.2,(p.evicted?3:p.housing==='flat'?.25:p.housing==='room'?.5:1)+(w.coldModifier||0)-(w.heating?1:0)-(p.coat?.6:0));
+    const rate=working?Math.max(.2,coldRate(p,w)+(w.coldModifier||0)):Math.max(.2,livingCold(p)+(w.coldModifier||0)-(w.heating?1:0)-(p.coat?.6:0)-(p.housing!=='street'?tenantHeat:0));
     const hunger=sleeping?1.5:2;
     const hungerDamage=Math.max(0,hours-Math.max(0,p.fullness-15)/hunger);
     const coldDamage=Math.max(0,hours-Math.max(0,p.warmth-15)/rate);
     p.fullness=clamp(p.fullness-hours*hunger);p.warmth=clamp(p.warmth-hours*rate);
     p.health=clamp(p.health-hungerDamage-coldDamage*.5,10,100);
-    p.energy=clamp(p.energy+hours*(sleeping?6:working?0:1));p.heat=clamp(p.heat-hours*.25);
+    p.energy=clamp(p.energy+hours*(sleeping?livingSleep(p).sleepRate:working?0:1));p.heat=clamp(p.heat-hours*.25);
     p.lastTick=until;
   };
   p.lastTick=start;
-  if(p.activity&&p.activity.endsAt<=now){const a=p.activity;advance(a.endsAt);completeActivity(p);if(a.action==='work')discoverDistrict(p,'work',a.endsAt,w.day);}
+  if(p.activity&&p.activity.endsAt<=now){const a=p.activity;advance(a.endsAt);completeActivity(p);if(a.action==='work'){discoverDistrict(p,'work',a.endsAt,w.day);p.clothingWear=Math.min(100,p.clothingWear+4);}}
   advance(now);
-  streetState(p,w.day);districtState(p,w.day);const quick=p.errand;finishQuick(p,now,accrueTax);if(quick&&!p.errand)completeDistrictTask(p,quick,w.day);
-  if(now>=p.nextRentAt){
-    const bills=Math.floor((now-p.nextRentAt)/CITY_DAY_MS)+1;
-    const charged=Math.min(bills,Math.max(0,4-p.rentCycles));
-    p.rentDebt+=charged*(p.housing==='flat'?32:p.housing==='room'?20:12);p.rentCycles+=charged;p.nextRentAt+=bills*CITY_DAY_MS;
-  }
-  if(p.rentCycles>=4){p.evicted=true;p.housing='street';}
-  if(now>=p.taxDeadline){if(p.taxDebt>0)p.taxHold=true;else p.taxDeadline+= (Math.floor((now-p.taxDeadline)/CITY_DAY_MS)+1)*CITY_DAY_MS;}
+  streetState(p,w.day);districtState(p,w.day);neighborState(p,w.day);const quick=p.errand;finishQuick(p,now,accrueTax);if(quick&&!p.errand){completeDistrictTask(p,quick,w.day);if(quick.action==='mend_clothes')p.clothingWear=Math.max(0,p.clothingWear-40);}
+  settleBills(p,now);offerContacts(p,w);
   // These fields survive for old saves and UI compatibility, but follow shared time.
   p.clock=Math.max(0,Math.floor((now-EPOCH)/CITY_HOUR_MS));p.nextRent=p.clock+Math.ceil((p.nextRentAt-now)/CITY_HOUR_MS);
   return p;
@@ -84,7 +88,7 @@ async function ensureMarket(db,w,life){
 }
 async function settledCitizen(db,owner,now,w){
   for(let retry=0;retry<4;retry++){
-    const c=await ensureCitizen(db,owner,now),raw=JSON.parse(c.data),p=settle(raw,now,w);
+    const c=await ensureCitizen(db,owner,now),raw=JSON.parse(c.data),building=await tenantMembership(db,c.id,now),p=settle(raw,now,{...w,tenantHeatWindows:building?.heatWindows||[]});
     if(JSON.stringify(raw)===JSON.stringify(p))return {...c,data:JSON.stringify(p)};
     const completions=[raw.activity&&!p.activity?raw.activity:null,raw.errand&&!p.errand?raw.errand:null].filter(Boolean);
     if(completions.length){
@@ -132,7 +136,7 @@ export async function snapshot(db,owner,now=Date.now()){
   ]);
   return {citizen:{id:c.id,name:c.name,...citizen},world:{...w,now},cityLife:life,appearanceOptions,requirements:institutionRequirements(citizen,now),idFlags:identityFlags(citizen,now),project,forces:force,encounters:encountersFor(citizen),
     goods:stock.filter(s=>Object.hasOwn(goods,s.id)).map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j,quotes:Object.keys(shiftTypes).map(mode=>jobQuote(citizen,j,mode,w))})),
-    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),streetLife:streetSnapshot(citizen,w),districtLife:districtSnapshot(citizen,w),supplyExchange:await supplyOrdersSnapshot(db,{id:c.id,...citizen},w),crisisResponses:crisisOptions(life.crisis.current).map(x=>({...x,blocked:crisisResponseBlocked(citizen,x,w,life.crisis.current)})),network:await all(db,'SELECT m.id,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen ORDER BY m.created DESC LIMIT 100'),
+    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),tenants:await tenantSnapshot(db,c.id,citizen,w),recoveryOptions:life.aftermath.incidents.map(r=>({...r,blocked:recoveryBlocked(citizen,r,w)})),living:livingSnapshot(citizen,w),streetLife:streetSnapshot(citizen,w),districtLife:districtSnapshot(citizen,w),supplyExchange:await supplyOrdersSnapshot(db,{id:c.id,...citizen},w),crisisResponses:crisisOptions(life.crisis.current).map(x=>({...x,blocked:crisisResponseBlocked(citizen,x,w,life.crisis.current)})),network:await all(db,'SELECT m.id,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen ORDER BY m.created DESC LIMIT 100'),
     log,board:board.map(p=>({id:p.id,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
     citizens:people.filter(p=>JSON.parse(p.data).registered!==false).map(p=>{const d=JSON.parse(p.data);return {id:p.id,name:p.name,role:d.role,rep:d.rep,shifts:d.shifts,union:d.union,appearance:d.appearance||defaultAppearance,daysInCity:Math.max(0,Math.floor((now-d.joined)/86400000)),online:now-p.updated<120000};}),listings:offers,totals};
 }
@@ -145,7 +149,7 @@ export async function act(db,owner,input,now=Date.now()){
   need(p.registered||input.action==='register','Register your character at the arrival platform first.');
   need(!p.activity||onDutyActions.has(input.action),`You are busy: ${p.activity?.label}. Wait until it finishes.`);
   need(!p.errand||!timedActions.has(input.action),'Finish your short task before starting another assignment.');
-  need(!p.detainedUntil||p.detainedUntil<=now||['tax','rent','post','network_post','consume','use_craft','relief'].includes(input.action),'Your sentence is still running. Check your release time.');
+  need(!p.detainedUntil||p.detainedUntil<=now||['tax','rent','tax_reserve','rent_prepay','rent_reclaim','post','network_post','tenant_post','consume','use_craft','relief'].includes(input.action),'Your sentence is still running. Check your release time.');
   need(now-c.last_action>=650,'Give the city a moment before your next action.');
   await ensureMarket(db,w,life);personalState(p);
   const before=structuredClone(p);
@@ -161,6 +165,10 @@ export async function act(db,owner,input,now=Date.now()){
   const credit=n=>need(p.credits>=n,`You need ${n} credits. You have ${p.credits}.`);
   const job=typeof input.id==='string'&&Object.hasOwn(jobs,input.id)?jobs[input.id]:null;
   switch(input.action){
+    case 'tenant_create':case 'tenant_join':case 'tenant_leave':case 'tenant_post':case 'tenant_donate':case 'tenant_take':case 'tenant_repair':{const result=await tenantAction(db,p,c,input,w,op);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
+    case 'recovery_work':{const result=await startRecovery(db,p,c,input,w,life,op);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
+    case 'tax_reserve':case 'rent_prepay':case 'rent_reclaim':case 'return_bunk':case 'sleep_street':message=livingAction(p,input,w);break;
+    case 'warm_fire':case 'mend_clothes':{const result=startLivingTask(p,input,w);message=result.message;break;}
     case 'district_choice':{const result=chooseDistrict(p,input,w);message=result.message;immediateTax=result.taxGross;break;}
     case 'survey':message=surveyDistrict(p,input.id,w);break;
     case 'case_review':message=reviewCareerCase(p,input.id,w);break;
@@ -188,12 +196,12 @@ export async function act(db,owner,input,now=Date.now()){
       need(validAppearance(input.appearance),'Choose a valid appearance for every field.');
       p.registered=true;p.appearance={...input.appearance};p.joined=now;p.lastTick=now;p.nextRentAt=now+CITY_DAY_MS;p.taxDeadline=now+CITY_DAY_MS;p.arrivalDay=w.day;
       extra.push(stmt(db,'UPDATE citizens SET name=? WHERE id=?',input.name.trim(),c.id));
-      message=`The import train brakes at Platform IX. City day ${w.day}. Your papers read ${input.name.trim()}. No credits. No allegiance. A bunk for one cycle. The city will bill you for the next.`;break;
+      message=`The import train brakes at Platform IX. City day ${w.day}. Your papers read ${input.name.trim()}. No credits. No allegiance. A bunk in the free municipal bunkhouse. Its radiator does not work.`;break;
     }
     case 'appearance':need(validAppearance(input.appearance),'Choose a valid appearance.');p.appearance={...input.appearance};message='The registry replaces your identity scan. Your face is still yours.';break;
     case 'relief':need(p.reliefDay!==w.day,'One emergency meal per citizen each city day.');p.reliefDay=w.day;p.fullness=clamp(p.fullness+24);p.warmth=clamp(p.warmth+10);p.health=Math.max(25,p.health);p.energy=Math.max(20,p.energy);message='A queue, a stamped wrist, and one emergency meal. Enough to work again. Relief is consumed here and cannot be sold.';break;
-    case 'tax':credit(p.taxDebt);need(p.taxDebt>0,'You have no unpaid income tax.');p.credits-=p.taxDebt;p.taxPaid+=p.taxDebt;message=`Revenue receives ${p.taxDebt} credits. ${p.taxHold?'Your ID remains flagged until the Registry completes a clearance review.':'Your tax record is current.'}`;p.taxDebt=0;p.taxDeadline=now+CITY_DAY_MS;break;
-    case 'clearance':need(p.taxHold||p.criminalHold,'Your ID has no clearance hold.');need(p.taxDebt===0,'Pay your income tax debt before requesting clearance.');need(p.heat<=20,'Reduce security heat to 20 or below before requesting clearance.');need(!p.detainedUntil||p.detainedUntil<=now,'Serve your sentence first.');hours=p.credits>=2?1:2;energy=p.credits>=2?6:14;if(p.credits>=2)p.credits-=2;p.taxHold=false;p.criminalHold=false;message='Your number is finally called. The Registry clears your ID. Factory gates will accept your papers again.';break;
+    case 'tax':credit(Math.max(0,p.taxDebt-p.finance.taxReserve));need(p.taxDebt>0,'You have no unpaid income tax.');{const reserved=Math.min(p.finance.taxReserve,p.taxDebt);p.finance.taxReserve-=reserved;p.credits-=p.taxDebt-reserved;}p.taxPaid+=p.taxDebt;message=`Revenue receives ${p.taxDebt} credits. ${p.taxHold?'Your ID remains flagged until the Registry completes a clearance review.':'Your tax record is current.'}`;p.taxDebt=0;p.taxDeadline=now+CITY_DAY_MS;break;
+    case 'clearance':need(p.taxHold||p.criminalHold,'Your ID has no clearance hold.');need(p.taxDebt===0,'Pay your income tax debt before requesting clearance.');need(p.heat<=20,'Reduce security heat to 20 or below before requesting clearance.');need(!p.detainedUntil||p.detainedUntil<=now,'Serve your sentence first.');hours=p.credits>=2?1:2;energy=p.credits>=2?6:14;if(p.credits>=2)p.credits-=2;if(p.district.flags.registryAdvocate)energy=Math.max(1,energy-2);p.taxHold=false;p.criminalHold=false;message='Your number is finally called. The Registry clears your ID. Factory gates will accept your papers again.';break;
     case 'security':requirement('security');need(!p.taxHold&&!p.criminalHold,'Security recruitment requires a cleared ID.');need(!p.security,'You already serve in the security forces.');p.security=true;p.role='Canon security recruit';p.ownedGear.push('securityuniform');p.loadout.body='securityuniform';p.coat=false;message='Thirty shifts and a week in the district. The Canon issues you a badge. You now protect the laws you struggled to survive.';break;
     case 'security_work':need(p.security,'Join the security forces first.');need(!p.taxHold&&!p.criminalHold,'Clear your identity holds before reporting for duty.');hours=3;energy=24;p.credits+=20;p.rep++;p.alignment=clamp(p.alignment+2,-100,100);message='You patrol the rainline. Two incidents closed, twenty credits earned. The district lockdown weakens.';break;
     case 'event_work':{const response=typeof input.id==='string'&&Object.hasOwn(cityResponses,input.id)?cityResponses[input.id]:null;need(response,'Choose a published district response.');need(!p.taxHold&&!p.criminalHold||input.id==='relief','Factory and freight gates require a cleared ID.');need(p.scrap>=(response.scrap||0),'The boiler requires one relay fragment.');p.scrap-=response.scrap||0;hours=response.hours;energy=response.energy;p.credits+=response.pay;p.rep++;message=`Completed ${response.name.toLowerCase()}. Your work changes the district for everyone.`;break;}
@@ -245,10 +253,10 @@ export async function act(db,owner,input,now=Date.now()){
       need(['bread','medicine'].includes(input.id),'That item cannot be used.');need(p[input.id]>0,'You don’t have that item.');p[input.id]--;
       if(input.id==='bread'){p.fullness=clamp(p.fullness+24);message='You consume the vat-grown ration. The printer thanks you for returning its biomass.';}else {p.health=clamp(p.health+30);message='The stabilizer silences an unfamiliar voice in your pulse. You can breathe a little easier.';}break;
     }
-    case 'rest':hours=6;need(p.lastRestDay!==w.day,'One full sleep per city day. Idle time also recovers energy.');p.lastRestDay=w.day;p.warmth=clamp(p.warmth+(p.evicted?0:p.housing==='flat'?40:p.housing==='room'?32:20));p.health=clamp(p.health+8);message=p.evicted?'You sleep beneath the transit lattice. The masked commuters step around you.':'Six hours in your habitation cell. The wall terminal repeats a prayer in a voice you used to know.';break;
-    case 'rent':credit(p.rentDebt);need(p.rentDebt>0,'Your rent is already paid.');p.credits-=p.rentDebt;message=`Paid ${p.rentDebt} credits in rent. You can stay another day.`;p.rentDebt=0;p.rentCycles=0;p.evicted=false;if(p.housing==='street')p.housing='bunk';break;
-    case 'upgrade':credit(45);need(!p.evicted,'Settle your rent debt first.');need(!['room','flat'].includes(p.housing),'You already have private housing.');p.credits-=45;p.housing='room';p.warmth=clamp(p.warmth+25);message='A room with a lock. Forty-five credits never bought so little freedom.';break;
-    case 'flat':credit(180);need(p.housing==='room'&&!p.evicted,'Rent a private room and settle any eviction first.');need(p.daysInCity>=2&&p.rep>=20,'A heated apartment requires 2 days of residency and 20 trust.');p.credits-=180;p.housing='flat';p.warmth=clamp(p.warmth+30);message='A heated apartment above the rainline. Thirty-two credits each city cycle. For once, the window closes.';break;
+    case 'rest':hours=6;need(p.lastRestDay!==w.day,'One full sleep per city day. Idle time also recovers energy.');p.lastRestDay=w.day;p.warmth=clamp(p.warmth+livingSleep(p).warmth);p.health=clamp(p.health+livingSleep(p).health);message=p.housing==='street'?'You sleep on cardboard beneath the rainline. No rent and no heat; the free bunkhouse is still open.':p.housing==='bunk'?'Six hours in the free bunkhouse. Your energy returns; the broken radiator gives no warmth.':'Six hours behind your own door. The radiator holds, and you wake with warmth and energy.';break;
+    case 'rent':credit(p.rentDebt);need(p.rentDebt>0,'Your rent is already paid.');p.credits-=p.rentDebt;message=`Paid ${p.rentDebt} credits in rent. You can stay another day.`;p.finance.rentPaid+=p.rentDebt;p.rentDebt=0;p.rentCycles=0;p.evicted=false;if(p.housing==='street')p.housing='bunk';break;
+    case 'upgrade':credit(45);need(!p.rentDebt,'Settle previous private-housing arrears first.');need(!['room','flat'].includes(p.housing),'You already have private housing.');p.credits-=45;p.housing='room';p.evicted=false;p.rentTier='room';p.nextRentAt=now+CITY_DAY_MS;p.warmth=clamp(p.warmth+25);message='A room with a lock. Forty-five credits never bought so little freedom.';break;
+    case 'flat':credit(180);need(!p.rentDebt,'Settle previous private-housing arrears first.');need(p.housing==='room'&&!p.evicted,'Rent a private room and settle any eviction first.');need(p.daysInCity>=2&&p.rep>=20,'A heated apartment requires 2 days of residency and 20 trust.');p.credits-=180;p.housing='flat';p.rentTier='flat';p.nextRentAt=now+CITY_DAY_MS;p.warmth=clamp(p.warmth+30);message='A heated apartment above the rainline. Thirty-two credits each city cycle. For once, the window closes.';break;
     case 'crime':{
       need(['steal','smuggle'].includes(input.id),'Unknown opportunity.');need(p.criminal.count<3,'Three criminal operations per city day. Checkpoints are watching you.');p.criminal.count++;p.criminal.attempts++;hours=input.id==='steal'?1:3;energy=input.id==='steal'?12:22;
       const risk=clamp((input.id==='steal'?.3:.4)+(p.heat/200)+(w.inspection?.15:0)+(w.securityModifier||0)+gearEffects(p).captureRisk+crimePreparation(p,w),0,1);p.district.plan=null;
@@ -283,7 +291,7 @@ export async function act(db,owner,input,now=Date.now()){
     case 'trade':{
       need(typeof input.id==='string','Choose a listing.');const offer=await stmt(db,'SELECT * FROM listings WHERE id=? AND sold=0',input.id).first();need(offer,'Someone already bought that listing.');need(offer.seller!==c.id,'You cannot buy your own listing.');credit(offer.price);
       checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,COALESCE((SELECT 1 FROM listings WHERE id=? AND sold=0),0))',op+'offer',input.id));
-      extra.push(stmt(db,'UPDATE listings SET sold=1 WHERE id=?',input.id),stmt(db,"UPDATE citizens SET data=json_set(data,'$.credits',json_extract(data,'$.credits')+?,'$.taxEarned',coalesce(json_extract(data,'$.taxEarned'),0)+?,'$.taxDebt',coalesce(json_extract(data,'$.taxDebt'),0)+CAST((coalesce(json_extract(data,'$.taxRemainder'),0)+?*12)/100 AS INTEGER),'$.taxRemainder',(coalesce(json_extract(data,'$.taxRemainder'),0)+?*12)%100),version=version+1 WHERE id=?",offer.price,offer.price,offer.price,offer.price,offer.seller),stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),offer.seller,`Your ${supplyCatalog[offer.item].name.toLowerCase()} sold for ${offer.price} credits.`,now));
+      extra.push(stmt(db,'UPDATE listings SET sold=1 WHERE id=?',input.id),reportedPaymentStatement(db,offer.seller,offer.price),stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),offer.seller,`Your ${supplyCatalog[offer.item].name.toLowerCase()} sold for ${offer.price} credits.`,now));
       p.credits-=offer.price;changeSupply(p,offer.item,1);message=`Bought ${supplyCatalog[offer.item].name.toLowerCase()} from another citizen for ${offer.price} credits.`;break;
     }
     case 'cancel':{

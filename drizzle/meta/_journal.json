@@ -50,6 +50,13 @@
       "when": 1791230283759,
       "tag": "0006_wealthy_garia",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "6",
+      "when": 1791234191715,
+      "tag": "0007_naive_major_mapleleaf",
+      "breakpoints": true
     }
   ]
 }

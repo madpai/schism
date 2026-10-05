@@ -87,9 +87,9 @@ const quickFinish=async(h,owner)=>{const s=await h.read(owner);h.now=s.citizen.e
 {
  const h=harness();await h.register('returning');const joined=(await h.read('returning')).citizen.joined;
  let s=await h.start('returning',{action:'work',id:'cleaning'});s=await h.finish('returning');const bank=s.citizen.credits;
- h.now=joined+24*3600000;s=await h.read('returning');check(s.citizen.credits===bank&&s.citizen.evicted&&s.citizen.rentDebt===48,'A real-day return preserves earned money and exposes capped offline rent debt');
+ h.now=joined+24*3600000;s=await h.read('returning');check(s.citizen.credits===bank&&!s.citizen.evicted&&s.citizen.rentDebt===0,'A real-day return preserves earned money and the rent-free basic bunk');
  check(s.districtLife.encounters.some(x=>x.id==='shift'),'Completed work leaves a message for the returning citizen');
  s=await h.start('returning',{action:'relief'});check(s.citizen.health>=25&&s.citizen.fullness>=24&&s.citizen.energy>=20,'A broke return has a real recovery path through existing relief');
- const quote=s.jobs.find(j=>j.id==='cleaning').quotes[0];check(!quote.blocked,'Public custodial wages remain available after eviction');s=await h.start('returning',{action:'work',id:'cleaning'});s=await h.finish('returning');check(s.citizen.credits===bank+quote.pay,'A returning citizen can complete another paid shift without a reset or grant');
+ const quote=s.jobs.find(j=>j.id==='cleaning').quotes[0];check(!quote.blocked,'Public custodial wages remain available after an absence');s=await h.start('returning',{action:'work',id:'cleaning'});s=await h.finish('returning');check(s.citizen.credits===bank+quote.pay,'A returning citizen can complete another paid shift without a reset or grant');
 }
 console.log(`Passed ${checks} district checks: action encounters, zero-energy planning, prepared crime, escrow/partial/cancel races, municipal demand, phased emergencies, deferred career cases, shop stock, legacy survival, and cycle boundaries.`);

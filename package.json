@@ -6,11 +6,13 @@
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-artifact.mjs",
     "db:generate": "drizzle-kit generate",
-    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs && node --experimental-sqlite scripts/test-reset.mjs && node --experimental-sqlite scripts/test-street.mjs && node --experimental-sqlite scripts/test-district.mjs",
+    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs && node --experimental-sqlite scripts/test-reset.mjs && node --experimental-sqlite scripts/test-street.mjs && node --experimental-sqlite scripts/test-district.mjs && node --experimental-sqlite scripts/test-living.mjs",
     "dev": "node --experimental-sqlite scripts/dev.mjs",
     "test:browser": "node scripts/playtest-browser.mjs",
     "test:portraits": "node scripts/playtest-portraits.mjs",
-    "test:district-browser": "node scripts/playtest-district-browser.mjs"
+    "test:district-browser": "node scripts/playtest-district-browser.mjs",
+    "test:living-browser": "node scripts/playtest-living-browser.mjs",
+    "test:balance": "node scripts/balance-living.mjs"
   },
   "dependencies": {
     "drizzle-orm": "0.45.2"

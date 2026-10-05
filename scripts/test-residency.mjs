@@ -13,7 +13,7 @@ let checks=0;const check=(condition,label)=>{assert.ok(condition,label);checks++
  let s=await h.start('new',{action:'register',name:'Mara Kess',appearance});
  check(s.citizen.name==='Mara Kess'&&JSON.stringify(s.citizen.appearance)===JSON.stringify(appearance),'Full character appearance and name are server-saved');
  check(s.citizen.credits===0&&s.citizen.alignment===0&&s.citizen.rep===0,'Arrival is broke and neutral');
- check(s.citizen.rentDebt===0&&s.citizen.nextRentAt-h.now===CITY_DAY_MS,'New arrival receives exactly one cycle of housing grace');
+ check(s.citizen.rentDebt===0&&s.citizen.nextRentAt-h.now===CITY_DAY_MS,'New arrival receives a free bunk and the shared six-hour bill clock');
  check(s.citizen.daysInCity===0&&s.citizen.arrivalDay===41,'Residence age and server day are independent');
  await reject(()=>h.register('new','Again'),/already/);
  await h.start('new',{action:'appearance',appearance:{...appearance,hair:'Silver'}});s=await h.read('new');check(s.citizen.appearance.hair==='Silver'&&s.citizen.name==='Mara Kess','Appearance editing preserves identity');
