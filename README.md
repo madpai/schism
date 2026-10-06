@@ -6,7 +6,7 @@
 
 A persistent dystopian city RPG about ordinary people surviving an indifferent system. Arrive with no money, no allegiance, and a civic ID. Work the foundry, climb into administration, open a shop, or disappear into the underground. Your neighbors change the city you all have to live in.
 
-[Play SCHISM](https://schism.williamschultz903.chatgpt.site) · [Gameplay rules](docs/GAMEPLAY.md) · [Architecture](docs/ARCHITECTURE.md) · [Playtest and critique](docs/playtests/V0.8.1.md) · [Next priorities](docs/NEXT_STEPS.md) · [Session handoff](SESSION_HANDOFF.md)
+[Play SCHISM](https://schism.williamschultz903.chatgpt.site) · [Gameplay rules](docs/GAMEPLAY.md) · [Architecture](docs/ARCHITECTURE.md) · [Playtest and critique](docs/playtests/V0.9.md) · [Next priorities](docs/NEXT_STEPS.md) · [Session handoff](SESSION_HANDOFF.md)
 
 The hosted game currently retains its owner-private audience. Sign-in and separate persistent characters support additional authorized citizens when access is expanded. This is an asynchronous multiplayer RPG: shared markets, district conditions, projects, trades, and notices, with timed individual activities.
 
@@ -29,6 +29,12 @@ The owner requested a fresh start after the residency update. On October 5, 2026
 | Full sleep | 90 real minutes; once per city day |
 
 A job reserves energy and completes in the background. Pay, career XP, and benefits arrive at its deadline. Sleeping restores energy over time. Neither action fast-forwards the city. A permit allows **eight work hours per city day**. Hunger, cold, rent, and tax deadlines continue while you are away.
+
+## A light on the stair
+
+Neri wants the bunkhouse lamp fixed. Esra wants the missing repair allocation recorded. Inspect the socket, decide whose account survives, and recover copper and fabric through ordinary tasks. Use your own supplies or your association’s shelf. The repair leaves an actual neighborhood news item, strengthens relationships, and leads to a message next cycle. It works even when you are the only active player.
+
+During ordinary work, an optional once-per-cycle decision lets you preserve an uncounted worker’s record or accept a small shortcut payment. Its reward settles with the original shift deadline. First-week milestones point toward wages, a neighborhood repair, a career rank, and a saved deposit.
 
 ## A few minutes in the city
 
@@ -54,11 +60,11 @@ An overdue account flags the citizen ID. Factory gates refuse flagged citizens. 
 
 ## A block worth coming back to
 
-Create or join a free **tenant association** with up to twelve neighbors. Donate actual supplies, take one donated consumable per cycle, and talk in a private building channel. Six thirty-second repairs consume shared copper and fabric; completed work reduces indoor cold exposure for **24 real hours**. Shelf transfers are visible, supplies are conserved, and no bill is attached to membership.
+Create or join a free **tenant association** with up to twelve neighbors. Donate actual supplies, take one donated consumable per cycle, and talk in a private building channel. Six thirty-second repairs consume shared copper and fabric; completed work reduces indoor cold exposure for **24 real hours**. Shelf transfers are visible, supplies are conserved, and no bill is attached to membership. Members can post two open supply requests; fulfilling one transfers owned supplies to the actual shared shelf.
 
 ![Free bunks beneath a broken radiator](public/bunkhouse.webp)
 
-The compact daily screen puts vitals, pending work, ready contact messages, and useful next moves first. The v0.8.1 mobile pass brings rest controls higher, folds secondary housing and empty shelf rows, and retains open sections during refresh. Mobile navigation keeps tasks, messages, and rest close. Painted contact portraits and visible jacket scuffs carry the district into the interface; mending costs fabric and effort while earned uniforms retain their corrected composition.
+The compact daily screen puts vitals, pending work, ready contact messages, and useful next moves first. The v0.9 mobile pass groups short tasks, shows available shifts on your current career first, and separates city conditions, recovery, news, and exploration. Secondary housing, supply requests, and empty shelf rows retain their disclosure state during refresh. Mobile navigation keeps tasks, messages, and rest close. Painted contact portraits and visible jacket scuffs carry the district into the interface; mending costs fabric and effort while earned uniforms retain their corrected composition.
 
 ## Choose a life
 
@@ -105,12 +111,20 @@ npm run dev
 
 The development game runs at `http://127.0.0.1:4173`, uses a local QA identity, and stores one shared city in ignored `.local-data/city.sqlite`. Each browser receives a separate signed local session. Production uses Sites identity and durable D1 storage. Local characters persist across server restarts. Set `SCHISM_TAILSCALE_IP` to bind the same city to your Tailscale address as well as loopback; see [local hosting](docs/LOCAL_HOSTING.md). Rebuild and restart development after changing source.
 
-**438 rule assertions** cover accounts, survival, timed rewards, careers, taxes and ID holds, trade races, encounters, shared supplies, tenant repairs, recovery, and persistence. A seven-day isolated balance simulation uses ordinary registration and actions; it distinguishes daily, twice-daily, each-cycle, and missed-weekend schedules. Real browser checks use ordinary citizens in the same city and wait through actual short tasks and wages. All 17 screens are checked at 360/390/1440px. See [verification and limits](docs/playtests/V0.8.md).
+**497 rule assertions** cover accounts, survival, timed rewards, careers, taxes and ID holds, trade races, encounters, shared supplies, tenant repairs, recovery, and persistence. A seven-day isolated balance simulation uses ordinary registration and actions; it distinguishes daily, twice-daily, each-cycle, and missed-weekend schedules. Real browser checks use ordinary citizens in the same city and wait through actual short tasks and wages. All 17 screens are checked at 360/390/1440px. See [verification and limits](docs/playtests/V0.8.md).
 
 ```sh
+npm run test:alpha-load     # built Worker, isolated SQLite; no real city writes
+npm run test:alpha-worker   # build first; protected API and request budgets
 npm run test:balance        # isolated simulated schedules
 npm run test:living-browser # real shared-city play; creates ordinary citizens
 ```
+
+## Prepared for an invited alpha
+
+Private feedback and community reports reach the configured operator. Reported messages can be hidden and their author’s posting paused for 24 hours. Authenticated health checks, redacted error IDs, request budgets, protected backups, and an isolated restore utility support operation. [Operations](docs/OPERATIONS.md) explains the current limits.
+
+The next gate is **10–20 invited players over one or two real weeks**, following the [alpha guide](docs/ALPHA_TEST.md). A local 20-citizen load test and automated simulations do not replace human retention, actual phone testing, hosted latency, or a production recovery drill. The owner-private audience is preserved until tester identities are supplied.
 
 ## Source and hosting
 

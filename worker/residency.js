@@ -32,7 +32,7 @@ export function institutionRequirements(p,now){
 }
 export const timedActions=new Set(['work','rest','crime','organize','clinic','official_work','business_work','security_work','event_work','clearance']);
 export const onDutyActions=new Set(['buy','consume','rent','tax','post','rename','appearance','gear_buy','gear_equip','gear_remove','relief','list','trade','cancel','sell','collect','quick','craft','casino','network_job','network_post','use_craft']);
-for(const action of ['tenant_create','tenant_join','tenant_leave','tenant_post','tenant_donate','tenant_take','tenant_repair','recovery_work','mend_clothes','tax_reserve','rent_prepay','rent_reclaim','district_choice','survey','case_review','order_create','order_fill','order_cancel','career_case','prepare_crime','crisis_response'])onDutyActions.add(action);
+for(const action of ['stair_choice','stair_inspect','stair_repair','shift_choice','tenant_request','tenant_request_fill','tenant_request_cancel','report','feedback','moderate','tenant_create','tenant_join','tenant_leave','tenant_post','tenant_donate','tenant_take','tenant_repair','recovery_work','mend_clothes','tax_reserve','rent_prepay','rent_reclaim','district_choice','survey','case_review','order_create','order_fill','order_cancel','career_case','prepare_crime','crisis_response'])onDutyActions.add(action);
 export function accrueTax(p,gross){
   p.taxEarned+=gross;const amount=p.taxRemainder+gross*12;
   const assessed=Math.floor(amount/100);p.taxDebt+=assessed;p.taxRemainder=amount%100;

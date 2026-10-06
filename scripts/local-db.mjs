@@ -15,7 +15,7 @@ export function localDB(filename=':memory:'){
     async first(){return sqlite.prepare(sql).get(...args)||null;},
     async all(){return {results:sqlite.prepare(sql).all(...args)};},
     async run(){const result=sqlite.prepare(sql).run(...args);return {success:true,meta:{changes:Number(result.changes)}};},
-    execute(){return sqlite.prepare(sql).run(...args);},
+    execute(){const s=sqlite.prepare(sql);if(s.columns().length)return {success:true,results:s.all(...args),meta:{changes:0}};const r=s.run(...args);return {success:true,meta:{changes:Number(r.changes)}};},
   });
-  return {prepare,sqlite,async batch(statements){sqlite.exec('BEGIN');try{const result=statements.map(s=>({success:true,meta:{changes:Number(s.execute().changes)}}));sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
+  return {prepare,sqlite,async batch(statements){sqlite.exec('BEGIN');try{const result=statements.map(s=>s.execute());sqlite.exec('COMMIT');return result;}catch(e){sqlite.exec('ROLLBACK');throw e;}}};
 }

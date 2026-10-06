@@ -1,4 +1,4 @@
-let inventoryFilter='all',shiftMode='standard',jobCareer='all';
+let inventoryFilter='all',shiftMode='standard',jobCareer='active';
 const slotNames={head:'HEAD / RESPIRATION',body:'BODY / WEATHER PROTECTION',hands:'HANDS / WORK TOOLS',feet:'FEET / TRANSIT',neural:'NEURAL / IDENTITY'};
 const currentCareer=()=>state.careers.find(path=>path.active);
 const shiftQuote=(job,mode=shiftMode)=>job.quotes.find(q=>q.mode===mode);

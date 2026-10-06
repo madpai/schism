@@ -1,0 +1,291 @@
+{
+  "release": "0.9.0",
+  "kind": "Actual local-city Playwright MCP observations; no injected resources or clocks",
+  "freshArrival": {
+    "name": "Ada v09 MCP",
+    "joined": 1791248854681,
+    "observed": "2026-10-06T01:12:21.556Z",
+    "repairCompleted": 1791249082130,
+    "repairMinutes": 3.7908166666666667,
+    "route": "record",
+    "materials": {
+      "cloth": 1,
+      "wire": 1,
+      "circuit": 1,
+      "data": 0
+    },
+    "energy": 44.318734444444424,
+    "credits": 0,
+    "trust": 2,
+    "shift": {
+      "started": 1791249141760,
+      "endsAt": 1791250941760,
+      "gross": 8,
+      "status": "Pending; no completion claimed"
+    }
+  },
+  "cooperation": {
+    "requestItem": "wire",
+    "purpose": "Stock the next draught repair",
+    "contributor": "Quin 676e0",
+    "before": {
+      "owned": 1,
+      "shared": 1
+    },
+    "after": {
+      "owned": 0,
+      "shared": 2
+    },
+    "conserved": true
+  },
+  "reporting": {
+    "hiddenForAuthor": true,
+    "feedbackAcknowledged": true,
+    "ordinaryQueuePrivate": true,
+    "originalShiftDeadline": 1791250941760
+  },
+  "backup": {
+    "healthStatus": 200,
+    "citizens": 17,
+    "version": "0.9.0",
+    "isolatedRestore": "Exact character JSON, stock, pending deadline and moderation verified; live city untouched"
+  },
+  "subpageSweep": {
+    "at": "2026-10-06T01:17:19.539Z",
+    "views": [
+      {
+        "screen": "street",
+        "section": "materials",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 2684
+      },
+      {
+        "screen": "street",
+        "section": "breaks",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 2677
+      },
+      {
+        "screen": "street",
+        "section": "planning",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 2139
+      },
+      {
+        "screen": "city",
+        "section": "conditions",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 2391
+      },
+      {
+        "screen": "city",
+        "section": "recovery",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 1491
+      },
+      {
+        "screen": "city",
+        "section": "paper",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 2190
+      },
+      {
+        "screen": "city",
+        "section": "explore",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 2978
+      },
+      {
+        "screen": "encounters",
+        "section": "neighborhood",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 3249
+      },
+      {
+        "screen": "encounters",
+        "section": "encounters",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 4648
+      },
+      {
+        "screen": "encounters",
+        "section": "contacts",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 1337
+      },
+      {
+        "screen": "encounters",
+        "section": "history",
+        "width": 360,
+        "scrollWidth": 360,
+        "height": 927
+      },
+      {
+        "screen": "street",
+        "section": "materials",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 2513
+      },
+      {
+        "screen": "street",
+        "section": "breaks",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 2540
+      },
+      {
+        "screen": "street",
+        "section": "planning",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 1904
+      },
+      {
+        "screen": "city",
+        "section": "conditions",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 2384
+      },
+      {
+        "screen": "city",
+        "section": "recovery",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 1488
+      },
+      {
+        "screen": "city",
+        "section": "paper",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 2161
+      },
+      {
+        "screen": "city",
+        "section": "explore",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 2974
+      },
+      {
+        "screen": "encounters",
+        "section": "neighborhood",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 3104
+      },
+      {
+        "screen": "encounters",
+        "section": "encounters",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 4333
+      },
+      {
+        "screen": "encounters",
+        "section": "contacts",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 1261
+      },
+      {
+        "screen": "encounters",
+        "section": "history",
+        "width": 390,
+        "scrollWidth": 390,
+        "height": 904
+      },
+      {
+        "screen": "street",
+        "section": "materials",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1646
+      },
+      {
+        "screen": "street",
+        "section": "breaks",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1700
+      },
+      {
+        "screen": "street",
+        "section": "planning",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1121
+      },
+      {
+        "screen": "city",
+        "section": "conditions",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1791
+      },
+      {
+        "screen": "city",
+        "section": "recovery",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1028
+      },
+      {
+        "screen": "city",
+        "section": "paper",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1596
+      },
+      {
+        "screen": "city",
+        "section": "explore",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1600
+      },
+      {
+        "screen": "encounters",
+        "section": "neighborhood",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 2114
+      },
+      {
+        "screen": "encounters",
+        "section": "encounters",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 3557
+      },
+      {
+        "screen": "encounters",
+        "section": "contacts",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 1032
+      },
+      {
+        "screen": "encounters",
+        "section": "history",
+        "width": 1440,
+        "scrollWidth": 1440,
+        "height": 844
+      }
+    ],
+    "errors": [],
+    "feedbackContainer": true
+  }
+}

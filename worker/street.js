@@ -2,6 +2,7 @@
 export const materials={cloth:{name:'Salvaged fabric',icon:'coat',description:'Clean strips cut from discarded civic textiles.'},wire:{name:'Copper wire',icon:'energy',description:'Enough live copper for one more improvised repair.'},circuit:{name:'Circuit parts',icon:'box',description:'Small components recovered from dead terminals.'},data:{name:'Signal traces',icon:'energy',description:'Fragments of the district network waiting to be decoded.'}};
 export const streetTasks={
  bins:{name:'Search collection bins',area:'Reclamation alley',art:'scavenge',seconds:25,energy:4,break:false,description:'Recover fabric or copper from municipal waste. No credits guaranteed.'},
+ textiles:{name:'Unpick discarded textiles',area:'Bunkhouse laundry',art:'bunkhouse',seconds:30,energy:4,break:false,description:'Recover two fabric strips from abandoned uniforms. A reliable source for mending and repairs.'},
  salvage:{name:'Strip dead electronics',area:'Service tunnels',art:'scavenge',seconds:45,energy:5,break:false,description:'Recover two wire and one circuit part. Exposed contacts can cost 2 health.'},
  sweep:{name:'Clean a public terminal',area:'Civic concourse',art:'registry',seconds:20,energy:3,break:true,description:'Earn 1 taxable credit. Small work with no career or trust shortcut.'},
  decode:{name:'Decode a stray signal',area:'Neural relay',art:'neural',seconds:35,energy:4,break:true,description:'Recover one signal trace for network contracts or neural patching.'},
@@ -36,6 +37,7 @@ export function startQuick(p,input,w,random){
  if(input.action==='quick'){
   item=typeof input.id==='string'&&Object.hasOwn(streetTasks,input.id)?streetTasks[input.id]:null;reject(item,'Choose a published short task.');
   if(input.id==='bins'){const id=random<.5?'cloth':'wire';reward.materials={[id]:2};message=`The bins yield two ${id==='cloth'?'strips of fabric':'lengths of copper wire'}. Someone has already taken everything valuable.`;}
+  if(input.id==='textiles'){reward.materials={cloth:2};message='Two clean fabric strips recovered from discarded uniforms. Their old names are cut away.';}
   if(input.id==='salvage'){reward.materials={wire:2,circuit:1};if(random<.2)reward.health=-2;message=`Recovered two wire and one circuit part.${random<.2?' A live contact burns your hand. −2 health.':''}`;}
   if(input.id==='sweep'){reward.credits=1;reward.taxGross=1;message='The terminal accepts your cleaning log. One credit, reported to Revenue.';}
   if(input.id==='decode'){reward.materials={data:1};message='One signal trace recovered. It carries a freight number and a voice that should not be there.';}
