@@ -1,4 +1,6 @@
 import {offerContacts} from './contacts.js';
+import {stairState,stairSnapshot,stairAction,completeStair,shiftMoment,chooseShiftMoment,stairNews,alphaProgress} from './neighborhood.js';
+import {communitySnapshot,communityAction,postingAllowed} from './community.js';
 import {tenantMembership,tenantSnapshot,tenantAction,neighborState} from './tenants.js';
 import {recoveryBlocked,startRecovery} from './aftermath.js';
 import {livingCold,livingSleep,settleBills,livingAction,startLivingTask,livingSnapshot,housingTypes,reportedPaymentStatement} from './living.js';
@@ -61,10 +63,10 @@ export function settle(data, now=Date.now(),w=world(now)) {
     p.lastTick=until;
   };
   p.lastTick=start;
-  if(p.activity&&p.activity.endsAt<=now){const a=p.activity;advance(a.endsAt);completeActivity(p);if(a.action==='work'){discoverDistrict(p,'work',a.endsAt,w.day);p.clothingWear=Math.min(100,p.clothingWear+4);}}
+  if(p.activity&&p.activity.endsAt<=now){const a=p.activity;advance(a.endsAt);completeActivity(p);if(a.action==='work'){discoverDistrict(p,'work',a.endsAt,w.day);p.clothingWear=Math.min(100,p.clothingWear+4);if(a.stairContact){districtState(p,w.day);p.district.contacts[a.stairContact]=(p.district.contacts[a.stairContact]||0)+1;}}}
   advance(now);
-  streetState(p,w.day);districtState(p,w.day);neighborState(p,w.day);const quick=p.errand;finishQuick(p,now,accrueTax);if(quick&&!p.errand){completeDistrictTask(p,quick,w.day);if(quick.action==='mend_clothes')p.clothingWear=Math.max(0,p.clothingWear-40);}
-  settleBills(p,now);offerContacts(p,w);
+  streetState(p,w.day);districtState(p,w.day);neighborState(p,w.day);stairState(p);const quick=p.errand;finishQuick(p,now,accrueTax);if(quick&&!p.errand){completeDistrictTask(p,quick,w.day);completeStair(p,quick);if(quick.action==='mend_clothes')p.clothingWear=Math.max(0,p.clothingWear-40);}
+  settleBills(p,now);offerContacts(p,w);alphaProgress(p);
   // These fields survive for old saves and UI compatibility, but follow shared time.
   p.clock=Math.max(0,Math.floor((now-EPOCH)/CITY_HOUR_MS));p.nextRent=p.clock+Math.ceil((p.nextRentAt-now)/CITY_HOUR_MS);
   return p;
@@ -122,25 +124,25 @@ async function cityForces(db,w){
   const row=await stmt(db,'SELECT * FROM forces WHERE id=?',id).first();
   const force={...row,...forceProfile(row)};Object.assign(w,forceProfile(row));return force;
 }
-export async function snapshot(db,owner,now=Date.now()){
+export async function snapshot(db,owner,now=Date.now(),context={}){
   const w=world(now),life=await cityLife(db,w,now);
   await ensureMarket(db,w,life);
   const force=await cityForces(db,w);w.securityModifier=(w.securityModifier||0)+w.citySecurityModifier;
   const project=await cityProject(db,w),c=await settledCitizen(db,owner,now,w),citizen=JSON.parse(c.data);personalState(citizen);
   const [stock,log,board,people,offers,totals]=await Promise.all([
     all(db,'SELECT * FROM market'),all(db,'SELECT body,created FROM journal WHERE citizen=? ORDER BY created DESC LIMIT 12',c.id),
-    all(db,'SELECT p.id,p.body,p.created,c.name,c.data FROM posts p JOIN citizens c ON c.id=p.citizen ORDER BY p.created DESC LIMIT 20'),
+    all(db,"SELECT p.id,p.citizen,p.body,p.created,c.name,c.data FROM posts p JOIN citizens c ON c.id=p.citizen WHERE NOT EXISTS(SELECT 1 FROM community_hidden h WHERE h.source='board' AND h.message=p.id) ORDER BY p.created DESC LIMIT 20"),
     all(db,'SELECT id,name,data,updated FROM citizens ORDER BY updated DESC LIMIT 30'),
     all(db,'SELECT l.*,c.name FROM listings l JOIN citizens c ON c.id=l.seller WHERE l.sold=0 ORDER BY l.created DESC LIMIT 30'),
     stmt(db,"SELECT count(*) AS citizens, sum(CASE WHEN json_extract(data,'$.union')=1 THEN 1 ELSE 0 END) AS members FROM citizens WHERE json_extract(data,'$.registered') IS NOT 0").first(),
   ]);
-  return {citizen:{id:c.id,name:c.name,...citizen},world:{...w,now},cityLife:life,appearanceOptions,requirements:institutionRequirements(citizen,now),idFlags:identityFlags(citizen,now),project,forces:force,encounters:encountersFor(citizen),
+  return {citizen:{id:c.id,name:c.name,...citizen},world:{...w,now},cityLife:life,appearanceOptions,requirements:institutionRequirements(citizen,now),idFlags:identityFlags(citizen,now),project,forces:force,encounters:encountersFor(citizen),stair:await stairSnapshot(db,citizen,c.id,w),shiftMoment:shiftMoment(citizen,w),neighborhoodNews:await stairNews(db,w),alphaProgress:alphaProgress(citizen),community:await communitySnapshot(db,c.id,w,context),
     goods:stock.filter(s=>Object.hasOwn(goods,s.id)).map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j,quotes:Object.keys(shiftTypes).map(mode=>jobQuote(citizen,j,mode,w))})),
-    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),tenants:await tenantSnapshot(db,c.id,citizen,w),recoveryOptions:life.aftermath.incidents.map(r=>({...r,blocked:recoveryBlocked(citizen,r,w)})),living:livingSnapshot(citizen,w),streetLife:streetSnapshot(citizen,w),districtLife:districtSnapshot(citizen,w),supplyExchange:await supplyOrdersSnapshot(db,{id:c.id,...citizen},w),crisisResponses:crisisOptions(life.crisis.current).map(x=>({...x,blocked:crisisResponseBlocked(citizen,x,w,life.crisis.current)})),network:await all(db,'SELECT m.id,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen ORDER BY m.created DESC LIMIT 100'),
-    log,board:board.map(p=>({id:p.id,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
+    equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),tenants:await tenantSnapshot(db,c.id,citizen,w),recoveryOptions:life.aftermath.incidents.map(r=>({...r,blocked:recoveryBlocked(citizen,r,w)})),living:livingSnapshot(citizen,w),streetLife:streetSnapshot(citizen,w),districtLife:districtSnapshot(citizen,w),supplyExchange:await supplyOrdersSnapshot(db,{id:c.id,...citizen},w),crisisResponses:crisisOptions(life.crisis.current).map(x=>({...x,blocked:crisisResponseBlocked(citizen,x,w,life.crisis.current)})),network:await all(db,"SELECT m.id,m.citizen,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen WHERE NOT EXISTS(SELECT 1 FROM community_hidden h WHERE h.source='network' AND h.message=m.id) ORDER BY m.created DESC LIMIT 100"),
+    log,board:board.map(p=>({id:p.id,citizen:p.citizen,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
     citizens:people.filter(p=>JSON.parse(p.data).registered!==false).map(p=>{const d=JSON.parse(p.data);return {id:p.id,name:p.name,role:d.role,rep:d.rep,shifts:d.shifts,union:d.union,appearance:d.appearance||defaultAppearance,daysInCity:Math.max(0,Math.floor((now-d.joined)/86400000)),online:now-p.updated<120000};}),listings:offers,totals};
 }
-export async function act(db,owner,input,now=Date.now()){
+export async function act(db,owner,input,now=Date.now(),context={}){
   need(input&&typeof input==='object'&&!Array.isArray(input),'Invalid action.');
   need(typeof input.action==='string','Choose an action.');
   const w=world(now),life=await cityLife(db,w,now);
@@ -149,14 +151,16 @@ export async function act(db,owner,input,now=Date.now()){
   need(p.registered||input.action==='register','Register your character at the arrival platform first.');
   need(!p.activity||onDutyActions.has(input.action),`You are busy: ${p.activity?.label}. Wait until it finishes.`);
   need(!p.errand||!timedActions.has(input.action),'Finish your short task before starting another assignment.');
-  need(!p.detainedUntil||p.detainedUntil<=now||['tax','rent','tax_reserve','rent_prepay','rent_reclaim','post','network_post','tenant_post','consume','use_craft','relief'].includes(input.action),'Your sentence is still running. Check your release time.');
+  need(!p.detainedUntil||p.detainedUntil<=now||['tax','rent','tax_reserve','rent_prepay','rent_reclaim','post','network_post','tenant_post','consume','use_craft','relief','report','feedback','moderate'].includes(input.action),'Your sentence is still running. Check your release time.');
   need(now-c.last_action>=650,'Give the city a moment before your next action.');
   await ensureMarket(db,w,life);personalState(p);
+  if(['post','network_post','tenant_post','tenant_request'].includes(input.action))await postingAllowed(db,c.id,now);
   const before=structuredClone(p);
   if(p.labor.day!==w.day)p.labor={day:w.day,hours:0};
   if(p.criminal.day!==w.day){p.criminal.day=w.day;p.criminal.count=0;}
   const requirement=kind=>{const requirements=institutionRequirements(p,now)[kind];need(requirements.every(([,met])=>met),'Requirements: '+requirements.filter(([,met])=>!met).map(([label])=>label).join(', '));};
   const extra=[],checks=[],op=uid();let message='',hours=0,energy=0,immediateTax=0;
+  if(['post','network_post','tenant_post','tenant_request'].includes(input.action))checks.push(stmt(db,'INSERT INTO action_guards (id,valid) VALUES (?,CASE WHEN EXISTS(SELECT 1 FROM community_mutes WHERE citizen=? AND until>?) THEN 0 ELSE 1 END)',op+'posting',c.id,now));
   const districtContribution=(metrics,endsAt,override)=>{
     const values=['output','freight','crime','unrest','relief','patrols'].map(id=>metrics[id]||0);
     if(values.some(Boolean))extra.push(stmt(db,'INSERT INTO city_activity (id,citizen,day,completes,output,freight,crime,unrest,relief,patrols) VALUES (?,?,?,?,?,?,?,?,?,?)',op,c.id,world(endsAt).day,endsAt,...values));
@@ -165,7 +169,10 @@ export async function act(db,owner,input,now=Date.now()){
   const credit=n=>need(p.credits>=n,`You need ${n} credits. You have ${p.credits}.`);
   const job=typeof input.id==='string'&&Object.hasOwn(jobs,input.id)?jobs[input.id]:null;
   switch(input.action){
-    case 'tenant_create':case 'tenant_join':case 'tenant_leave':case 'tenant_post':case 'tenant_donate':case 'tenant_take':case 'tenant_repair':{const result=await tenantAction(db,p,c,input,w,op);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
+    case 'report':case 'feedback':case 'moderate':{const result=await communityAction(db,c,input,w,op,context);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
+    case 'stair_choice':case 'stair_inspect':case 'stair_repair':{const result=await stairAction(db,p,c,input,w,op);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
+    case 'shift_choice':message=chooseShiftMoment(p,input,w);break;
+    case 'tenant_create':case 'tenant_join':case 'tenant_leave':case 'tenant_post':case 'tenant_donate':case 'tenant_take':case 'tenant_repair':case 'tenant_request':case 'tenant_request_fill':case 'tenant_request_cancel':{const result=await tenantAction(db,p,c,input,w,op);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
     case 'recovery_work':{const result=await startRecovery(db,p,c,input,w,life,op);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
     case 'tax_reserve':case 'rent_prepay':case 'rent_reclaim':case 'return_bunk':case 'sleep_street':message=livingAction(p,input,w);break;
     case 'warm_fire':case 'mend_clothes':{const result=startLivingTask(p,input,w);message=result.message;break;}
@@ -325,5 +332,5 @@ export async function act(db,owner,input,now=Date.now()){
     stmt(db,'INSERT INTO journal (id,citizen,body,created) VALUES (?,?,?,?)',uid(),c.id,message,now),
     stmt(db,'DELETE FROM action_guards WHERE id LIKE ?',op+'%')];
   try{await db.batch(statements);}catch(e){if(String(e).includes('guard_valid'))throw Object.assign(new Error('That offer or your balance just changed. Refresh and try again.'),{status:409});throw e;}
-  return {message,...await snapshot(db,owner,now)};
+  return {message,...await snapshot(db,owner,now,context)};
 }

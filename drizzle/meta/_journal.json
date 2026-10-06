@@ -57,6 +57,13 @@
       "when": 1791234191715,
       "tag": "0007_naive_major_mapleleaf",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "6",
+      "when": 1791247897260,
+      "tag": "0008_gray_fat_cobra",
+      "breakpoints": true
     }
   ]
 }

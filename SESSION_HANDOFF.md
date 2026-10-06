@@ -1,4 +1,4 @@
-# SCHISM session handoff — v0.8.1 mobile visits
+# SCHISM session handoff — v0.9 invited alpha
 
 Updated October 5, 2026. The owner requested all accepted priorities, a permanently free unheated starting bunkhouse, and publication/documentation/GitHub handoffs before a fresh session. v0.8 implements them. Exact final deployment and matching GitHub source IDs are recorded in `/home/commander/SCHISM_HANDOFF.md` after publication. Leave the same shared local city running; preserve all current characters.
 
@@ -20,6 +20,20 @@ Keep a harsh persistent city: zero-credit neutral train arrivals inherit the act
 The basic bunkhouse must not bill an absent citizen. Its misery is no heat and weak recovery, with voluntary street/cardboard sleep and a barrel fire. Private obligations are bounded. Do not turn these changes into a character reset.
 
 Keep independently cropped alpha-preserving player portrait layers: rear garment, face/neck, neckline-specific clipped front garment, hair. Both garments share body breadth. Shaved has no hair layer. Never restore the leaking atlas, pixel portrait, floating neck, or whole-jacket overlay. Earlier checks covered 135 combinations and all skin/hair pairs. New contact portraits do not replace the customized player sheet.
+
+## v0.9 invited alpha
+
+The owner authorized implementing the recommendations and getting the game ready to show. Added **A light on the stair**, a finite Neri/Esra story with actual 30s inspection, 45s supply-consuming repair, political/account choices, next-cycle epilogue, durable relationship history, and a completed-work newspaper entry. Ordinary isolated and real Playwright MCP arrivals finish its first-session repair without granted materials; guaranteed 30s textile recovery complements existing copper salvage. A once-per-cycle ordinary-shift choice settles trust/contact or taxable credit at the existing work deadline. Four first-week milestones preserve the saved-deposit achievement.
+
+Member supply requests conserve actual inventories/shelf stock and guard races. Mobile short tasks have Materials/Work breaks/Read & plan; work defaults to available shifts on the active career; city has Conditions/Recovery/Newspaper/Explore; stories lead with the stair. Requests and optional detail fold without burying the building channel. Feedback dialogs preserve the shared action dialog container and controls wait through the server cooldown.
+
+Community reports/feedback are private. Configured trusted operator/moderator emails grant roles; no visitor/bootstrap/client argument can. Moderators hide/dismiss and apply a 24-hour posting timeout. Only operators download a transactional 25-table backup and read health. API minute counters are bounded per identity/kind, error logs omit private contents, and backups restore only to new isolated SQLite files. See [OPERATIONS](docs/OPERATIONS.md); hosted D1 recovery and automated alerting remain outstanding. Migration **0008_gray_fat_cobra.sql** adds six tables; no earlier migration changed.
+
+**497 rule checks + 15 built-Worker API checks**, 54 full-screen MCP views and 33 subpage views pass. The 20-citizen built-Worker/SQLite lab completed 460 requests with zero failures; it is not a production capacity proof. Real MCP Ada v09 repaired in 3m47s, started an 8-CR memory shift, selected the deferred record bonus, and joined the existing Rainline association. Quin contributed an owned wire to Ada’s request. Private reporting/hiding and feedback/acknowledgement passed; the live city was exported and restored into a separate 17-citizen database with exact character JSON, stock and moderation. Current Ada work deadline is **2026-10-06 01:42:21.760 UTC**; it was pending at verification, never advanced. The next story reply is **2026-10-06 06:00 UTC**. Original Quin v0.8.1 wages have completed (5 CR observed, including the earlier terminal task).
+
+Local operator is the established MCP QA owner in ignored `.local-data/operator.json`; it confers no powers on other local sessions. Production `SCHISM_OPERATOR_EMAIL` is configured as a Sites secret to the actual Site owner. Never commit identities, backups, session keys or cookies. Credentials and release IDs are recorded only through the normal hosting workflow and external handoff.
+
+The site remains owner-private. An async question requested the tester email list and an optional custom hostname; neither was supplied during this build. [ALPHA_TEST](docs/ALPHA_TEST.md) defines the real 10–20 tester / 1–2 week acceptance gate. Do not invent testers, send invitations without identities, or open public access on the strength of simulated evidence.
 
 ## v0.8.1 mobile visits
 
@@ -50,7 +64,7 @@ New domains: `worker/living.js`, `contacts.js`, `tenants.js`, `aftermath.js`; in
 
 Append-only migration `0007_naive_major_mapleleaf.sql` and metadata add 7 tables: tenant_blocks/members/messages/transfers/repairs, recovery_actions, district_news. No earlier migration edits. Existing local city migrated after a private SQLite backup in `.local-data/backups`.
 
-Current suite: **438 assertions** (old 355 plus 83 living). New checks cover ten-day absence, legacy waiver, sleep/fire deadlines, private debt/prepay/refund races, tax reserves, shared conservation and private chat, last-item/capacity races, actual completed repairs/historical protection, deferred original/continuation offers, Registry advocacy, wear, recovery reservation race, immutable newspaper, and expiry. Build/ESM validation and whitespace checks are part of publication.
+Prior v0.8 suite: **438 assertions** (old 355 plus 83 living). New checks cover ten-day absence, legacy waiver, sleep/fire deadlines, private debt/prepay/refund races, tax reserves, shared conservation and private chat, last-item/capacity races, actual completed repairs/historical protection, deferred original/continuation offers, Registry advocacy, wear, recovery reservation race, immutable newspaper, and expiry. Build/ESM validation and whitespace checks are part of publication.
 
 `npm run test:balance` uses normal registration/actions and isolated injected deadlines for seven-day schedules. Daily/twice-daily/each-cycle/missed-weekend memory shifts end with22/48/55/15 CR and no rent/tax debt. A much more intensive two-shift-per-cycle schedule uses the unlocked lattice job, pays 400 CR rent, and ends privately housed with 447 CR. This requires many returns and is not casual affordability evidence. Raw numeric schedules are committed under `docs/playtests/v0.8/balance.json`.
 
@@ -60,4 +74,4 @@ Desktop/mobile sweeps cover all 17 pages at 360/390/1440px. Actual phone hardwar
 
 ## Next session
 
-Read [NEXT_STEPS](docs/NEXT_STEPS.md) and [V0.8](docs/playtests/V0.8.md). First gather real multi-day phone evidence: survival recovery, attention per visit, housing affordability, supply fill rates, and whether remaining long pages hide useful actions. Expand histories, association demand, and emergency stories from that evidence. Preserve shared local data, corrected art layering, role gates, bounded debt, and publication discipline.
+Start with [ALPHA_TEST](docs/ALPHA_TEST.md), [OPERATIONS](docs/OPERATIONS.md), and [V0.9](docs/playtests/V0.9.md). Gather the owner’s tester identities and domain choice, then collect real-week evidence before widening access. Read [NEXT_STEPS](docs/NEXT_STEPS.md) and [V0.8](docs/playtests/V0.8.md). First gather real multi-day phone evidence: survival recovery, attention per visit, housing affordability, supply fill rates, and whether remaining long pages hide useful actions. Expand histories, association demand, and emergency stories from that evidence. Preserve shared local data, corrected art layering, role gates, bounded debt, and publication discipline.

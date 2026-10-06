@@ -1,4 +1,4 @@
-# SCHISM priorities after v0.8
+# SCHISM priorities after v0.9
 
 The accepted living-city priorities now have playable implementations, including the owner's rent-free bunkhouse correction. Current characters are preserved. [Gameplay](GAMEPLAY.md) gives costs and gates; [v0.8 evidence](playtests/V0.8.md) separates real shared-city play from injected-time balance checks.
 
@@ -18,10 +18,10 @@ An intensive progression schedule completes two shifts per cycle and switches to
 
 ## Next work, in order
 
-1. **A real week of ordinary phone play.** Measure recovery time, attention per visit, food/heat spending, private-housing moves, and missed days. Current-weather offline settlement is still an approximation. The simulated schedules prove recoverability, not enjoyment. Do not inflate wages or add another currency without observing where people actually stall.
-2. **More consequential authored histories.** Expand the small finite pool, role cases, and emergency stories. Give contacts decisions about supplies, neighbors, and public records, with clear costs and delayed consequences. Existing relationship scores mainly choose authored encounters and access flags; they do not yet form a broad reputation simulation.
-3. **Association demand and trade evidence.** Track whether donated supplies, repairs, and funded orders attract ordinary participation. Consider member requests and scheduled deliveries once real fill rates support them. Keep ownership, refunds, and shared quotas explicit; do not generate stock to make an empty shelf look busy.
-4. **Reduce the other long mobile screens.** The v0.8.1 Playwright MCP pass shortened housing and raised the building channel, with refresh-safe folds for optional housing and empty stock. The observed 390px jobs and city pages still reach roughly 8,000 and 7,300px during a pending shift. Case desks and encounter lists need the same attention. Watch actual taps and scrolls before rearranging them again; screenshots and overflow checks do not establish ease of use.
-5. **Historical event settlement.** Reconstruct weather and damage changes over long absences if their impact proves material. Tenant protection already uses exact completion/join/expiry windows; global weather still uses the state at return. Keep bounded recovery for quiet cities.
+1. **Run the invited alpha.** The owner approved the recommended implementation. v0.9 supplies the first-session Neri/Esra chapter, delayed consequences, shift decisions, visible goals, supply requests, shorter task/work/city screens, feedback/reporting and operator recovery tools. Collect tester identities and the optional hostname, then follow [ALPHA_TEST](ALPHA_TEST.md) for 10–20 people over 1–2 real weeks. Keep the current audience until that information arrives.
+2. **Use human results to adjust pacing.** Observe first ten minutes, return motivation, missed days, recovery effort, food/heat spending, private-room savings and rent coverage. Automated clocks prove rules, not enjoyment. Do not inflate wages or add another currency before observing stalls.
+3. **Measure actual cooperation.** Member requests are now playable. Track fulfillment, wait time, completed shared work and whether citizens need operator help. Preserve conservation, refunds, quotas and empty-shelf honesty.
+4. **Finish hosted operational proof.** Health, redacted failures, bounded requests, private moderation, transactional export and isolated restore are implemented. Rehearse provider-supported D1 recovery and assign hosted monitoring/alerting. Local 20-citizen timings do not prove hosted capacity. See [OPERATIONS](OPERATIONS.md).
+5. **Expand history from evidence.** Add later authored arcs, cases and emergency types that players ask for. Investigate historical weather settlement if absence results make its approximation material. Tenant protection already follows exact join/completion/expiry windows.
 
-Direct player arrest, real-time combat, an AI-run social network, and an open hosted audience are separate decisions. Current shared gameplay uses authored rules, persistent chat, trades, associations, and asynchronous work. Earned institutional gates and visible uniforms remain important pacing anchors.
+Direct player arrest, real-time combat, an AI-run social network, and an open hosted audience remain separate decisions. Current shared gameplay uses authored rules, persistent chat, trades, associations, and asynchronous work. Earned institutional gates and visible uniforms remain pacing anchors.

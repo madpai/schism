@@ -1,4 +1,4 @@
-import { sqliteTable, text, integer, index, check } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, integer, index, uniqueIndex, check } from 'drizzle-orm/sqlite-core';
 import { sql } from 'drizzle-orm';
 export const citizens = sqliteTable('citizens', {
   id: text('id').primaryKey(), owner: text('owner').notNull().unique(), name: text('name').notNull(),
@@ -73,3 +73,22 @@ export const recoveryActions = sqliteTable('recovery_actions', {
 export const districtNews = sqliteTable('district_news', {
  id:text('id').primaryKey(),day:integer('day').notNull(),headline:text('headline').notNull(),body:text('body').notNull(),data:text('data').notNull(),published:integer('published').notNull(),
 },t=>[index('idx_district_news_published').on(t.published)]);
+
+export const stairEvents=sqliteTable('stair_events',{
+ id:text('id').primaryKey(),citizen:text('citizen').notNull().unique(),block:text('block'),route:text('route').notNull(),method:text('method').notNull(),completes:integer('completes').notNull(),
+},t=>[index('idx_stair_events_completion').on(t.completes)]);
+export const tenantRequests=sqliteTable('tenant_requests',{
+ id:text('id').primaryKey(),block:text('block').notNull(),citizen:text('citizen').notNull(),item:text('item').notNull(),quantity:integer('quantity').notNull(),remaining:integer('remaining').notNull(),purpose:text('purpose').notNull(),created:integer('created').notNull(),
+},t=>[index('idx_tenant_requests_block').on(t.block,t.remaining),check('tenant_request_bounds',sql`${t.remaining} >= 0 AND ${t.remaining} <= ${t.quantity} AND ${t.quantity} BETWEEN 1 AND 5`)]);
+export const communityReports=sqliteTable('community_reports',{
+ id:text('id').primaryKey(),reporter:text('reporter').notNull(),source:text('source').notNull(),message:text('message').notNull(),author:text('author'),body:text('body').notNull(),reason:text('reason').notNull(),status:text('status').notNull().default('open'),resolution:text('resolution'),moderator:text('moderator'),created:integer('created').notNull(),resolved:integer('resolved'),
+},t=>[uniqueIndex('idx_reports_unique').on(t.reporter,t.source,t.message),index('idx_reports_status_created').on(t.status,t.created)]);
+export const communityHidden=sqliteTable('community_hidden',{
+ source:text('source').notNull(),message:text('message').notNull(),moderator:text('moderator').notNull(),created:integer('created').notNull(),
+},t=>[uniqueIndex('idx_hidden_source_message').on(t.source,t.message)]);
+export const communityMutes=sqliteTable('community_mutes',{
+ citizen:text('citizen').primaryKey(),until:integer('until').notNull(),moderator:text('moderator').notNull(),created:integer('created').notNull(),
+});
+export const requestWindows=sqliteTable('request_windows',{
+ owner:text('owner').notNull(),kind:text('kind').notNull(),window:integer('window').notNull(),count:integer('count').notNull(),
+},t=>[uniqueIndex('idx_request_window').on(t.owner,t.kind)]);
