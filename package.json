@@ -6,7 +6,7 @@
     "build": "node scripts/build.mjs",
     "validate": "node scripts/validate-artifact.mjs",
     "db:generate": "drizzle-kit generate",
-    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs && node --experimental-sqlite scripts/test-reset.mjs && node --experimental-sqlite scripts/test-street.mjs && node --experimental-sqlite scripts/test-district.mjs && node --experimental-sqlite scripts/test-living.mjs && node --experimental-sqlite scripts/test-alpha.mjs",
+    "test": "node --experimental-sqlite scripts/test-game.mjs && node --experimental-sqlite scripts/test-stories.mjs && node --experimental-sqlite scripts/test-forces.mjs && node --experimental-sqlite scripts/test-progression.mjs && node --experimental-sqlite scripts/test-residency.mjs && node --experimental-sqlite scripts/test-reset.mjs && node --experimental-sqlite scripts/test-street.mjs && node --experimental-sqlite scripts/test-district.mjs && node --experimental-sqlite scripts/test-living.mjs && node --experimental-sqlite scripts/test-alpha.mjs && node --experimental-sqlite scripts/test-workbench.mjs",
     "dev": "node --experimental-sqlite scripts/dev.mjs",
     "test:browser": "node scripts/playtest-browser.mjs",
     "test:portraits": "node scripts/playtest-portraits.mjs",

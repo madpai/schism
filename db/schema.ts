@@ -92,3 +92,7 @@ export const communityMutes=sqliteTable('community_mutes',{
 export const requestWindows=sqliteTable('request_windows',{
  owner:text('owner').notNull(),kind:text('kind').notNull(),window:integer('window').notNull(),count:integer('count').notNull(),
 },t=>[uniqueIndex('idx_request_window').on(t.owner,t.kind)]);
+
+export const deviceOffers=sqliteTable('device_offers',{id:text('id').primaryKey(),seller:text('seller').notNull(),data:text('data').notNull(),price:integer('price').notNull(),status:integer('status').notNull().default(0),created:integer('created').notNull()},t=>[index('idx_device_offers_status_created').on(t.status,t.created),check('device_offer_price',sql`${t.price} BETWEEN 1 AND 50`)]);
+export const deviceDemand=sqliteTable('device_demand',{id:text('id').primaryKey(),remaining:integer('remaining').notNull()},t=>[check('device_demand_nonnegative',sql`${t.remaining} >= 0`)]);
+export const campProduction=sqliteTable('camp_production',{id:text('id').primaryKey(),citizen:text('citizen').notNull(),sentence:text('sentence').notNull(),goods:text('goods').notNull(),quantity:integer('quantity').notNull(),completes:integer('completes').notNull()},t=>[index('idx_camp_production_completes').on(t.completes),check('camp_quantity',sql`${t.quantity} = 1`)]);

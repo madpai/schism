@@ -5,7 +5,9 @@ import {localDB} from './local-db.mjs';
 import {backupTables} from '../worker/community.js';
 export function restoreCity(backup,filename){
  if(filename===':memory:'||existsSync(filename))throw Error('Choose a new isolated database file; existing destinations are never overwritten.');
+ const optionalExpansionTables=new Set(['device_offers','device_demand','camp_production']);
  if(backup?.format!=='schism-city-backup-v1'||!backup.tables)throw Error('Unsupported city backup.');
+ backup={...backup,tables:{...backup.tables}};for(const table of optionalExpansionTables)backup.tables[table]??=[];
  for(const table of backupTables)if(!Array.isArray(backup.tables[table])||backup.tables[table].length>10000)throw Error('Invalid or missing table: '+table);
  mkdirSync(dirname(resolve(filename)),{recursive:true,mode:0o700});const db=localDB(filename);chmodSync(filename,0o600);
  db.sqlite.exec('BEGIN');

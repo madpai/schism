@@ -6,9 +6,19 @@
 
 A persistent dystopian city RPG about ordinary people surviving an indifferent system. Arrive with no money, no allegiance, and a civic ID. Work the foundry, climb into administration, open a shop, or disappear into the underground. Your neighbors change the city you all have to live in.
 
-[Play SCHISM](https://schism.williamschultz903.chatgpt.site) · [Gameplay rules](docs/GAMEPLAY.md) · [Architecture](docs/ARCHITECTURE.md) · [Playtest and critique](docs/playtests/V0.9.md) · [Next priorities](docs/NEXT_STEPS.md) · [Session handoff](SESSION_HANDOFF.md)
+[Play SCHISM](https://schism.williamschultz903.chatgpt.site) · [Gameplay rules](docs/GAMEPLAY.md) · [Architecture](docs/ARCHITECTURE.md) · [Playtest and critique](docs/playtests/V0.10.md) · [Next priorities](docs/NEXT_STEPS.md) · [Session handoff](SESSION_HANDOFF.md)
 
 The hosted game currently retains its owner-private audience. Sign-in and separate persistent characters support additional authorized citizens when access is expanded. This is an asynchronous multiplayer RPG: shared markets, district conditions, projects, trades, and notices, with timed individual activities.
+
+## Repair your way into useful work
+
+v0.10 adds electronics, mechanics, tailoring and signal analysis. Scavenge a unique broken handheld, diagnose its fault, repair it with supplied bench tools, and keep its function or sell its working condition. Actual citizen device listings preserve ownership and quality. Practical training opens four technical jobs while career history still earns civic permits.
+
+Craft cells, weather linings and comfort supplies. Tea and conversation ease stress; cigarettes trade a little health for comfort. Fictional restricted street drugs have delayed crashes, storage choices and visible scanner risks. Bulk or repeated detection can bring three compulsory municipal production orders: zero wages, real city output, free food/rest and paused outside bills until release.
+
+![The communal repair bench](public/technical-workbench.webp)
+
+[Full workshop rules](docs/WORKSHOP.md) · [Saved art prompts](art/expansion-prompts.json)
 
 ## Arrive as someone
 
@@ -111,7 +121,7 @@ npm run dev
 
 The development game runs at `http://127.0.0.1:4173`, uses a local QA identity, and stores one shared city in ignored `.local-data/city.sqlite`. Each browser receives a separate signed local session. Production uses Sites identity and durable D1 storage. Local characters persist across server restarts. Set `SCHISM_TAILSCALE_IP` to bind the same city to your Tailscale address as well as loopback; see [local hosting](docs/LOCAL_HOSTING.md). Rebuild and restart development after changing source.
 
-**497 rule assertions** cover accounts, survival, timed rewards, careers, taxes and ID holds, trade races, encounters, shared supplies, tenant repairs, recovery, and persistence. A seven-day isolated balance simulation uses ordinary registration and actions; it distinguishes daily, twice-daily, each-cycle, and missed-weekend schedules. Real browser checks use ordinary citizens in the same city and wait through actual short tasks and wages. All 17 screens are checked at 360/390/1440px. See [verification and limits](docs/playtests/V0.8.md).
+**584 rule assertions** cover accounts, survival, timed rewards, careers, taxes and ID holds, trade races, encounters, shared supplies, tenant repairs, recovery, and persistence. A seven-day isolated balance simulation uses ordinary registration and actions; it distinguishes daily, twice-daily, each-cycle, and missed-weekend schedules. Real browser checks use ordinary citizens in the same city and wait through actual short tasks and wages. The original screens and all new workshop, signal and camp views are checked at 360/390/1440px. See [verification and limits](docs/playtests/V0.10.md).
 
 ```sh
 npm run test:alpha-load     # built Worker, isolated SQLite; no real city writes
@@ -139,7 +149,7 @@ drizzle/      Append-only production migrations
 docs/         Gameplay and architecture reference
 ```
 
-Build emits a Worker module with embedded interface and 29 WebP assets, including cropped portrait layers, plus D1 migrations. Publishing uses the **Sites building and hosting skills** and preserves the existing Site and audience. Production requires the trusted `oai-authenticated-user-id` header forwarded by Sites. No browser-provided identity or balances are trusted.
+Build emits a Worker module with embedded interface and 39 WebP assets, including cropped portrait layers, plus D1 migrations. Publishing uses the **Sites building and hosting skills** and preserves the existing Site and audience. Production requires the trusted `oai-authenticated-user-id` header forwarded by Sites. No browser-provided identity or balances are trusted.
 
 ## Original artwork
 

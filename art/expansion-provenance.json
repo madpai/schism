@@ -1,0 +1,356 @@
+{
+  "created_utc": "2026-10-06 02:44:33 UTC",
+  "mode": "built-in image_gen",
+  "source_references": [
+    "/home/commander/ashfall/public/workshop.webp",
+    "/home/commander/ashfall/public/bunkhouse.webp"
+  ],
+  "reference_usage": "Inspected visually; prompt-described stylistic guidance only. Generated assets are original standalone artworks.",
+  "assets": [
+    {
+      "name": "technical-workbench",
+      "transparent": false,
+      "shape": "landscape",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone location artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: a cramped technical workbench where electronics repair, mechanics, and tailoring are all visibly practiced: a stripped circuit board and soldering iron, open gear housing and hand tools, a battered manual sewing machine with patched dark fabric and thread. One coherent room, not divided panels.\nScene/backdrop: soot-stained concrete utility room, exposed pipes, shelves of salvaged components, rainy window looking into a dense elevated industrial city. No people needed.\nStyle/medium: gritty painterly cinematic concept art, tactile brushwork and rough painted edges, rich material detail; terminal-noir atmosphere matching a worn urban workshop, not a glossy 3D render.\nComposition/framing: wide landscape 3:2, workbench dominates foreground and center, distinct recognizable tools in naturally clustered work zones, depth to a modest rainy window.\nLighting/mood: warm amber desk lamps against cool desaturated teal rain light; practical, resourceful, austere.\nMaterials/textures: chipped iron, oily steel, frayed fabric, dust, soot, damp walls, scratched surfaces.\nConstraints: original artwork, no UI, no typography, no numbers, no logos, no watermarks, no readable signs, no border.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-50cee9a4-e02a-4278-bb99-27c278a43458.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/technical-workbench.png",
+      "original_size": [
+        1536,
+        1024
+      ],
+      "original_mode": "RGB",
+      "original_alpha_extrema": null,
+      "original_sha256": "66b55a6b6011a9cd50da27c872b3f9b74525d9ab9cb662cad074b216add5c8d5",
+      "final_path": "/home/commander/schism-expansion-art/technical-workbench.webp",
+      "final_size": [
+        960,
+        640
+      ],
+      "final_mode": "RGB",
+      "final_alpha_extrema": null,
+      "final_bytes": 179422,
+      "final_sha256": "f41b291f38e73c3d74bfab7ff31771383f285392816e8d7372c755aa578e7599",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": false
+      }
+    },
+    {
+      "name": "signal-den",
+      "transparent": false,
+      "shape": "landscape",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone location artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: a clandestine signal-den hacking alcove in a damp utility recess: a bank of obsolete CRT terminals with dim teal abstract geometric signals, chunky keyboards, patch cables, antenna components, tiny solder joints, battered stool, and improvised data relays. The screens are fictional and contain no legible text.\nScene/backdrop: confined soot-black brick and concrete alcove under a disused municipal infrastructure shaft, pipes and rain seeping from a grate, amber filament work lamp.\nStyle/medium: gritty painterly cinematic concept art, visible tactile brushwork and rough painted edges, terminal-noir urban salvage mood; no glossy 3D aesthetic.\nComposition/framing: wide landscape 3:2, intimate three-quarter view into the alcove, readable silhouettes of several obsolete terminals, cables forming subtle leading lines.\nLighting/mood: restrained desaturated teal monitor glow, one small amber lamp, deep charcoal shadows; secretive and worn.\nMaterials/textures: scratched glass, oxidized metal, peeling paint, dusty plastic, cable insulation, soot, wet concrete.\nConstraints: original artwork, no UI overlay, no legible text anywhere, no typography, no logos, no watermarks, no border.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-ce97c1f0-45f9-46f8-953b-9a8ee887f141.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/signal-den.png",
+      "original_size": [
+        1536,
+        1024
+      ],
+      "original_mode": "RGB",
+      "original_alpha_extrema": null,
+      "original_sha256": "63a8fdf8762d79183b2e94004eeee7e5db8d1d61a791adf8ed3888c9757e759b",
+      "final_path": "/home/commander/schism-expansion-art/signal-den.webp",
+      "final_size": [
+        960,
+        640
+      ],
+      "final_mode": "RGB",
+      "final_alpha_extrema": null,
+      "final_bytes": 157026,
+      "final_sha256": "2e074082631dc2c48152a9cb9fecc04d86408e9d7cddb38c0094c8491af72b1e",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": false
+      }
+    },
+    {
+      "name": "civic-checkpoint",
+      "transparent": false,
+      "shape": "landscape",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone location artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: an austere civic checkpoint at rainy night, heavy scanner gates in a concrete passage, queue rails, shuttered inspection booths, overhead surveillance lenses and a few small anonymous bundled silhouettes passing through. Make the scanner gates and municipal control architecture the clear focal subject.\nScene/backdrop: brutal concrete infrastructure between dense industrial city towers, rain puddles, elevated walkways disappearing into haze, no readable signage.\nStyle/medium: original gritty painterly cinematic concept art with visible brushwork, soot and hand-painted material texture; terminal-noir, oppressive cyberpunk municipal atmosphere.\nComposition/framing: wide landscape 3:2, low three-quarter view down the scanner lanes, spacious environmental image with strong gate silhouettes and depth.\nLighting/mood: cold restrained teal scanner illumination, distant amber utility lamps, rain streaks and wet reflections; bleak procedural authority.\nMaterials/textures: chipped concrete, rust-dark steel, scratched scanner glass, wet coats, asphalt puddles, soot.\nConstraints: no UI, no typography or numbers, no logos, no watermark, no readable signs, no border, no explicit violence.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-a42bbb25-e07c-4b4b-a031-d6050208520c.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/civic-checkpoint.png",
+      "original_size": [
+        1536,
+        1024
+      ],
+      "original_mode": "RGB",
+      "original_alpha_extrema": null,
+      "original_sha256": "06c23725988f9113dffc696e91d396820a3a574b9d17c4a87f953df17ab5d19d",
+      "final_path": "/home/commander/schism-expansion-art/civic-checkpoint.webp",
+      "final_size": [
+        960,
+        640
+      ],
+      "final_mode": "RGB",
+      "final_alpha_extrema": null,
+      "final_bytes": 164274,
+      "final_sha256": "7db07ac3c6ab43adbdf99198d4a993eb1498e96e2bc0e1c526cbe9a4b8008c53",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": false
+      }
+    },
+    {
+      "name": "camp-factory",
+      "transparent": false,
+      "shape": "landscape",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone location artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: a municipal camp factory devoted to relay assembly: long utilitarian benches holding half-built electromechanical relay boxes, wire spools, metal casings and inspection fixtures; a few anonymous workers in worn dark work clothes assembling parts. Emphasize industrial equipment and relay assemblies, no individual portrait.\nScene/backdrop: vast soot-stained concrete work hall, exposed steel beams and pipes, barred high windows, orderly material crates, distant gantry, no signage.\nStyle/medium: gritty original painterly cinematic concept art, clearly tactile painted brushwork with rough edges and dense material texture; dystopian terminal-noir industrial mood.\nComposition/framing: wide landscape 3:2, bench in foreground with recognizable relay coils and contacts, repeating benches recede deeply.\nLighting/mood: harsh amber utility lighting overhead cut by cold desaturated teal light from high windows, austere smoky shadows.\nMaterials/textures: greasy steel, oxidized copper, stained concrete, worn fabric, soot, scratches and solder residue.\nConstraints: no UI, no typography, no numbers, no logos, no watermarks, no readable labels, no border.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-57de4703-7527-4dc0-91d1-db0a5f539c9c.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/camp-factory.png",
+      "original_size": [
+        1536,
+        1024
+      ],
+      "original_mode": "RGB",
+      "original_alpha_extrema": null,
+      "original_sha256": "bc3e9a1bf8ec19528fd1ca2c20887405c01cd2a8db4ff72af5cda21a605457ce",
+      "final_path": "/home/commander/schism-expansion-art/camp-factory.webp",
+      "final_size": [
+        960,
+        640
+      ],
+      "final_mode": "RGB",
+      "final_alpha_extrema": null,
+      "final_bytes": 185052,
+      "final_sha256": "6ec922a7ab8a3ebb949344afe6fb8ba8b6eaf2eafb7822455cc1620214a6fac1",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": false
+      }
+    },
+    {
+      "name": "camp-barracks",
+      "transparent": false,
+      "shape": "landscape",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone location artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: sparse but habitable municipal camp barracks, rows of worn iron bunks with patched blankets, a few tired anonymous residents resting or quietly eating soup, metal cups and plain soup bowls on a small communal table. Show a modest place to recover within a harsh city.\nScene/backdrop: old industrial dormitory, soot-stained concrete walls, pipes, coat hooks, rain-streaked tall windows, damp floor, dim corridor, no signage.\nStyle/medium: original gritty painterly cinematic concept art with visible brushwork, rough painted edges and tactile material detail; worn terminal-noir urban atmosphere.\nComposition/framing: wide landscape 3:2, view along bunk rows with soup table in foreground and bunks clearly visible; people secondary and faces indistinct.\nLighting/mood: restrained teal rain light from windows and warm amber wall lamps, weary shelter with a small trace of warmth.\nMaterials/textures: frayed fabric, chipped iron, dented bowls, old paint, wet concrete, soot.\nConstraints: no UI, no typography, no numbers, no logos, no watermarks, no readable signs, no border.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-7cd2ea20-6cc0-41b3-81f7-ab26254a064f.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/camp-barracks.png",
+      "original_size": [
+        1536,
+        1024
+      ],
+      "original_mode": "RGB",
+      "original_alpha_extrema": null,
+      "original_sha256": "6ac5fdda9bb2c7666e9ecb2fbf5a7f5fc7c5a98a636d848e00a215adebba44ad",
+      "final_path": "/home/commander/schism-expansion-art/camp-barracks.webp",
+      "final_size": [
+        960,
+        640
+      ],
+      "final_mode": "RGB",
+      "final_alpha_extrema": null,
+      "final_bytes": 154066,
+      "final_sha256": "8c1b210bd2b7518cc22fd0788bbacf1307b31800c8cc09e43e92094af0ba47bd",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": false
+      }
+    },
+    {
+      "name": "broken-pda",
+      "transparent": true,
+      "shape": "square",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone inventory object artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: one battered old rugged handheld PDA, isolated with a genuinely transparent background. Charcoal rectangular casing with beveled corners, small physical blank keypad beneath the screen, one burnt orange fabric wrist strap attached at the bottom. Display glass is badly shattered with radiating cracks and dark exposed pixels; charging/data port along its lower edge visibly scorched and burnt. Scraped casing with small oxidized screws, recognizable as a salvageable device.\nStyle/medium: gritty painterly game concept art, visible brushwork and tactile surface texture, restrained desaturated teal and amber highlights on charcoal metal and plastic.\nComposition/framing: square canvas, complete single handheld centered at a slight three-quarter angle, generous transparent margin, all edges and strap fully inside canvas.\nLighting/mood: soft directional practical amber highlight and dim teal edge light, grim salvaged object.\nConstraints: actual transparent alpha background, no ground plane, no backdrop, no rectangular background, no cast shadow outside the object, no UI overlay, no text, no letters or numbers on keypad or screen, no logos, no watermarks, no border, no duplicate device.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-fe079838-2b9b-4531-9a8a-b0c996a6e1bf.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/broken-pda.png",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "original_mode": "RGBA",
+      "original_alpha_extrema": [
+        0,
+        255
+      ],
+      "original_sha256": "a56c349ac21b91a770df8bcc88463fffbe331c1d732ee52989002ca0626abc6a",
+      "final_path": "/home/commander/schism-expansion-art/broken-pda.webp",
+      "final_size": [
+        768,
+        768
+      ],
+      "final_mode": "RGBA",
+      "final_alpha_extrema": [
+        0,
+        255
+      ],
+      "final_bytes": 171648,
+      "final_sha256": "c53a2f5653aa0e81f0815debb1ba6a8e8b8b151ee2743babcde600c4c2985d71",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": true
+      }
+    },
+    {
+      "name": "repaired-pda",
+      "transparent": true,
+      "shape": "square",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone inventory object artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: one successfully repaired but visibly weathered old rugged handheld PDA, isolated with a genuinely transparent background. Charcoal rectangular casing with beveled corners, small physical blank keypad beneath the screen, one burnt orange fabric wrist strap attached at the bottom. This is the same general device type as a salvaged broken PDA: scraped casing and small oxidized screws retained, replaced display glass intact and a functional soft teal screen displaying only faint abstract nonlinguistic geometric signals; lower charging/data port neatly repaired with a small metal reinforcement. It should look refurbished, not new.\nStyle/medium: gritty painterly game concept art, visible brushwork and tactile surface texture, restrained desaturated teal and amber highlights on charcoal metal and plastic.\nComposition/framing: square canvas, complete single handheld centered at a slight three-quarter angle, generous transparent margin, all edges and strap fully inside canvas.\nLighting/mood: soft directional practical amber highlight and teal glow from intact display, useful restored object.\nConstraints: actual transparent alpha background, no ground plane, no backdrop, no rectangular background, no cast shadow outside the object, no UI overlay, no text, no letters or numbers on keypad or screen, no logos, no watermarks, no border, no duplicate device.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-cb5710fa-6d96-4292-bc01-7559f6c16067.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/repaired-pda.png",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "original_mode": "RGBA",
+      "original_alpha_extrema": [
+        0,
+        255
+      ],
+      "original_sha256": "10d69eff7ea1fae759c9f32674d3d2e0dec93282262e5437dcdc3d42ef2c6178",
+      "final_path": "/home/commander/schism-expansion-art/repaired-pda.webp",
+      "final_size": [
+        768,
+        768
+      ],
+      "final_mode": "RGBA",
+      "final_alpha_extrema": [
+        0,
+        255
+      ],
+      "final_bytes": 115170,
+      "final_sha256": "e897ced049d734c6e928b1a09ec74e6e300fe9ae8db4cfdac679d34ffb6f9ad8",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": true
+      }
+    },
+    {
+      "name": "comfort-supplies",
+      "transparent": false,
+      "shape": "square",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone inventory still-life artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: a small austere comfort-supplies still life: a plain unbranded cigarette pack with a single loose cigarette beside it, a dented plain tea tin, and one clearly fictional sealed violet stimulant ampoule with an unusual faceted capsule silhouette and inert violet glow. The stimulant is entirely invented science fiction, not any real drug; no real drug ingredients, labels, instructions, dosage, syringe, needle, preparation or use.\nScene/backdrop: dark neutral charcoal painted surface and backdrop, tightly grouped quiet still life.\nStyle/medium: original gritty painterly concept art, tactile visible brushwork, worn material detail, terminal-noir cyberpunk salvage aesthetic.\nComposition/framing: square canvas, all three supply types fully visible and distinct, tea tin slightly behind cigarette pack and fictional sealed violet ampoule in front, moderate breathing room.\nLighting/mood: restrained warm amber practical highlights and cool desaturated teal rim light, violet ampoule is a small controlled accent.\nMaterials/textures: worn blank paperboard, tobacco-paper cigarette, scratched and dented metal tin, sealed cloudy fictional violet glass.\nConstraints: no UI, no typography, no letters or numbers, no brands, no logos, no watermark, no border, no real drug names or ingredients.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-bf03688d-a93e-443c-8a92-598ba79f0596.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/comfort-supplies.png",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "original_mode": "RGB",
+      "original_alpha_extrema": null,
+      "original_sha256": "1f59d14cea677d4f3e81515442fb7927a4f92690533a823d9fd1b564d7e2cabf",
+      "final_path": "/home/commander/schism-expansion-art/comfort-supplies.webp",
+      "final_size": [
+        768,
+        768
+      ],
+      "final_mode": "RGB",
+      "final_alpha_extrema": null,
+      "final_bytes": 104074,
+      "final_sha256": "879cba1cce8edad02e48ed727e1aef802e8bdcf69fae657a66d6ff7988c002b6",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": false
+      }
+    },
+    {
+      "name": "field-receiver",
+      "transparent": true,
+      "shape": "square",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone transparent inventory object artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: one battered portable analog field radio receiver, visibly distinct from a handheld PDA: squat horizontal charcoal metal body, burnt orange woven carrying strap, circular softly illuminated teal tuning dial behind scratched glass, chunky blank rotary knobs, grille speaker and a short battered telescoping antenna extended diagonally. Useful scavenged radio equipment, no screen or keypad.\nStyle/medium: gritty painterly game concept art with tactile visible brushwork, rough edges, soot, scratches, aged dark metal and worn cloth; restrained amber highlights and desaturated teal dial glow.\nComposition/framing: square canvas, single complete device centered in slight three-quarter view, all parts including antenna and strap fully inside the canvas with generous transparent margin.\nLighting/mood: soft amber directional edge highlights and controlled teal glow, worn industrial terminal-noir mood.\nConstraints: genuinely transparent alpha background, no ground plane, no backdrop, no rectangle, no cast shadow outside object, no UI, no text, no letters or numbers on tuning dial or controls, no typography, no logo, no watermark, no border, no duplicate device.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-7215cf54-3244-4353-8b30-b46eddeec3da.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/field-receiver.png",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "original_mode": "RGBA",
+      "original_alpha_extrema": [
+        0,
+        255
+      ],
+      "original_sha256": "fe78037947d0db8fea8ac0f3acff36dd6f5f948395494312cea08041f4f4a5c1",
+      "final_path": "/home/commander/schism-expansion-art/field-receiver.webp",
+      "final_size": [
+        768,
+        768
+      ],
+      "final_mode": "RGBA",
+      "final_alpha_extrema": [
+        0,
+        255
+      ],
+      "final_bytes": 175704,
+      "final_sha256": "13ed2a72efc1ebf482006d51cbe91b8c99341c86276334f3606475fee06c0ad5",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": true
+      }
+    },
+    {
+      "name": "hand-generator-lamp",
+      "transparent": true,
+      "shape": "square",
+      "prompt": "Use case: stylized-concept\nAsset type: standalone transparent inventory object artwork for the original dystopian cyberpunk browser game SCHISM.\nPrimary request: one small repaired crank-powered industrial lantern, distinct from a radio or PDA: weathered dark metal compact box body, protective steel cage around a softly glowing warm amber lamp globe, sturdy folding carry handle, visible hand-crank on the side and a neatly repaired panel with small rivets. The crank mechanism and warm light must be easy to recognize.\nStyle/medium: gritty painterly game concept art, visible tactile brushwork and rough hand-painted edges, soot and scratched metal, worn salvaged industrial materials; restrained amber and subtle desaturated teal rim highlights.\nComposition/framing: square canvas, one whole lantern centered in slight three-quarter view, crank and handle entirely visible with generous transparent margin.\nLighting/mood: warm amber practical light within the cage, weak cool teal edge light, useful repaired object in a dystopian terminal-noir world.\nConstraints: genuinely transparent alpha background, no ground plane, no backdrop, no rectangle, no cast shadow outside object, no UI, no text, no letters or numbers, no typography, no logo, no watermark, no border, no duplicate device, no modern glossy product styling.",
+      "source_path": "/home/commander/.codex/generated_images/01a10f0c-80d5-7ba2-a919-3fec9b8a02ce/exec-8e835213-1ea6-4ae9-b250-3cbd0569786a.png",
+      "tool": "image_gen.imagegen",
+      "generation_requests": 1,
+      "original_path": "/home/commander/schism-expansion-art/originals/hand-generator-lamp.png",
+      "original_size": [
+        1254,
+        1254
+      ],
+      "original_mode": "RGBA",
+      "original_alpha_extrema": [
+        0,
+        255
+      ],
+      "original_sha256": "2911f16e78c479a8593428a9e125d5d4ae3dd9cef1665a5736475a2b3ad86574",
+      "final_path": "/home/commander/schism-expansion-art/hand-generator-lamp.webp",
+      "final_size": [
+        768,
+        768
+      ],
+      "final_mode": "RGBA",
+      "final_alpha_extrema": [
+        0,
+        255
+      ],
+      "final_bytes": 152452,
+      "final_sha256": "2d4856b0cd15d41d2400ba81a62895b4215dca21791c433826bb447dfcbc31a0",
+      "conversion": {
+        "format": "WebP",
+        "quality": 85,
+        "method": 6,
+        "alpha_preserved": true
+      }
+    }
+  ],
+  "visual_review": "All ten generated outputs inspected. Subjects, restrained teal/amber lighting and painted industrial texture match the requested direction. PDA images depict the same general rugged charcoal and orange-strapped device type in different poses; repaired artwork has functioning teal display and repaired port."
+}

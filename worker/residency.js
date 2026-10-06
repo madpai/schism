@@ -26,7 +26,7 @@ export function residencyState(p,now){
 export function institutionRequirements(p,now){
   const age=residenceDays(p,now),civic=p.careers?.civic?.xp||0;
   const administrative=[['2 days in the city',age>=2],['25 civic trust',p.rep>=25],['80 civic career XP',civic>=80],['Security heat below 20',p.heat<20]];
-  const security=[['7 days in the city',age>=7],['60 civic trust',p.rep>=60],['180 civic career XP',civic>=180],['Order alignment +40',p.alignment>=40],['30 completed shifts',p.shifts>=30],['Security heat at most 10',p.heat<=10],['No active sentence',!p.detainedUntil||p.detainedUntil<=now]];
+  const security=[['7 days in the city',age>=7],['60 civic trust',p.rep>=60],['180 civic career XP',civic>=180],['Order alignment +40',p.alignment>=40],['30 completed shifts',p.shifts>=30],['Security heat at most 10',p.heat<=10],['No active sentence',!p.camp?.active&&(!p.detainedUntil||p.detainedUntil<=now)]];
   const shop=[['1 day in the city',age>=1],['10 civic trust',p.rep>=10]];
   return {administrative,security,shop};
 }
@@ -39,7 +39,7 @@ export function accrueTax(p,gross){
   if(p.finance?.taxAuto){const held=Math.min(p.credits,assessed);p.credits-=held;p.finance.taxReserve+=held;}
 }
 export function identityFlags(p,now){
-  const flags=[];
+  const flags=[];if(p.camp?.active)flags.push({id:'camp',label:'Compulsory labor',detail:`${p.camp.completed} / ${p.camp.required} production orders. Free food and rest are available; outside bills paused until release.`});
   if(p.taxHold)flags.push({id:'tax',label:'Tax delinquency',detail:`${p.taxDebt} CR owed. Pay Revenue, then request registry clearance. Public custodial work remains open if you need debt money.`});
   if(p.criminalHold)flags.push({id:'arrest',label:'Arrest record',detail:'Resolve your sentence, reduce heat to 20 or below, then request registry clearance.'});
   if(p.detainedUntil>now)flags.push({id:'detained',label:'Detained',detail:'Your sentence is still running.'});
@@ -51,7 +51,7 @@ export function identityFlags(p,now){
 export function scheduleActivity(before,after,{action,label,message,now,hours,energy,day}){
   const deltas={},sets={};
   for(const key of Object.keys(after)){
-    if(['activity','lastTick','nextRent','nextRentAt','clock','daysInCity','energy','labor','criminal','district','neighborhood','aftermath','finance','clothingWear','fireDay','housingReform','housingVersion','rentTier','shopDay','shopSessions','lastRestDay'].includes(key))continue;
+    if(['activity','lastTick','nextRent','nextRentAt','clock','daysInCity','energy','labor','criminal','district','neighborhood','aftermath','finance','clothingWear','fireDay','housingReform','housingVersion','skills','workbench','devices','activeDevice','stress','effects','locker','camp','offenses','lastComfortAt','rentTier','shopDay','shopSessions','lastRestDay'].includes(key))continue;
     if(typeof after[key]==='number'&&typeof before[key]==='number'){
       const delta=after[key]-before[key];if(delta>0)deltas[key]=delta;
     }else if(JSON.stringify(after[key])!==JSON.stringify(before[key]))sets[key]=after[key];
