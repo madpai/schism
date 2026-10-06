@@ -249,3 +249,7 @@ The repair’s public entry begins at completion. The quiet route withholds the 
 Thirty seconds into an ordinary shift, one optional decision per cycle offers a record (1 energy now; 1 additional trust and Esra +1 at completion) or shortcut (2 heat now; 1 additional taxable credit at completion). Neither changes the shift deadline. Shared quotas, survival, taxes and existing job requirements still apply.
 
 Associations accept two open requests per member, 1–5 units each and a short purpose. Contributors supply items they own. Fulfillment goes into the shelf, preserves its 100/item cap, reduces the request and records the transfer atomically. The author can close a request; earlier donations remain. Reports on network, public board and current-member chat are private. Feedback and reports share a twelve-per-real-day limit. Configured moderators can hide messages and pause posting for 24 hours while gameplay continues.
+
+## v0.10 repair and custody
+
+See [Workshop rules](WORKSHOP.md) for four practical skills, unique repairable devices, skill-qualified jobs, additional crafting, comfort, fictional street drugs, explicit scanner crossings, and finite compulsory labor. All rewards and release progress remain server timed. Existing characters and career gates are preserved.

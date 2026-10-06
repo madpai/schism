@@ -21,7 +21,7 @@ export default {
           if(request.method!=='GET')return Response.json({error:'Method not allowed.'},{status:405,headers});
           await requestBudget(env.DB,owner,'operator');
           if(url.pathname==='/api/backup')return Response.json(await exportCity(env.DB),{headers:{...headers,'Content-Disposition':'attachment; filename="schism-city-backup.json"'}});
-          const health=await env.DB.prepare("SELECT count(*) citizens FROM citizens").first();return Response.json({ok:true,version:'0.9.0',time:new Date().toISOString(),citizens:health.citizens,requestId},{headers});
+          const health=await env.DB.prepare("SELECT count(*) citizens FROM citizens").first();return Response.json({ok:true,version:'0.10.0',time:new Date().toISOString(),citizens:health.citizens,requestId},{headers});
         }
         if(url.pathname==='/api/state'&&request.method==='GET'){await requestBudget(env.DB,owner,'state');return Response.json(await snapshot(env.DB,owner,Date.now(),context),{headers});}
         if(url.pathname==='/api/action'&&request.method==='POST'){

@@ -9,7 +9,7 @@ check((await request('/api/state')).status===401,'Anonymous API requests require
 check((await request('/api/state',owner,{},{})).status===503,'Missing storage returns an explicit unavailable status.');
 check((await request('/api/health',{'oai-authenticated-user-id':'visitor'})).status===403,'Health is operator-only.');
 check((await request('/api/backup',{'oai-authenticated-user-id':'visitor'})).status===403,'City backup is operator-only.');
-const health=await request('/api/health',owner);check(health.status===200&&(await health.json()).version==='0.9.0','Health checks actual storage and deployed release.');
+const health=await request('/api/health',owner);check(health.status===200&&(await health.json()).version==='0.10.0','Health checks actual storage and deployed release.');
 check((await request('/api/action',owner,{method:'POST',body:'{}'})).status===415,'Actions need JSON.');
 check((await request('/api/action',{...owner,'Content-Type':'application/json','Origin':'https://other.test'},{method:'POST',body:'{}'})).status===403,'Cross-origin mutations are rejected.');
 check((await request('/api/action',{...owner,'Content-Type':'application/json'},{method:'POST',body:'{'})).status===400,'Malformed JSON is rejected.');

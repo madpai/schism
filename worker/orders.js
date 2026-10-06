@@ -1,5 +1,6 @@
 const orderNeed=(ok,message)=>{if(!ok)throw Object.assign(new Error(message),{status:400});};
 export const supplyCatalog={
+ gel:{name:'Restricted clinic gel [CONTRABAND]',material:true,contraband:true,icon:'health'},leaf:{name:'Civic leaf stock',material:true,icon:'box'},tea:{name:'Salvage tea',icon:'soup'},cigarettes:{name:'Plain cigarettes',icon:'box'},cell:{name:'Rebuilt power cell',icon:'energy'},lining:{name:'Weather lining',icon:'coat'},nightglass:{name:'Nightglass [CONTRABAND]',contraband:true,icon:'energy'},veil:{name:'Veil [CONTRABAND]',contraband:true,icon:'lock'},
  cloth:{name:'Salvaged fabric',material:true,icon:'coat'},wire:{name:'Copper wire',material:true,icon:'energy'},circuit:{name:'Circuit parts',material:true,icon:'box'},data:{name:'Signal traces',material:true,icon:'energy'},
  heatpack:{name:'Improvised warming pack',icon:'temp'},bandage:{name:'Clean field dressing',icon:'health'},neuralpatch:{name:'Neural grounding patch',icon:'energy'},
  bread:{name:'Vat-grown ration',icon:'bread'},medicine:{name:'Somatic stabilizer',icon:'health'},scrap:{name:'Relay fragment',icon:'box'},

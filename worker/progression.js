@@ -1,3 +1,4 @@
+import {skillWorkBonus,skillLevel} from './workshop.js';
 // Persistent character equipment and career progression; all effects are server-owned.
 export const gearCatalog={
   adminuniform:{name:'Canon administrative uniform',slot:'body',price:0,earned:true,icon:'institutions',description:'Tailored slate cloth, pale piping, and a numbered civic insignia. Issued with your municipal appointment.',effect:'Earned administration appearance; no insulation bonus'},
@@ -25,6 +26,10 @@ export const shiftTypes={
   graveyard:{name:'Graveyard',pay:1.35,hours:1,energy:4,requires:2,description:'35% more base pay; +1 hour, +4 energy, +3 heat, −4 coherence.'},
 };
 export const specialistJobs={
+ benchtech:{name:'Handheld repair technician',employer:'Municipal Refurbishment Bench',pay:12,energy:13,hours:2,rep:1,requires:0,career:'mnemonic',skill:'electronics',skillLevel:1,description:'Repair discarded civic terminals. Electronics practice qualifies you even without a career rank.',risk:'Soldering bench'},
+ loomtech:{name:'Municipal loom technician',employer:'Stratum Textile Works',pay:13,energy:15,hours:2,rep:1,requires:0,career:'recovery',skill:'mechanics',skillLevel:1,description:'Keep the textile motors running with workshop training.',risk:'Machine duty'},
+ tailor:{name:'Civic uniform tailor',employer:'Canon Civic Bureau',pay:11,energy:12,hours:2,rep:1,requires:0,career:'civic',skill:'tailoring',skillLevel:1,description:'Refit discarded uniforms for their next names.',risk:'Needle bench'},
+ signaltech:{name:'Public signal analyst',employer:'Vestibule Relay Office',pay:14,energy:14,hours:2,rep:1,requires:0,career:'transit',skill:'signal',skillLevel:1,description:'Identify legal freight echoes. Practical signal training qualifies you.',risk:'Relay duty'},
   diagnostics:{name:'Grid diagnostic survey',employer:'Canon Mnemonic Works',pay:16,energy:17,hours:2,rep:2,description:'Follow a faulty memory signal into the rain. The scanner says it has a heartbeat.',risk:'Field diagnostics',requires:4,career:'mnemonic',xp:24,field:true,coherence:2},
   extraction:{name:'Memory extraction',employer:'Canon Mnemonic Works',pay:28,energy:29,hours:4,rep:3,description:'Enter a live archive and separate a citizen from their recorded past.',risk:'Neural exposure',requires:8,career:'mnemonic',xp:80,coherence:5},
   delivery:{name:'Rainline delivery',employer:'Vestibule Transit Office',pay:10,energy:14,hours:2,rep:1,description:'Carry sealed correspondence across the elevated rainline. Do not read the return address.',risk:'Street exposure',requires:0,career:'transit',physical:true,field:true},
@@ -53,10 +58,11 @@ export function gearEffects(p){
 export function coldRate(p,w={}){return Math.max(0,gearEffects(p).cold-(w.heating?1:0));}
 export function jobQuote(p,job,mode='standard',w={}){
   const shift=shiftTypes[mode],effects=gearEffects(p),track=p.careers[job.career],rank=rankFor(track.xp);
-  const pay=Math.max(1,Math.ceil(job.pay*shift.pay)+(p.union?1:0)+(p.career===job.career?rank:0)+(job.field?effects.fieldPay:0)+(w.wageModifier||0));
-  const hours=job.hours+shift.hours,energy=Math.max(2,job.energy+shift.energy-effects.energy-(job.physical?effects.physicalEnergy:0));
-  const blocked=!p.registered?'Register at the arrival platform.':p.errand?'Finish your short task.':p.activity?'Already on an assignment.':['mnemonic','recovery'].includes(job.career)&&(p.taxHold||p.criminalHold)?'ID flagged. Registry clearance required.':p.detainedUntil>w.now?'Serve your sentence first.':(p.labor?.day===w.day?p.labor.hours:0)+hours>8?'Daily work permit exhausted.':p.rep<job.requires?`Requires ${job.requires} trust.`:track.xp<(job.xp||0)?`Requires ${job.xp} ${careerPaths[job.career].name} XP.`:p.shifts<shift.requires?`Complete ${shift.requires} shifts first.`:p.health<15?'Treatment needed.':p.energy<energy?`Need ${energy} energy.`:null;
-  return {mode,name:shift.name,pay,hours,energy,fullness:hours*2,warmth:hours*Math.max(.2,coldRate(p,w)+(w.coldModifier||0)),xp:hours*2,healthLoss:Math.max(0,(job.hazard||0)-effects.protection),coherenceLoss:Math.max(0,(job.coherence||0)+(mode==='graveyard'?4:0)-effects.coherence),heat:(job.heat||0)+(mode==='graveyard'?3:0),scrap:job.scrap||0,blocked};
+  const skillBonus=skillWorkBonus(p,job);
+  const pay=Math.max(1,Math.ceil(job.pay*shift.pay)+(p.union?1:0)+(p.career===job.career?rank:0)+(job.field?effects.fieldPay:0)+(w.wageModifier||0)+skillBonus.pay);
+  const hours=job.hours+shift.hours,energy=Math.max(2,job.energy+shift.energy-effects.energy-(job.physical?effects.physicalEnergy:0)-skillBonus.energy+(p.stress>=70?2:0));
+  const blocked=p.camp?.active?'Complete your camp orders first.':!p.registered?'Register at the arrival platform.':p.errand?'Finish your short task.':p.activity?'Already on an assignment.':['mnemonic','recovery'].includes(job.career)&&(p.taxHold||p.criminalHold)?'ID flagged. Registry clearance required.':p.detainedUntil>w.now?'Serve your sentence first.':(p.labor?.day===w.day?p.labor.hours:0)+hours>8?'Daily work permit exhausted.':job.skillLevel&&skillLevel(p.skills?.[job.skill]?.xp||0)<job.skillLevel?`Requires ${job.skill} level ${job.skillLevel}.`:p.rep<job.requires?`Requires ${job.requires} trust.`:track.xp<(job.xp||0)?`Requires ${job.xp} ${careerPaths[job.career].name} XP.`:p.shifts<shift.requires?`Complete ${shift.requires} shifts first.`:p.health<15?'Treatment needed.':p.energy<energy?`Need ${energy} energy.`:null;
+  return {mode,name:shift.name,skill:skillBonus.skill,skillBonus:skillBonus.level,pay,hours,energy,fullness:hours*2,warmth:hours*Math.max(.2,coldRate(p,w)+(w.coldModifier||0)),xp:hours*2,healthLoss:Math.max(0,(job.hazard||0)-effects.protection),coherenceLoss:Math.max(0,(job.coherence||0)+(mode==='graveyard'?4:0)-effects.coherence),heat:(job.heat||0)+(mode==='graveyard'?3:0),scrap:job.scrap||0,blocked};
 }
 export function recordShift(p,job,quote,day){
   p.careers[job.career].xp+=quote.xp;p.careers[job.career].shifts++;

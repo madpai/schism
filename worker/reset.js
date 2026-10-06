@@ -8,6 +8,8 @@ export async function resetCharacters(db,now=Date.now()){
     await db.batch([
       db.prepare('INSERT INTO maintenance_runs (id,completed,citizens) SELECT ?,?,count(*) FROM citizens').bind(CHARACTER_RESET_ID,now),
       db.prepare('DELETE FROM listings'),
+      db.prepare('DELETE FROM device_offers'),
+      db.prepare('DELETE FROM camp_production WHERE completes>?').bind(now),
       db.prepare('DELETE FROM posts'),
       db.prepare('DELETE FROM journal'),
       // Completed contributions belong to city history; unfinished work must not

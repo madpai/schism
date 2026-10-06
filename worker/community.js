@@ -48,9 +48,9 @@ export async function requestBudget(db,owner,kind,now=Date.now()){
  const row=await communitySql(db,'INSERT INTO request_windows (owner,kind,window,count) VALUES (?,?,?,1) ON CONFLICT(owner,kind) DO UPDATE SET count=CASE WHEN request_windows.window=excluded.window THEN request_windows.count+1 ELSE 1 END,window=excluded.window RETURNING count',owner,kind,minute).first();
  communityNeed(row.count<=limit,'Too many requests. Try again in one minute.',429);
 }
-export const backupTables=['citizens','market','journal','posts','listings','projects','forces','city_activity','maintenance_runs','neural_messages','supply_orders','district_crises','crisis_actions','tenant_blocks','tenant_members','tenant_messages','tenant_transfers','tenant_repairs','recovery_actions','district_news','stair_events','tenant_requests','community_reports','community_hidden','community_mutes'];
+export const backupTables=['device_offers','device_demand','camp_production','citizens','market','journal','posts','listings','projects','forces','city_activity','maintenance_runs','neural_messages','supply_orders','district_crises','crisis_actions','tenant_blocks','tenant_members','tenant_messages','tenant_transfers','tenant_repairs','recovery_actions','district_news','stair_events','tenant_requests','community_reports','community_hidden','community_mutes'];
 export async function exportCity(db){
  const rows=await db.batch(backupTables.map(name=>db.prepare('SELECT * FROM '+name+' LIMIT 10001')));
  communityNeed(rows.every(r=>r.results&&r.results.length<=10000),'City export exceeds the alpha backup limit. Use a database export before proceeding.',409);
- return {format:'schism-city-backup-v1',version:'0.9.0',exportedAt:new Date().toISOString(),tables:Object.fromEntries(backupTables.map((name,i)=>[name,rows[i].results]))};
+ return {format:'schism-city-backup-v1',version:'0.10.0',exportedAt:new Date().toISOString(),tables:Object.fromEntries(backupTables.map((name,i)=>[name,rows[i].results]))};
 }

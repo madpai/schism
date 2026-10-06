@@ -1,5 +1,18 @@
 # SCHISM session handoff — v0.9 invited alpha
 
+
+## Current release: v0.10 workshop, signals and finite custody
+
+This supersedes the older release notes below. Existing characters are retained. The shared local service remains enabled at `http://100.89.1.14:4173`; a pre-upgrade SQLite backup preserves 17 citizens, and ordinary Rowan v010 MCP registration adds an eighteenth. No live character fixture, city reset, injected credits or timestamp advance was used.
+
+Four practical skills, condition-bearing unique PDA/receiver/lamp items, communal repairs, technical job gates/bonuses, finite municipal refurbisher demand, atomic device escrow, additional crafting, comfort/stress, fictional contraband/crashes, explicit scanning, and fixed three-order camp production are implemented. Free camp meal/rest is visible in the first viewport, external billing pauses exactly during custody, and goods replenish actual city stock. Ten built-in generated artworks are integrated; saved prompts/provenance under `art/expansion-*`, 39 embedded WebPs. Original character portrait layers remain intact.
+
+Read [WORKSHOP](docs/WORKSHOP.md) and [V0.10](docs/playtests/V0.10.md). Verification: 584 gameplay assertions, 15 built-Worker API checks, 36 desktop/mobile expansion views (33 ordinary views plus three isolated camp views), ten asset routes, and an ordinary MCP repair/training/functional-use/sale walkthrough on real timers. A 20-citizen/460-request isolated built-Worker load run passed; its 60.74 ms p95 is SQLite lab evidence, not production D1 latency.
+
+Ordinary QA Rowan v010 MCP now has 10 CR, electronics 7 XP, signals 3 XP, wire 1/data 2, tax debt 1 CR and no pending activity. Its PDA was repaired, equipped to recover two traces, then sold for 10 reported credits. A 13 CR / 12 energy technical shift is unlocked and reviewed, but was not started. Its private storage state is `.local-data/alpha-playtest/rowan-v010.json`. Existing Quin and Ada are retained. The isolated read-only camp preview was separate from the city DB and is stopped after QA.
+
+Migration 0009 adds device escrow/demand and camp output. Operator exports include these tables; isolated restore accepts old exports with new tables empty. Preserve existing owner-private Sites access. Actual invited-player identities, public-domain choice, multi-day human balance and production recovery still need follow-through; automated checks do not establish those gates. Publication/source hashes are recorded in `/home/commander/SCHISM_HANDOFF.md` after release to avoid embedding self-referential commit hashes.
+
 Updated October 5, 2026. The owner requested all accepted priorities, a permanently free unheated starting bunkhouse, and publication/documentation/GitHub handoffs before a fresh session. v0.8 implements them. Exact final deployment and matching GitHub source IDs are recorded in `/home/commander/SCHISM_HANDOFF.md` after publication. Leave the same shared local city running; preserve all current characters.
 
 ## Locations and release workflow

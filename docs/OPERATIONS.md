@@ -26,3 +26,5 @@ The utility does **not** restore over production D1. Before a real hosted recove
 The signed local identity adapter strips incoming email headers. Only the exact established QA owner in ignored `.local-data/operator.json` receives the local operator email. This file contains `{ "owner": "local-…" }`, must stay private, and is never shipped. Other browser sessions remain ordinary players. Owner names never confer authorization.
 
 Keep `schism-local.service` active, rebuild before restarting it, and never start another listener on 4173. The same persistent city serves loopback and Tailscale. Never overwrite `.local-data/city.sqlite` or its session key to run tests. Tests and load probes use isolated databases.
+
+v0.10 exports also preserve `device_offers`, `device_demand` and `camp_production`. The isolated restore utility accepts older valid city backups with these new tables initially empty. A pre-v0.10 live-city SQLite backup passed integrity checks with 17 existing citizens. Never restore over the active city or change live clocks to playtest a sentence; camp fixtures and simulated completion belong in isolated databases.

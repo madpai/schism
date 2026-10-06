@@ -1,3 +1,4 @@
+import {workshopState,workshopSnapshot,workshopAction,completeWorkshop,settleEffects,awardSkill,skillWorkBonus,equippedDevice} from './workshop.js';
 import {offerContacts} from './contacts.js';
 import {stairState,stairSnapshot,stairAction,completeStair,shiftMoment,chooseShiftMoment,stairNews,alphaProgress} from './neighborhood.js';
 import {communitySnapshot,communityAction,postingAllowed} from './community.js';
@@ -16,6 +17,8 @@ import { gearCatalog, careerPaths, shiftTypes, specialistJobs, careerState, gear
 const EPOCH = Date.UTC(2026,9,5);
 const clamp = (n, min=0, max=100) => Math.max(min,Math.min(max,n));
 export const goods = {
+  tea:{name:'Salvage tea',price:2,stock:16,description:'A filtered municipal tea ration.',effect:'−10 stress, +4 warmth',icon:'soup'},
+  cigarettes:{name:'Plain cigarettes',price:3,stock:12,description:'Small comfort with a small health cost.',effect:'−12 stress, −0.5 health',icon:'box'},
   bread:{name:'Vat-grown ration',price:3,stock:36,description:'Your daily biomass allowance. It has no previous owner.',effect:'+24 fullness',icon:'bread'},
   soup:{name:'Heated nutrient broth',price:5,stock:24,description:'Warm enough to silence the tremor in your hands.',effect:'+35 fullness · +18 warmth',icon:'soup'},
   coat:{name:'Insulated shroud',price:18,stock:8,description:'Conductive lining. Previous occupant unknown.',effect:'Slows cold exposure',icon:'coat'},
@@ -39,7 +42,7 @@ export function initial(now=Date.now()) {
   return {credits:0,health:78,energy:58,fullness:42,warmth:35,rep:0,heat:0,scrap:0,bread:0,medicine:0,coat:false,housing:'bunk',role:'Unassigned resident',union:false,shifts:0,clock:0,nextRent:24,nextRentAt:now+CITY_DAY_MS,rentDebt:0,rentCycles:0,registered:false,appearance:{...defaultAppearance},residencyVersion:2,joined:now,lastTick:now,evicted:false,business:false,property:false};
 }
 export function settle(data, now=Date.now(),w=world(now)) {
-  const p=residencyState(careerState(citizenForces(structuredClone(data))),now);
+  const p=workshopState(residencyState(careerState(citizenForces(structuredClone(data))),now),w.day);
   if(!p.registered){p.lastTick=now;return p;}
   // Resolve at a precise boundary: completion rewards cannot be used before the shift ends.
   const start=Math.max(p.lastTick,now-168*3600000);
@@ -52,21 +55,27 @@ export function settle(data, now=Date.now(),w=world(now)) {
     const tenantHeat=(w.tenantHeatWindows||[]).some(r=>r.from<=p.lastTick&&p.lastTick<r.until)?.75:0;
     const hours=Math.max(0,(until-p.lastTick)/CITY_HOUR_MS);
     if(!hours)return;
-    const sleeping=p.activity?.action==='rest',working=!!p.activity&&!sleeping;
-    const rate=working?Math.max(.2,coldRate(p,w)+(w.coldModifier||0)):Math.max(.2,livingCold(p)+(w.coldModifier||0)-(w.heating?1:0)-(p.coat?.6:0)-(p.housing!=='street'?tenantHeat:0));
-    const hunger=sleeping?1.5:2;
-    const hungerDamage=Math.max(0,hours-Math.max(0,p.fullness-15)/hunger);
+    const sleeping=p.activity?.action==='rest',working=!!p.activity&&!sleeping,custody=p.camp?.active;
+    const rate=custody?.2:working?Math.max(.2,coldRate(p,w)+(w.coldModifier||0)):Math.max(.2,livingCold(p)+(w.coldModifier||0)-(w.heating?1:0)-(p.coat?.6:0)-(p.housing!=='street'?tenantHeat:0)-(equippedDevice(p,'lamp')?.2:0));
+    const hunger=custody?0:sleeping?1.5:2;
+    const hungerDamage=custody?0:Math.max(0,hours-Math.max(0,p.fullness-15)/hunger);
     const coldDamage=Math.max(0,hours-Math.max(0,p.warmth-15)/rate);
     p.fullness=clamp(p.fullness-hours*hunger);p.warmth=clamp(p.warmth-hours*rate);
     p.health=clamp(p.health-hungerDamage-coldDamage*.5,10,100);
     p.energy=clamp(p.energy+hours*(sleeping?livingSleep(p).sleepRate:working?0:1));p.heat=clamp(p.heat-hours*.25);
-    p.lastTick=until;
+    p.stress=clamp(p.stress-hours*(sleeping?2:.5));p.lastTick=until;
   };
   p.lastTick=start;
-  if(p.activity&&p.activity.endsAt<=now){const a=p.activity;advance(a.endsAt);completeActivity(p);if(a.action==='work'){discoverDistrict(p,'work',a.endsAt,w.day);p.clothingWear=Math.min(100,p.clothingWear+4);if(a.stairContact){districtState(p,w.day);p.district.contacts[a.stairContact]=(p.district.contacts[a.stairContact]||0)+1;}}}
-  advance(now);
-  streetState(p,w.day);districtState(p,w.day);neighborState(p,w.day);stairState(p);const quick=p.errand;finishQuick(p,now,accrueTax);if(quick&&!p.errand){completeDistrictTask(p,quick,w.day);completeStair(p,quick);if(quick.action==='mend_clothes')p.clothingWear=Math.max(0,p.clothingWear-40);}
-  settleBills(p,now);offerContacts(p,w);alphaProgress(p);
+  const boundaries=[p.activity?.endsAt,p.errand?.endsAt,...p.effects.map(x=>x.at)].filter(t=>Number.isFinite(t)&&t<=now).sort((a,b)=>a-b);
+  streetState(p,w.day);districtState(p,w.day);neighborState(p,w.day);stairState(p);
+  for(const boundary of [...new Set(boundaries)]){
+    advance(Math.max(p.lastTick,boundary));
+    if(p.activity&&p.activity.endsAt<=boundary){const a=p.activity;completeActivity(p);if(a.action==='work'){discoverDistrict(p,'work',a.endsAt,w.day);p.clothingWear=Math.min(100,p.clothingWear+4);if(a.skill)awardSkill(p,a.skill,2,world(a.endsAt).day);p.stress=clamp(p.stress+6);if(a.stairContact){districtState(p,w.day);p.district.contacts[a.stairContact]=(p.district.contacts[a.stairContact]||0)+1;}}if(a.action==='rest')p.stress=clamp(p.stress-15);}
+    const quick=p.errand;finishQuick(p,boundary,accrueTax);if(quick&&!p.errand){completeDistrictTask(p,quick,w.day);completeStair(p,quick);completeWorkshop(p,quick,world(quick.endsAt).day);if(quick.action==='mend_clothes'){p.clothingWear=Math.max(0,p.clothingWear-40);awardSkill(p,'tailoring',1,world(quick.endsAt).day);}if(quick.action==='craft')awardSkill(p,quick.id==='bandage'||quick.id==='heatpack'?'tailoring':'electronics',1,world(quick.endsAt).day);if(quick.action==='quick'&&['decode','repair'].includes(quick.id))awardSkill(p,quick.id==='decode'?'signal':'electronics',1,world(quick.endsAt).day);}
+    settleEffects(p,boundary);
+  }
+  advance(now);settleEffects(p,now);workshopState(p,w.day);
+  if(!p.camp?.active)settleBills(p,now);offerContacts(p,w);alphaProgress(p);
   // These fields survive for old saves and UI compatibility, but follow shared time.
   p.clock=Math.max(0,Math.floor((now-EPOCH)/CITY_HOUR_MS));p.nextRent=p.clock+Math.ceil((p.nextRentAt-now)/CITY_HOUR_MS);
   return p;
@@ -136,7 +145,7 @@ export async function snapshot(db,owner,now=Date.now(),context={}){
     all(db,'SELECT l.*,c.name FROM listings l JOIN citizens c ON c.id=l.seller WHERE l.sold=0 ORDER BY l.created DESC LIMIT 30'),
     stmt(db,"SELECT count(*) AS citizens, sum(CASE WHEN json_extract(data,'$.union')=1 THEN 1 ELSE 0 END) AS members FROM citizens WHERE json_extract(data,'$.registered') IS NOT 0").first(),
   ]);
-  return {citizen:{id:c.id,name:c.name,...citizen},world:{...w,now},cityLife:life,appearanceOptions,requirements:institutionRequirements(citizen,now),idFlags:identityFlags(citizen,now),project,forces:force,encounters:encountersFor(citizen),stair:await stairSnapshot(db,citizen,c.id,w),shiftMoment:shiftMoment(citizen,w),neighborhoodNews:await stairNews(db,w),alphaProgress:alphaProgress(citizen),community:await communitySnapshot(db,c.id,w,context),
+  return {citizen:{id:c.id,name:c.name,...citizen},world:{...w,now},cityLife:life,appearanceOptions,requirements:institutionRequirements(citizen,now),idFlags:identityFlags(citizen,now),project,forces:force,encounters:encountersFor(citizen),stair:await stairSnapshot(db,citizen,c.id,w),shiftMoment:shiftMoment(citizen,w),neighborhoodNews:await stairNews(db,w),alphaProgress:alphaProgress(citizen),workshop:await workshopSnapshot(db,citizen,w),community:await communitySnapshot(db,c.id,w,context),
     goods:stock.filter(s=>Object.hasOwn(goods,s.id)).map(s=>({...goods[s.id],id:s.id,stock:s.stock,price:price(s.id,w)})),jobs:Object.entries(jobs).map(([id,j])=>({id,...j,quotes:Object.keys(shiftTypes).map(mode=>jobQuote(citizen,j,mode,w))})),
     equipment:equipmentSnapshot(citizen,stock,w),careers:careerSnapshot(citizen,w),shiftTypes,loadoutEffects:gearEffects(citizen),tenants:await tenantSnapshot(db,c.id,citizen,w),recoveryOptions:life.aftermath.incidents.map(r=>({...r,blocked:recoveryBlocked(citizen,r,w)})),living:livingSnapshot(citizen,w),streetLife:streetSnapshot(citizen,w),districtLife:districtSnapshot(citizen,w),supplyExchange:await supplyOrdersSnapshot(db,{id:c.id,...citizen},w),crisisResponses:crisisOptions(life.crisis.current).map(x=>({...x,blocked:crisisResponseBlocked(citizen,x,w,life.crisis.current)})),network:await all(db,"SELECT m.id,m.citizen,m.channel,m.body,m.created,c.name FROM neural_messages m JOIN citizens c ON c.id=m.citizen WHERE NOT EXISTS(SELECT 1 FROM community_hidden h WHERE h.source='network' AND h.message=m.id) ORDER BY m.created DESC LIMIT 100"),
     log,board:board.map(p=>({id:p.id,citizen:p.citizen,name:p.name,body:p.body,created:p.created,role:JSON.parse(p.data).role})),
@@ -151,6 +160,7 @@ export async function act(db,owner,input,now=Date.now(),context={}){
   need(p.registered||input.action==='register','Register your character at the arrival platform first.');
   need(!p.activity||onDutyActions.has(input.action),`You are busy: ${p.activity?.label}. Wait until it finishes.`);
   need(!p.errand||!timedActions.has(input.action),'Finish your short task before starting another assignment.');
+  need(!p.camp?.active||input.action.startsWith('camp_')||['report','feedback','moderate','network_post'].includes(input.action),'Complete your camp production orders before returning to the city.');
   need(!p.detainedUntil||p.detainedUntil<=now||['tax','rent','tax_reserve','rent_prepay','rent_reclaim','post','network_post','tenant_post','consume','use_craft','relief','report','feedback','moderate'].includes(input.action),'Your sentence is still running. Check your release time.');
   need(now-c.last_action>=650,'Give the city a moment before your next action.');
   await ensureMarket(db,w,life);personalState(p);
@@ -169,6 +179,7 @@ export async function act(db,owner,input,now=Date.now(),context={}){
   const credit=n=>need(p.credits>=n,`You need ${n} credits. You have ${p.credits}.`);
   const job=typeof input.id==='string'&&Object.hasOwn(jobs,input.id)?jobs[input.id]:null;
   switch(input.action){
+    case 'device_find':case 'device_diagnose':case 'device_repair':case 'device_dismantle':case 'device_equip':case 'device_list':case 'device_buy':case 'device_cancel':case 'device_broker':case 'skill_lesson':case 'advanced_craft':case 'hack':case 'checkpoint':case 'restricted_salvage':case 'restricted_steal':case 'comfort_use':case 'comfort_talk':case 'locker_store':case 'locker_take':case 'surrender':case 'camp_work':case 'camp_rest':case 'camp_help':case 'camp_appeal':case 'camp_escape':case 'camp_release':{const result=await workshopAction(db,p,c,input,w,op,crypto.getRandomValues(new Uint32Array(1))[0]/4294967296);message=result.message;immediateTax=result.taxGross||0;extra.push(...result.extra);checks.push(...result.checks);districtContribution(result.metrics||{},result.endsAt||now);break;}
     case 'report':case 'feedback':case 'moderate':{const result=await communityAction(db,c,input,w,op,context);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
     case 'stair_choice':case 'stair_inspect':case 'stair_repair':{const result=await stairAction(db,p,c,input,w,op);message=result.message;extra.push(...result.extra);checks.push(...result.checks);break;}
     case 'shift_choice':message=chooseShiftMoment(p,input,w);break;
@@ -208,7 +219,8 @@ export async function act(db,owner,input,now=Date.now(),context={}){
     case 'appearance':need(validAppearance(input.appearance),'Choose a valid appearance.');p.appearance={...input.appearance};message='The registry replaces your identity scan. Your face is still yours.';break;
     case 'relief':need(p.reliefDay!==w.day,'One emergency meal per citizen each city day.');p.reliefDay=w.day;p.fullness=clamp(p.fullness+24);p.warmth=clamp(p.warmth+10);p.health=Math.max(25,p.health);p.energy=Math.max(20,p.energy);message='A queue, a stamped wrist, and one emergency meal. Enough to work again. Relief is consumed here and cannot be sold.';break;
     case 'tax':credit(Math.max(0,p.taxDebt-p.finance.taxReserve));need(p.taxDebt>0,'You have no unpaid income tax.');{const reserved=Math.min(p.finance.taxReserve,p.taxDebt);p.finance.taxReserve-=reserved;p.credits-=p.taxDebt-reserved;}p.taxPaid+=p.taxDebt;message=`Revenue receives ${p.taxDebt} credits. ${p.taxHold?'Your ID remains flagged until the Registry completes a clearance review.':'Your tax record is current.'}`;p.taxDebt=0;p.taxDeadline=now+CITY_DAY_MS;break;
-    case 'clearance':need(p.taxHold||p.criminalHold,'Your ID has no clearance hold.');need(p.taxDebt===0,'Pay your income tax debt before requesting clearance.');need(p.heat<=20,'Reduce security heat to 20 or below before requesting clearance.');need(!p.detainedUntil||p.detainedUntil<=now,'Serve your sentence first.');hours=p.credits>=2?1:2;energy=p.credits>=2?6:14;if(p.credits>=2)p.credits-=2;if(p.district.flags.registryAdvocate)energy=Math.max(1,energy-2);p.taxHold=false;p.criminalHold=false;message='Your number is finally called. The Registry clears your ID. Factory gates will accept your papers again.';break;
+    case 'clearance':need(p.taxHold||p.criminalHold,'Your ID has no clearance hold.');need(p.taxDebt===0,'Pay your income tax debt before requesting clearance.');need(p.heat<=20,'Reduce security heat to 20 or below before requesting clearance.');need(!p.camp?.active||input.action.startsWith('camp_')||['report','feedback','moderate','network_post'].includes(input.action),'Complete your camp production orders before returning to the city.');
+  need(!p.detainedUntil||p.detainedUntil<=now,'Serve your sentence first.');hours=p.credits>=2?1:2;energy=p.credits>=2?6:14;if(p.credits>=2)p.credits-=2;if(p.district.flags.registryAdvocate)energy=Math.max(1,energy-2);p.taxHold=false;p.criminalHold=false;message='Your number is finally called. The Registry clears your ID. Factory gates will accept your papers again.';break;
     case 'security':requirement('security');need(!p.taxHold&&!p.criminalHold,'Security recruitment requires a cleared ID.');need(!p.security,'You already serve in the security forces.');p.security=true;p.role='Canon security recruit';p.ownedGear.push('securityuniform');p.loadout.body='securityuniform';p.coat=false;message='Thirty shifts and a week in the district. The Canon issues you a badge. You now protect the laws you struggled to survive.';break;
     case 'security_work':need(p.security,'Join the security forces first.');need(!p.taxHold&&!p.criminalHold,'Clear your identity holds before reporting for duty.');hours=3;energy=24;p.credits+=20;p.rep++;p.alignment=clamp(p.alignment+2,-100,100);message='You patrol the rainline. Two incidents closed, twenty credits earned. The district lockdown weakens.';break;
     case 'event_work':{const response=typeof input.id==='string'&&Object.hasOwn(cityResponses,input.id)?cityResponses[input.id]:null;need(response,'Choose a published district response.');need(!p.taxHold&&!p.criminalHold||input.id==='relief','Factory and freight gates require a cleared ID.');need(p.scrap>=(response.scrap||0),'The boiler requires one relay fragment.');p.scrap-=response.scrap||0;hours=response.hours;energy=response.energy;p.credits+=response.pay;p.rep++;message=`Completed ${response.name.toLowerCase()}. Your work changes the district for everyone.`;break;}
@@ -318,7 +330,7 @@ export async function act(db,owner,input,now=Date.now(),context={}){
       need(p.labor.hours+hours<=8,'Eight working hours per city day. Your permit has no hours left.');p.labor.hours+=hours;
     }
     final=scheduleActivity(before,p,{action:input.action,label:input.action==='work'?job.name:input.action==='event_work'?cityResponses[input.id].name:input.action.replaceAll('_',' '),message,now,hours,energy,day:w.day});
-    if(input.action==='work')final.activity.job=input.id;
+    if(input.action==='work'){final.activity.job=input.id;final.activity.skill=skillWorkBonus(p,job).skill;}
     if(taxable)final.activity.taxGross=gross;
     districtContribution(contributionFor(input.action,input,job,hours),final.activity.endsAt);
     message=`Started ${final.activity.label.toLowerCase()}. Finishes in ${hours*15} real minutes. Pay and benefits arrive at completion.`;
