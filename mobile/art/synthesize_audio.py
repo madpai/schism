@@ -22,12 +22,12 @@ for n,(hz,volume,rain) in SCENES.items():
   s.append(hum+machine+noise*rain*.27+low*rain)
  write(n,s,'Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop')
 for n in ['door','footsteps','cloth','mop','coin','beep','washer','buzzer','drain']:
- rng=random.Random(48200+sum(map(ord,n)));duration=1.2 if n in ['footsteps','washer','drain'] else .42;s=[];low=0
+ rng=random.Random(48200+sum(map(ord,n)));duration=.26 if n=='footsteps' else 1.2 if n in ['washer','drain'] else .42;s=[];low=0
  for i in range(int(RATE*duration)):
   t=i/RATE;noise=rng.uniform(-1,1);low=low*.9+noise*.1
   if n=='door': x=(math.sin(math.tau*92*t)+noise*.2)*math.exp(-t*15)*.42
   elif n=='footsteps':
-   pulse=t%0.36;x=(low*1.3+math.sin(math.tau*80*pulse)*.1)*math.exp(-pulse*38)
+   x=(low*.4+math.sin(math.tau*70*t)*.03)*math.exp(-t*24)*min(1,t*80)
   elif n=='coin': x=(math.sin(math.tau*1730*t)+math.sin(math.tau*2620*t)*.5)*math.exp(-t*23)*.2
   elif n=='beep': x=math.sin(math.tau*680*t)*.12 if .015<t<.18 else 0
   elif n=='buzzer':x=(math.sin(math.tau*125*t)+math.sin(math.tau*250*t)*.6)*math.exp(-t*9)*.16
@@ -35,5 +35,5 @@ for n in ['door','footsteps','cloth','mop','coin','beep','washer','buzzer','drai
   elif n=='drain': x=(noise*.1+low*.9)*math.sin(math.pi*t/duration)*.4
   else:x=noise*math.sin(math.pi*t/duration)*(.10 if n=='cloth' else .14)
   s.append(x)
- write(n,s,'Original tactile '+n+' effect')
+ write(n,s,'Single soft 260 ms travel contact; no repeated steps' if n=='footsteps' else 'Original tactile '+n+' effect')
 (Path(__file__).parent/'audio-provenance.json').write_text(json.dumps({'generator':'synthesize_audio.py','seed_family':48193,'assets':manifest},indent=2)+'\n')

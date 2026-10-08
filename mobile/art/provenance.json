@@ -1,5 +1,5 @@
 {
-  "pipeline_version": 1,
+  "pipeline_version": 2,
   "style": "SCHISM PSX municipal / green fluorescent + amber practical / portrait 2:3",
   "reproducibility": "Prompts preserve intent; exact committed images and hashes reproduce builds. Generation itself is nondeterministic. Object animation and overlays are native Godot code.",
   "assets": [
@@ -694,6 +694,144 @@
         }
       ],
       "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "backpack",
+      "version": 1,
+      "file": "assets/objects/backpack-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-dfd9e5c4-7ad0-472a-b232-9882060e488d.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "21e2ee7573aed256590d7d27771f5e5a0a172f9cac2505eacae3c98b805e1a9e",
+      "prompt": "art/prompts/backpack-v1.txt",
+      "prompt_sha256": "fd5af1605c0c1d03f7bf1b4af385dfc5d4a2dd5fd9e4d44e4f61c9aebc59a4d5",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "references": [
+        {
+          "file": "assets/scenes/room-v1.png",
+          "sha256": "6abb928ce877801a92fc49705da8865aaf08669f461b5f6c51ab136ceecb6004"
+        }
+      ],
+      "composition": "First-person empty open canvas backpack. Fixed civic paper/key remain scenery. 4 real carried instances per page.",
+      "hotspots": [
+        {
+          "id": "compartment",
+          "rect": [
+            0.2,
+            0.26,
+            0.6,
+            0.49
+          ]
+        }
+      ],
+      "review": "Visually inspected: consistent coarse PSX geometry/textures, matching green fluorescent palette, legible silhouettes. Original outputs retained; runtime atlas regions and shaders define states."
+    },
+    {
+      "id": "objects",
+      "version": 1,
+      "file": "assets/objects/objects-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-0745de7b-cf9f-47f9-9cf2-075358d9a058.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "65a891fd57b8866752682b4bc7eca2c6cadc71e35cbbd878cb2980398ac1b7e5",
+      "prompt": "art/prompts/objects-v1.txt",
+      "prompt_sha256": "ecce7773f5db48f86869166798dfdd04f514e4bee04d674906ba08a90b0a869e",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "references": [
+        {
+          "file": "assets/scenes/room-v1.png",
+          "sha256": "6abb928ce877801a92fc49705da8865aaf08669f461b5f6c51ab136ceecb6004"
+        }
+      ],
+      "composition": "4\u00d74 transparent object atlas. Authored cell order in data/objects.json; isolate via AtlasTexture without modifying source pixels.",
+      "hotspots": [],
+      "review": "Visually inspected: consistent coarse PSX geometry/textures, matching green fluorescent palette, legible silhouettes. Original outputs retained; runtime atlas regions and shaders define states."
+    },
+    {
+      "id": "laundry-empty",
+      "version": 2,
+      "file": "assets/scenes/laundry-empty-v2.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-3363e018-f4a9-4669-932c-669180cf3a86.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "586b96d8f63ca156381b8768cef6114f7fbc64d5d5400d2f1a3eec48d85cf2a8",
+      "prompt": "art/prompts/laundry-empty-v2.txt",
+      "prompt_sha256": "cc6b6a1eb0ed7347d088813299283247beeda0e639651a11e72072f06dedaedd",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "references": [
+        {
+          "file": "assets/scenes/laundry-v1.png",
+          "sha256": "2134a96e5ab6dfed33e75ac916a8014da658679dc1fbc561fce818ab6b0ffd31"
+        }
+      ],
+      "composition": "Same closed washer and architecture. Empty incoming cart. Runtime composites original pile by remaining uniform count.",
+      "hotspots": [],
+      "review": "Visually inspected: consistent coarse PSX geometry/textures, matching green fluorescent palette, legible silhouettes. Original outputs retained; runtime atlas regions and shaders define states."
+    },
+    {
+      "id": "laundry-open",
+      "version": 2,
+      "file": "assets/scenes/laundry-open-v2.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-58a04510-c716-4052-b5d0-d87813171268.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "b757dd1c0d77109b8c87b73e6069350767e0c0424e849df00b9ae8729e9b5098",
+      "prompt": "art/prompts/laundry-open-v2.txt",
+      "prompt_sha256": "e7c0f21d4dfec689ddd69e16090eef1335e608c8f9e6bcfa0bcd7c7ae3a41199",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "references": [
+        {
+          "file": "assets/scenes/laundry-empty-v2.png",
+          "sha256": "586b96d8f63ca156381b8768cef6114f7fbc64d5d5400d2f1a3eec48d85cf2a8"
+        }
+      ],
+      "composition": "Same empty incoming cart; industrial door opens left. Same main scene hotspots.",
+      "hotspots": [],
+      "review": "Visually inspected: consistent coarse PSX geometry/textures, matching green fluorescent palette, legible silhouettes. Original outputs retained; runtime atlas regions and shaders define states."
+    },
+    {
+      "id": "laundry-running",
+      "version": 2,
+      "file": "assets/scenes/laundry-running-v2.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-56139afb-a74d-43d4-b10d-ac4831548506.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "71860808ea129535c6446b9e9d1dfc3e33be7c70767f6138a1fd9225312f69b4",
+      "prompt": "art/prompts/laundry-running-v2.txt",
+      "prompt_sha256": "da75dd07746dfe40da8252c4f45a6e4706575b692b81c593fc11ba33380b891e",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "references": [
+        {
+          "file": "assets/scenes/laundry-empty-v2.png",
+          "sha256": "586b96d8f63ca156381b8768cef6114f7fbc64d5d5400d2f1a3eec48d85cf2a8"
+        }
+      ],
+      "composition": "Same empty carts and closed door. Damp uniforms behind glass; shader rotates only the glass ellipse.",
+      "hotspots": [],
+      "review": "Visually inspected: consistent coarse PSX geometry/textures, matching green fluorescent palette, legible silhouettes. Original outputs retained; runtime atlas regions and shaders define states."
     }
   ]
 }

@@ -18,10 +18,16 @@ func scene(id: String,sound: bool) -> void:
  if ResourceLoader.exists(path):
   ambient.stream = load(path); ambient.stream.loop_mode = AudioStreamWAV.LOOP_FORWARD; ambient.play()
 
+func travel(location: String) -> void:
+ # One soft cue; no repeated footstep loop or stacked door/step sound at every hop.
+ play("footsteps" if location=="street" else "door")
+
 func play(id: String) -> void:
  if not enabled: return
  var path = "res://assets/audio/"+id+".wav"
- if ResourceLoader.exists(path): effects.stream = load(path); effects.play()
+ if ResourceLoader.exists(path):
+  effects.volume_db = -27 if id=="footsteps" else -23 if id=="door" else -12
+  effects.stream = load(path); effects.play()
 
 func _exit_tree() -> void:
  if ambient: ambient.stop(); ambient.stream = null

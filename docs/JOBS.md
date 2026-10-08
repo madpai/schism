@@ -11,3 +11,5 @@ Each role stores completed shifts, quality, warnings, trust and appointment inde
 Shift IDs, resolved pockets, selected treatment, machine stage, settlement receipt and output events persist. Settlement is idempotent. A future authority verifies commands and issues output once; UI never computes pay.
 
 The incoming laundry cart now shows four large garment targets in two columns. Sorted uniforms become unavailable on the rack. Label and pocket close-ups retain the large contextual tap alternatives; there is no precision drag requirement.
+
+Laundry presentation now follows saved work: uniforms disappear from the scene cart as they are sorted; the hatch-open artwork shows the drum; closed running art and masked clothes motion show the cycle; a raster folded load appears at outgoing dispatch. The animation is cosmetic and never advances an extra transaction.

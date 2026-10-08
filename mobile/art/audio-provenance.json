@@ -105,12 +105,12 @@
     {
       "id": "footsteps",
       "file": "assets/audio/footsteps.wav",
-      "sha256": "1030561595f990a26598a027d2f1ecd4645ea92070f24645e0ae0416cb808c13",
+      "sha256": "981fa24a7e53f698bbf28deb7088d8576901ff539f25f84533a944e46c97ba62",
       "license": "Original project asset; repository owner controls distribution",
       "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
-      "description": "Original tactile footsteps effect",
+      "description": "Single soft 260 ms travel contact; no repeated steps",
       "rate": 22050,
-      "duration": 1.2
+      "duration": 0.26
     },
     {
       "id": "cloth",

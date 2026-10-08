@@ -1,6 +1,7 @@
 extends Control
 
 const Sim = preload("res://src/simulation.gd")
+const Visual = preload("res://src/presentation.gd")
 const Prop = preload("res://src/prop.gd")
 const Atmosphere = preload("res://src/environment.gd")
 const Sound = preload("res://src/audio.gd")
@@ -21,6 +22,9 @@ var pending_notices: Array = []
 var official: Font
 var human: Font
 var animation_clock = 0.0
+var sheet_title = ""
+var sheet_style = ""
+var bag_page = 0
 
 func _ready() -> void:
  official = load("res://assets/fonts/municipal.ttf")
@@ -77,11 +81,19 @@ func _render_world() -> void:
  area.clip_contents = true
  var texture = TextureRect.new(); texture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; texture.stretch_mode = TextureRect.STRETCH_SCALE
  var path = "res://assets/scenes/"+data.asset
+ var laundry_visual = {}
+ if location=="laundry":
+  laundry_visual = Visual.laundry_state(s); path = laundry_visual.asset
  if ResourceLoader.exists(path): texture.texture = load(path)
  texture.mouse_filter = Control.MOUSE_FILTER_IGNORE
  var material = ShaderMaterial.new(); material.shader = load("res://shaders/recovered.gdshader")
  if not s.settings.effects: material.set_shader_parameter("instability",0); material.set_shader_parameter("tracking",0)
- texture.material = material; area.add_child(texture)
+ if location=="laundry":
+  var art = Visual.data().laundry
+  material.set_shader_parameter("full_cart",load(art.full)); material.set_shader_parameter("cart_remaining",laundry_visual.remaining)
+  material.set_shader_parameter("cart_rect",Vector4(art.cart_rect[0],art.cart_rect[1],art.cart_rect[2],art.cart_rect[3]))
+  material.set_shader_parameter("running",laundry_visual.running); material.set_shader_parameter("motion",1.0 if s.settings.effects else 0.0)
+ texture.name = "scene_art"; texture.material = material; area.add_child(texture)
  var environment = Atmosphere.new(); environment.location = location; environment.state = s; environment.enabled = s.settings.effects; environment.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); area.add_child(environment)
  for hotspot in data.hotspots:
   var rect = hotspot.rect
@@ -164,21 +176,27 @@ func _label(text: String,points: int=23) -> Label:
  return label
 
 func _button(text: String,callback: Callable) -> Button:
- var b = Button.new(); b.text = text; b.custom_minimum_size = Vector2(0,64); b.pressed.connect(callback)
+ var b = Button.new(); b.text = text; b.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART; b.custom_minimum_size = Vector2(0,64); b.pressed.connect(callback)
  return b
 
-func _sheet(title: String) -> void:
+func _sheet(title: String,style: String="") -> void:
  _close_sheet()
- modal = Control.new(); modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(modal)
+ sheet_title = title; sheet_style = style
+ modal = Control.new(); modal.name = "interaction_sheet"; modal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(modal)
  var shade = ColorRect.new(); shade.color = Color(0,0,0,.58); shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); modal.add_child(shade)
- var panel = PanelContainer.new(); panel.position = Vector2(10,maxf(92,size.y*.19)); panel.size = Vector2(size.x-20,size.y-panel.position.y-12); modal.add_child(panel)
- panel.add_theme_stylebox_override("panel",_box(Color("17231a"),Color("7b8061"),2))
- var outer = VBoxContainer.new(); outer.add_theme_constant_override("separation",12); panel.add_child(outer)
+ # Plain Panel cannot grow to the minimum width of a long button. Content scrolls inside it.
+ var panel = Panel.new(); panel.name = "sheet_panel"; panel.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ panel.offset_left = 10; panel.offset_right = -10; panel.offset_top = maxf(92,size.y*.14); panel.offset_bottom = -12; modal.add_child(panel)
+ panel.add_theme_stylebox_override("panel",_box(Color("111911"),Color("66634b"),1))
+ var margin = MarginContainer.new(); margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+ for edge in ["left","right","top","bottom"]: margin.add_theme_constant_override("margin_"+edge,12)
+ panel.add_child(margin)
+ var outer = VBoxContainer.new(); outer.add_theme_constant_override("separation",10); margin.add_child(outer)
  var row = HBoxContainer.new(); outer.add_child(row)
- var heading = _label(title,27); heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(heading)
+ var heading = _label(title,24); heading.name = "sheet_heading"; heading.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(heading)
  var close = _button("×",_close_sheet); close.name = "close_sheet"; close.custom_minimum_size.x = 64; row.add_child(close)
- var scroll = ScrollContainer.new(); scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; outer.add_child(scroll)
- sheet_body = VBoxContainer.new(); sheet_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sheet_body.add_theme_constant_override("separation",13); scroll.add_child(sheet_body)
+ var scroll = ScrollContainer.new(); scroll.name = "sheet_scroll"; scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; outer.add_child(scroll)
+ sheet_body = VBoxContainer.new(); sheet_body.name = "sheet_body"; sheet_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sheet_body.add_theme_constant_override("separation",12); scroll.add_child(sheet_body)
 
 func _close_sheet() -> void:
  if modal and is_instance_valid(modal): remove_child(modal); modal.queue_free()
@@ -288,12 +306,12 @@ func _hotspot(id: String) -> void:
 func _travel(target: String) -> void:
  _close_sheet()
  if not Session.state.shift.is_empty(): _do({"action":"travel","to":target}); return
- busy = true; audio.play("door")
+ busy = true
  var veil = ColorRect.new(); veil.color = Color(0,0,0,0); veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(veil)
  var tween = create_tween(); tween.tween_property(veil,"color:a",1.0,.14)
  await tween.finished
  busy = false; _do({"action":"travel","to":target})
- audio.play("footsteps")
+ audio.travel(Session.state.location)
  var fade = create_tween(); fade.tween_property(veil,"color:a",0.0,.2); fade.tween_callback(veil.queue_free)
 
 func _status() -> void:
@@ -332,15 +350,35 @@ func _inventory() -> Array:
  return Session.state.items.filter(func(item): return item.owner=="player" and item.get("storage","bag")=="bag")
 
 func _bag() -> void:
- _sheet("WHAT YOU CARRY")
- _body("%d CR  /  Each object has a previous life."%int(Session.state.credits),20)
+ _sheet("YOUR BAG")
+ _body("%d CR / Civic paper. Room key. Whatever else you kept."%int(Session.state.credits),19)
  var items = _inventory()
- if items.is_empty(): _body("Your pockets are empty. Your civic paper and room key are all you came with.")
- for item in items:
-  var card = _button(item.label+"  /  "+item.serial,func(): _item_sheet(item.id)); sheet_body.add_child(card)
- if Session.state.location=="room":
-  for kind in Session.state.room_upgrades:
-   var b = _button(kind.to_upper()+"  /  in your room",func(): _possession(kind)); sheet_body.add_child(b)
+ bag_page = clampi(bag_page,0,maxi(0,int(ceil(items.size()/4.0))-1))
+ var surface = Control.new(); surface.name = "backpack_interior"; surface.custom_minimum_size.y = 380; surface.clip_contents = true; sheet_body.add_child(surface)
+ var lining = TextureRect.new(); lining.texture = load(Visual.data().backpack.asset); lining.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; lining.stretch_mode = TextureRect.STRETCH_SCALE; lining.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); lining.mouse_filter = Control.MOUSE_FILTER_IGNORE; surface.add_child(lining)
+ for index in range(bag_page*4,mini(items.size(),bag_page*4+4)):
+  var item = items[index]; var slot = index%4
+  var card = _button("",func(): _item_sheet(item.id)); card.name = "bag_item_"+item.id
+  card.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+  card.anchor_left = .19+(slot%2)*.31; card.anchor_right = card.anchor_left+.30
+  card.anchor_top = .25+int(slot/2)*.25; card.anchor_bottom = card.anchor_top+.24
+  card.custom_minimum_size = Vector2(64,82)
+  card.add_theme_stylebox_override("normal",StyleBoxEmpty.new()); card.add_theme_stylebox_override("hover",_box(Color(.65,.63,.4,.08),Color(.8,.8,.6,.3)))
+  var object = Prop.new(); object.kind = item.kind; object.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); object.offset_bottom = -24; card.add_child(object)
+  var name_tag = _label(item.label,16); name_tag.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_WIDE); name_tag.offset_top = -28; name_tag.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+  name_tag.mouse_filter = Control.MOUSE_FILTER_IGNORE; name_tag.add_theme_color_override("font_shadow_color",Color.BLACK); name_tag.add_theme_constant_override("shadow_offset_y",2); card.add_child(name_tag)
+  card.tooltip_text = item.label+" / "+item.serial; surface.add_child(card)
+ if items.is_empty(): _body("The main compartment is empty. Just the paper and key in the side pocket.",20)
+ else:
+  _body("Tap an object to take a closer look.",18)
+  # Readable tap alternatives do not require recognising an unfamiliar object silhouette.
+  for index in range(bag_page*4,mini(items.size(),bag_page*4+4)):
+   var item = items[index]; var label = _button(item.label+" / "+item.serial,func(): _item_sheet(item.id)); sheet_body.add_child(label)
+ if items.size()>4:
+  var pages = HBoxContainer.new(); sheet_body.add_child(pages)
+  for direction in [-1,1]:
+   var button = _button("Previous pocket" if direction<0 else "Look deeper",func(): bag_page += direction; _bag()); button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+   button.disabled = bag_page+direction<0 or (bag_page+direction)*4>=items.size(); pages.add_child(button)
 
 func _item_sheet(id: String) -> void:
  var item = Sim._find(Session.state,id)
@@ -382,13 +420,20 @@ func _prop(kind: String,height: int=160,caption: String="") -> Control:
  var prop = Prop.new(); prop.kind = kind; prop.caption = caption; prop.custom_minimum_size = Vector2(0,height); sheet_body.add_child(prop); return prop
 
 func _touch_prop(prop: Control,zone: Rect2,label: String,cmd: Dictionary,next: Callable=Callable()) -> void:
- var button = Button.new(); button.text = label; button.add_theme_font_size_override("font_size",18)
- button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
- button.anchor_left = zone.position.x; button.anchor_top = zone.position.y
- button.anchor_right = zone.end.x; button.anchor_bottom = zone.end.y
+ var button = Button.new(); button.text = label if Session.state.settings.hints else ""; button.add_theme_font_size_override("font_size",16)
  button.custom_minimum_size = Vector2(64,64)
- button.add_theme_stylebox_override("normal",_box(Color(.06,.1,.065,.68),Color(.7,.72,.5,.5)))
- button.pressed.connect(func(): _do(cmd,next)); prop.add_child(button)
+ button.add_theme_stylebox_override("normal",StyleBoxEmpty.new())
+ button.add_theme_stylebox_override("hover",_box(Color(.7,.7,.5,.04),Color(.7,.7,.5,.2)))
+ button.add_theme_stylebox_override("pressed",_box(Color(.7,.7,.5,.12),ACCENT))
+ button.add_theme_color_override("font_shadow_color",Color.BLACK); button.add_theme_constant_override("shadow_offset_y",2)
+ # Zones are relative to the painted raster, including aspect-fit margins, not a vector silhouette.
+ var fit = func():
+  var art = prop.artwork_rect()
+  button.position = art.position+zone.position*art.size
+  button.size = Vector2(maxf(64,zone.size.x*art.size.x),maxf(64,zone.size.y*art.size.y))
+  button.position.x = clampf(button.position.x,0,maxf(0,prop.size.x-button.size.x))
+  button.position.y = clampf(button.position.y,0,maxf(0,prop.size.y-button.size.y))
+ prop.resized.connect(fit); button.pressed.connect(func(): _do(cmd,next)); prop.add_child(button); fit.call_deferred()
 
 func _possession(kind: String) -> void:
  if kind=="fridge": _storage("fridge"); return
@@ -401,7 +446,7 @@ func _possession(kind: String) -> void:
   else: _body("A tin of tea from the kiosk would make an evening of it.")
 
 func _vacancies() -> void:
- _sheet("WINDOW 3  /  RESIDENT WORK AUTHORIZATION")
+ _sheet("WINDOW 3 / WORK AUTHORIZATION")
  if not Session.state.id_shown:
   _body("The papers are behind glass. The clerk wants a ticket and your civic identification first."); return
  _body('“Three vacancies. All temporary.”',22)
@@ -487,11 +532,11 @@ func _washer() -> void:
  var prop = _prop("washer",270)
  if s.shift.is_empty(): _body("The machine is quiet. Today's uniforms are in the incoming cart."); return
  var w = s.shift; prop.hatch_open = w.get("hatch_open",false); prop.active = w.stage=="washed"
- if w.stage=="inspect": _touch_prop(prop,Rect2(.22,.35,.56,.49),"HATCH",{"action":"open_hatch"},_washer)
+ if w.stage=="inspect": _touch_prop(prop,Rect2(.42,.35,.52,.40),"HATCH",{"action":"open_hatch"},_washer)
  if w.stage=="prepare":
-  if w.hatch_open: _touch_prop(prop,Rect2(.04,.05,.23,.22),"DOSE",{"action":"dose"},_washer)
-  else: _touch_prop(prop,Rect2(.23,.4,.55,.39),"START",{"action":"start_wash"},_wash_animation)
- if w.stage=="washed": _touch_prop(prop,Rect2(.23,.4,.55,.39),"HANDLE",{"action":"unload"},_washer)
+  if w.hatch_open: _touch_prop(prop,Rect2(.28,.025,.20,.20),"DOSE",{"action":"dose"},_washer)
+  else: _touch_prop(prop,Rect2(.42,.35,.52,.40),"START",{"action":"start_wash"},_wash_animation)
+ if w.stage=="washed": _touch_prop(prop,Rect2(.42,.35,.52,.40),"HANDLE",{"action":"unload"},_washer)
  match w.stage:
   "inspect":
    _body("CAPACITY: 4 UNIFORMS\nTwo measured doses. Oil: hot wash. Blood: sanitize. Ordinary dirt: standard.",22)
@@ -524,7 +569,7 @@ func _outgoing() -> void:
  _sheet("OUTGOING TEXTILE CART")
  if Session.state.shift.is_empty(): _body("Empty. Every coat has gone back to somebody else."); return
  var w = Session.state.shift
- _prop("uniform",180,"FOLDED LOAD" if w.stage in ["folded","receipt"] else "AWAITING LOAD")
+ _prop("folded",180,"FOLDED LOAD" if w.stage in ["folded","receipt"] else "AWAITING LOAD")
  if w.stage=="folded": _action("Place folded uniforms in the outgoing cart",{"action":"dispatch"},_outgoing)
  elif w.stage=="receipt": _action("Slide your timecard into the pay terminal",{"action":"settle_shift"})
  else: _body("Wet or unfolded uniforms are not accepted.")
@@ -629,7 +674,7 @@ func _settings() -> void:
  _body("Your life is saved after every action. Pausing or closing SCHISM freezes personal time.",21)
  for pair in [["sound","Machine soundscape"],["effects","Analog instability"],["hints","Object labels"]]:
   _action(pair[1]+" / "+("ON" if Session.state.settings[pair[0]] else "OFF"),{"action":"setting","key":pair[0],"value":not Session.state.settings[pair[0]]},_settings)
- _body("SCHISM 0.2 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
+ _body("SCHISM 0.3 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
  var save = _button("Save and put the phone down",func(): Session.flush(); _close_sheet()); sheet_body.add_child(save)
 
 func _notification(what: int) -> void:

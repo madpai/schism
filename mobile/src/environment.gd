@@ -33,17 +33,9 @@ func _draw() -> void:
     var mark = Vector2(w*(.34+n*.065),h*(.74+float(n%2)*.04))
     draw_circle(mark,w*.016,Color(.25,.2,.14,.6))
  if location=="laundry" and not state.get("shift",{}).is_empty():
-  var shift = state.shift
-  if shift.get("hatch_open",false):
-   var center = Vector2(w*.49,h*.475)
-   draw_circle(center,minf(w*.085,h*.06),Color("0b1510"))
-   draw_arc(center+Vector2(-w*.12,0),w*.085,0,TAU,8,Color("969782"),7)
-  if shift.stage=="washed":
-   for i in range(6):
-    var angle = clock*2+float(i)*TAU/6
-    draw_circle(Vector2(w*.59,h*.475)+Vector2(cos(angle)*w*.04,sin(angle)*h*.03),w*.013,Color(.53,.62,.52,.6))
-  if shift.stage in ["wet","dry","folded","receipt"]:
-   draw_rect(Rect2(w*.78,h*.53,w*.17,h*.09),Color("78816b"))
+  if state.shift.stage in ["folded","receipt"]:
+   var cloth = preload("res://src/presentation.gd").object_texture("folded")
+   if cloth: draw_texture_rect(cloth,Rect2(w*.82,h*.49,w*.17,h*.13),false)
  if location=="cleaning" and not state.get("shift",{}).is_empty():
   for area in state.shift.get("cleaned",[]):
    if area=="floor": draw_colored_polygon(PackedVector2Array([Vector2(w*.25,h*.8),Vector2(w*.7,h*.74),Vector2(w*.85,h*.86),Vector2(w*.37,h*.92)]),Color(.46,.54,.44,.18))

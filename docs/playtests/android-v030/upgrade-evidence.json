@@ -1,0 +1,27 @@
+{
+  "previous_version": "0.2.0",
+  "version": "0.3.0",
+  "schema": 4,
+  "apk_sha256": "531fa7fc72e85d374b01393226688f2f8430858ca1aff4d990ab056307204083",
+  "all_simulation_fields_preserved": true,
+  "steps": [
+    {
+      "assertion": "existing 0.2.0 QA citizen available for real in-place update",
+      "ok": true
+    },
+    {
+      "assertion": "0.2.0 to 0.3.0 update preserves every simulation field without migration or reset",
+      "ok": true
+    },
+    {
+      "assertion": "home + force-stop/relaunch preserves every simulation field; no offline decay",
+      "ok": true
+    }
+  ],
+  "retained": {
+    "credits": 6,
+    "employment": "laundry",
+    "completed_laundry_shifts": 1.0,
+    "owned_items": 1
+  }
+}

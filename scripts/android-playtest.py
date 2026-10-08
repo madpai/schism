@@ -3,7 +3,7 @@
 import argparse,csv,hashlib,io,json,os,re,subprocess,time
 from pathlib import Path
 from PIL import Image
-p=argparse.ArgumentParser();p.add_argument('--device',required=True);p.add_argument('--resume-arrival',action='store_true');p.add_argument('--verify-resume',action='store_true');p.add_argument('--adb',default=os.environ.get('ADB','adb'));p.add_argument('--output',default='docs/playtests/android');args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--device',required=True);p.add_argument('--presentation',action='store_true');p.add_argument('--resume-arrival',action='store_true');p.add_argument('--verify-resume',action='store_true');p.add_argument('--adb',default=os.environ.get('ADB','adb'));p.add_argument('--output',default='docs/playtests/android');args=p.parse_args()
 if not args.device.startswith('emulator-'):raise SystemExit('This automated QA script is restricted to an isolated emulator.')
 ADB=[args.adb,'-s',args.device];PACKAGE='org.schism.districtix';OUT=Path(args.output);OUT.mkdir(parents=True,exist_ok=True)
 scenes=json.loads(Path('mobile/data/scenes.json').read_text())['scenes'];steps=[]
@@ -53,7 +53,7 @@ def click(text,scroll=True,button_only=False):
     offset+=length+1
    left=min(int(v['left']) for v in matched);right=max(int(v['left'])+int(v['width']) for v in matched)
    top=min(int(v['top']) for v in matched);bottom=max(int(v['top'])+int(v['height']) for v in matched);x=(left+right)//2;y=(top+bottom)//2
-   adb('shell','input','tap',str(x),str(y));time.sleep(.13);steps.append({'touch':text,'point':[x,y]});print('TOUCH:',text,flush=True);return
+   adb('shell','input','tap',str(x),str(y));time.sleep(.65);steps.append({'touch':text,'point':[x,y]});print('TOUCH:',text,'at',x,y,flush=True);return
   if scroll:adb('shell','input','swipe','850','1900','850','750','220')
   time.sleep(.4)
  shot('FAILED-'+re.sub(r'\W+','-',text));raise AssertionError(f'Cannot find {text}: {lines()}')
@@ -63,7 +63,7 @@ def hotspot(name):
  # Portrait canvas uses width scaling, expanding logical height.
  raw=adb('shell','wm','size');w,h=map(int,re.findall(r'(\d+)x(\d+)',raw)[-1]);scale=w/480
  x=int((rect[0]+rect[2]/2)*w);y=int(100*scale+(rect[1]+rect[3]/2)*(h-222*scale))
- adb('shell','input','tap',str(x),str(y));time.sleep(.45);steps.append({'hotspot':name,'point':[x,y]});print('OBJECT:',name,flush=True)
+ adb('shell','input','tap',str(x),str(y));time.sleep(.65);steps.append({'hotspot':name,'point':[x,y]});print('OBJECT:',name,flush=True)
 def check(ok,label):
  if not ok:shot('FAILED-state');raise AssertionError(label)
  steps.append({'assertion':label,'ok':True});print('PASS:',label,flush=True)
@@ -77,6 +77,21 @@ def launch():
 def interruption():
  old=state();adb('shell','input','keyevent','3');time.sleep(.3);adb('shell','am','force-stop',PACKAGE);time.sleep(.2);launch();new=state()
  check(old==new,'home + force-stop/relaunch preserves every simulation field; no offline decay')
+def bureau_presentation():
+ old=state()
+ for w,h in [(360,640),(390,844),(1080,2400)]:
+  adb('shell','wm','size',f'{w}x{h}');adb('shell','wm','density','160' if w<600 else '420');time.sleep(2)
+  close();hotspot('vacancies');shot(f'bureau-top-{w}x{h}')
+  for job in ['Municipal Laundry','Civic Sanitation','Freight Sorter']:
+   for attempt in range(5):
+    visible=' '.join(line[0].lower() for line in lines())
+    if job.lower() in visible:break
+    adb('shell','input','swipe',str(int(w*.80)),str(int(h*.80)),str(int(w*.80)),str(int(h*.40)),'220');time.sleep(.4)
+   check(job.lower() in visible,f'{w}x{h}: {job} paper is readable through bounded scrolling')
+  shot(f'bureau-bottom-{w}x{h}')
+ adb('shell','wm','size','reset');adb('shell','wm','density','reset');time.sleep(2);close();hotspot('vacancies')
+ check(old==state(),'reading all bureau papers at three sizes changes no citizen state')
+
 def laundry(interrupt=False):
  hotspot('cart');click('Pull the cart');shot('garment-cart')
  for n in range(4):
@@ -85,10 +100,25 @@ def laundry(interrupt=False):
   if u['found']:
    shot('found-object');click('Place in Lost Property');hotspot('cart');click(f'UNIFORM {n+1:02}')
   click(u['type'].upper(),button_only=True)
- close();hotspot('washer');click('Pull the hatch');click('Lift the sorted');click('Tip one measured');click('Tip one measured')
+  if args.presentation and n==1:close();shot('cart-half-empty');hotspot('cart')
+ close();
+ if args.presentation:shot('cart-empty')
+ hotspot('washer');click('Pull the hatch')
+ if args.presentation:close();shot('washer-open-scene');hotspot('washer')
+ click('Lift the sorted');click('Tip one measured');click('Tip one measured')
  if interrupt:interruption();hotspot('washer');shot('resumed-washer')
  expected={'dirt':'STANDARD','oil':'HOT','blood':'SANITIZE'}[state()['shift']['uniforms'][0]['stain']]
- click(expected,button_only=True);click('Push the hatch');click('Press the green');time.sleep(1.3);click('Open the hatch and');click('Hang the bundle');click('Fold sleeves');click('Place folded');click('Slide your timecard');shot('wage-slip')
+ click(expected,button_only=True);click('Push the hatch');click('Press the green');time.sleep(1.3)
+ if args.presentation:
+  close();first=shot('washer-running-a');time.sleep(.6);second=shot('washer-running-b')
+  from PIL import ImageChops,ImageStat
+  a=Image.open(first).convert('RGB');b=Image.open(second).convert('RGB');width,height=a.size;scale=width/480;top=100*scale;area=height-222*scale
+  region=(int(width*.47),int(top+area*.39),int(width*.70),int(top+area*.55))
+  delta=ImageChops.difference(a.crop(region),b.crop(region));rms=sum(ImageStat.Stat(delta).rms)/3
+  check(rms>5,'rendered washer glass changes between actual running frames')
+  steps.append({'measurement':'washer-glass RGB RMS frame difference','value':rms,'region':region})
+  hotspot('washer')
+ click('Open the hatch and');click('Hang the bundle');click('Fold sleeves');click('Place folded');click('Slide your timecard');shot('wage-slip')
  check(state()['last_receipt']['quality']==100 and not state()['shift'],'touch-only laundry completes quality and settlement')
  click('Fold the wage')
 
@@ -101,11 +131,18 @@ if not args.verify_resume:
  if not initial or not initial['identity']['registered']:click('Sign the residency')
  click('Fold the paper')
  check(state()['identity']['registered'] and state()['credits']==4,'arrival identity and 4 CR persist')
- shot('room');hotspot('sink');click('Cup your hands');hotspot('door');hotspot('stairs');shot('street');hotspot('bureau');shot('bureau');hotspot('ticket');click('Put the paper');hotspot('clerk');click('Slide your civic');shot('vacancies');click('Sign Municipal Laundry')
+ shot('room');hotspot('sink');click('Cup your hands');hotspot('door');hotspot('stairs');shot('street');hotspot('bureau');shot('bureau');hotspot('ticket');click('Put the paper');hotspot('clerk');click('Slide your civic');shot('vacancies')
+ if args.presentation:bureau_presentation()
+ click('Sign Municipal Laundry')
  check(state()['employment']=='laundry','bureau ticket/ID/authorization touch path')
  hotspot('exit');hotspot('laundry');shot('laundry');laundry(True)
  check(state()['credits']==11 and state()['jobs']['laundry']['shifts']==1,'first shift 7 CR paid once')
- hotspot('exit');hotspot('shop');hotspot('food');click('Take Wrapped black');click('Wrapped black');click('Unwrap and eat');hotspot('water');click('Take Bottled water');click('Bottled water');click('Open and drink');hotspot('water');click('Take Municipal soap');close();hotspot('exit');hotspot('hall');hotspot('room');hotspot('sink');click('Wash face');hotspot('bed');click('Pull the blanket');shot('room-after-shift');hotspot('paper');shot('tenancy');close();
+ hotspot('exit');hotspot('shop');hotspot('food');click('Take Wrapped black')
+ if args.presentation:
+  shot('bag-with-bread');adb('shell','input','tap','350','900');time.sleep(.5)
+  visible=' '.join(line[0].lower() for line in lines());check('serial' in visible and 'bread' in visible,'touching the actual bread inside the backpack opens its identity record');shot('bread-inspection')
+ else:click('Wrapped black')
+ click('Unwrap and eat');hotspot('water');click('Take Bottled water');click('Bottled water');click('Open and drink');hotspot('water');click('Take Municipal soap');close();hotspot('exit');hotspot('hall');hotspot('room');hotspot('sink');click('Wash face');hotspot('bed');click('Pull the blanket');shot('room-after-shift');hotspot('paper');shot('tenancy');close();
  check(state()['credits']==6 and state()['needs']['energy']>95 and state()['needs']['hygiene']>70,'work -> food/water/soap -> home -> sleep loop')
  interruption()
 else:
@@ -123,5 +160,5 @@ for w,h in [(360,640),(390,844),(1080,2400)]:
 adb('shell','wm','size','reset');adb('shell','wm','density','reset');time.sleep(2)
 logs=adb('logcat','-d','-s','godot','AndroidRuntime');(OUT/'runtime.txt').write_text(logs)
 check('SCRIPT ERROR' not in logs and 'FATAL EXCEPTION' not in logs and 'Program linking failed' not in logs,'no native script, Java crash or GLES shader errors')
-s=state();(OUT/'touch-evidence.json').write_text(json.dumps({'package':PACKAGE,'apk_sha256':installed_sha256,'device':args.device,'follow_up':args.verify_resume,'platform':'Android API 34 emulator / ANGLE SwiftShader', 'sizes':[{'width':w,'height':h,'density':160 if w<600 else 420} for w,h in [(360,640),(390,844),(1080,2400)]],'steps':steps,'final':{'revision':s['revision'],'location':s['location'],'credits':s['credits'],'needs':s['needs'],'employment':s['employment'],'shifts':s['jobs']['laundry']['shifts'],'receipt':s['last_receipt'],'identity_registered':s['identity']['registered']},'limits':'Not a physical-phone audio, ergonomics or retention test.'},indent=2)+'\n')
+s=state();(OUT/'touch-evidence.json').write_text(json.dumps({'package':PACKAGE,'apk_sha256':installed_sha256,'device':args.device,'follow_up':args.verify_resume,'presentation':args.presentation,'platform':'Android API 34 emulator / ANGLE SwiftShader', 'sizes':[{'width':w,'height':h,'density':160 if w<600 else 420} for w,h in [(360,640),(390,844),(1080,2400)]],'steps':steps,'final':{'revision':s['revision'],'location':s['location'],'credits':s['credits'],'needs':s['needs'],'employment':s['employment'],'shifts':s['jobs']['laundry']['shifts'],'receipt':s['last_receipt'],'identity_registered':s['identity']['registered']},'limits':'Not a physical-phone audio, ergonomics or retention test.'},indent=2)+'\n')
 print('ANDROID TOUCH LOOP PASSED',flush=True)

@@ -8,13 +8,13 @@ The active game is [`mobile/`](mobile/), built with **Godot 4.7.2, GDScript and 
 
 ## Play
 
-[Download the Android sideload preview](https://github.com/madpai/schism/releases/download/v0.2.0-alpha/schism-0.2.0.apk). Installation, update and checksum details are in [docs/RELEASES.md](docs/RELEASES.md).
+[Download the Android sideload preview](https://github.com/madpai/schism/releases/download/v0.3.0-alpha/schism-0.3.0.apk). Installation, update and checksum details are in [docs/RELEASES.md](docs/RELEASES.md).
 
 Open `mobile/project.godot` in Godot 4.7.2 and run. On Android, install the debug APK produced below. The package is `org.schism.districtix`. This is a playable development slice, not a production store release.
 
-Tap objects in the current scene. Follow doors through the hallway to the street. At the bureau, take a ticket and present your ID. All three jobs are playable; laundry has the most developed interaction sequence. CIVIC ID opens your body/needs/employment record. BAG contains individual possessions. Settings include sound, reduced effects and object hints.
+Tap objects in the current scene. Follow doors through the hallway to the street. At the bureau, take a ticket and present your ID. All three jobs are playable; laundry has the most developed interaction sequence. CIVIC ID opens your body/needs/employment record. BAG looks inside a worn backpack; tap the actual possessions inside it. Settings include sound, reduced effects and object hints.
 
-Nine illustrated locations, five needs, local identity, three jobs, taxes, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. The locker and refrigerator hold individual belongings; carried food earns no refrigerator bonus. Damaged media remains unexplained. No multiplayer service or monetization is required.
+Nine illustrated locations, five needs, local identity, three jobs, taxes, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. The locker and refrigerator hold individual belongings; carried food earns no refrigerator bonus. The incoming laundry cart empties as garments are sorted; an open hatch and tumbling cloth follow the saved machine state. Close-ups use consistent raster art. Bureau sheets scroll inside fixed phone bounds. Travel cues are brief and quiet. Damaged media remains unexplained. No multiplayer service or monetization is required.
 
 ## Check and build
 
@@ -34,7 +34,7 @@ adb -s emulator-5584 install --no-incremental builds/schism-android-debug.apk
 python3 scripts/android-playtest.py --device emulator-5584 --adb /path/to/adb
 ```
 
-The playtest uses `tesseract` and real Android taps. It refuses to reset an existing citizen. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID.md`](docs/playtests/ANDROID.md) for measured evidence and limits.
+The playtest uses Python 3, Pillow, `tesseract` and real Android taps. Add `--presentation` to inspect bureau papers at three sizes, tap inside the bag and measure the rendered washer motion. It refuses to reset an existing citizen. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID.md`](docs/playtests/ANDROID.md) for measured evidence and limits.
 
 ## Design and handoff
 
