@@ -2,6 +2,7 @@
 """Touch/OCR Android loop. Only an explicitly selected emulator; never clears existing saves."""
 import argparse,csv,hashlib,io,json,os,re,subprocess,time
 from pathlib import Path
+from PIL import Image
 p=argparse.ArgumentParser();p.add_argument('--device',required=True);p.add_argument('--resume-arrival',action='store_true');p.add_argument('--verify-resume',action='store_true');p.add_argument('--adb',default=os.environ.get('ADB','adb'));p.add_argument('--output',default='docs/playtests/android');args=p.parse_args()
 if not args.device.startswith('emulator-'):raise SystemExit('This automated QA script is restricted to an isolated emulator.')
 ADB=[args.adb,'-s',args.device];PACKAGE='org.schism.districtix';OUT=Path(args.output);OUT.mkdir(parents=True,exist_ok=True)
@@ -21,11 +22,13 @@ def state():
  return max(candidates,key=lambda x:x['revision'])
 def shot(name=None):
  path=OUT/(name+'.png') if name else Path('/tmp/schism-touch.png')
- for attempt in range(4):
+ for attempt in range(40):
   data=adb('exec-out','screencap','-p',raw=True)
-  if data.startswith(b'\x89PNG\r\n\x1a\n') and data[-8:-4]==b'IEND':path.write_bytes(data);return path
+  if data.startswith(b'\x89PNG\r\n\x1a\n') and data[-8:-4]==b'IEND':
+   frame=Image.open(io.BytesIO(data)).convert('L')
+   if frame.getextrema()[1]>16:path.write_bytes(data);return path
   time.sleep(.2)
- raise AssertionError('ADB returned an incomplete screenshot; no image was overwritten')
+ raise AssertionError('Android frame stayed blank or incomplete; no image was overwritten')
 def lines(mode=3):
  path=shot();r=subprocess.run(['tesseract',str(path),'stdout','--psm',str(mode),'tsv'],capture_output=True,text=True,check=True,env={**os.environ,'OMP_THREAD_LIMIT':'1'});groups={}
  for row in csv.DictReader(io.StringIO(r.stdout),delimiter='\t'):
@@ -36,11 +39,12 @@ def lines(mode=3):
   text=' '.join(x['text'] for x in rows);x=min(int(v['left']) for v in rows);y=min(int(v['top']) for v in rows);right=max(int(v['left'])+int(v['width']) for v in rows);bottom=max(int(v['top'])+int(v['height']) for v in rows)
   result.append((text,(x+right)//2,(y+bottom)//2,rows))
  return result
-def click(text,scroll=True):
+def click(text,scroll=True,button_only=False):
  needle=text.lower()
  for attempt in range(9 if scroll else 8):
-  found=[line for line in lines() if needle in line[0].lower()]
-  if not found:found=[line for line in lines(6) if needle in line[0].lower()]
+  def matches(line):return needle in line[0].lower() and (not button_only or ':' not in line[0])
+  found=[line for line in lines() if matches(line)]
+  if not found:found=[line for line in lines(6) if matches(line)]
   if found:
    line,_,_,rows=found[-1];start=line.lower().rfind(needle);end=start+len(needle);offset=0;matched=[]
    for word in rows:
@@ -63,7 +67,13 @@ def hotspot(name):
 def check(ok,label):
  if not ok:shot('FAILED-state');raise AssertionError(label)
  steps.append({'assertion':label,'ok':True});print('PASS:',label,flush=True)
-def launch():adb('shell','am','start','-n',PACKAGE+'/com.godot.game.GodotAppLauncher');time.sleep(1.2)
+def launch():
+ adb('shell','am','start','-n',PACKAGE+'/com.godot.game.GodotAppLauncher')
+ for attempt in range(20):
+  visible=' '.join(line[0].lower() for line in lines())
+  if 'schism' in visible or 'civic' in visible:return
+  time.sleep(.3)
+ raise AssertionError('Game interface did not appear after Android launch')
 def interruption():
  old=state();adb('shell','input','keyevent','3');time.sleep(.3);adb('shell','am','force-stop',PACKAGE);time.sleep(.2);launch();new=state()
  check(old==new,'home + force-stop/relaunch preserves every simulation field; no offline decay')
@@ -74,11 +84,11 @@ def laundry(interrupt=False):
   u=state()['shift']['uniforms'][n]
   if u['found']:
    shot('found-object');click('Place in Lost Property');hotspot('cart');click(f'UNIFORM {n+1:02}')
-  click(u['type'].upper())
+  click(u['type'].upper(),button_only=True)
  close();hotspot('washer');click('Pull the hatch');click('Lift the sorted');click('Tip one measured');click('Tip one measured')
  if interrupt:interruption();hotspot('washer');shot('resumed-washer')
  expected={'dirt':'STANDARD','oil':'HOT','blood':'SANITIZE'}[state()['shift']['uniforms'][0]['stain']]
- click(expected);click('Push the hatch');click('Press the green');time.sleep(1.3);click('Open the hatch and');click('Hang the bundle');click('Fold sleeves');click('Place folded');click('Slide your timecard');shot('wage-slip')
+ click(expected,button_only=True);click('Push the hatch');click('Press the green');time.sleep(1.3);click('Open the hatch and');click('Hang the bundle');click('Fold sleeves');click('Place folded');click('Slide your timecard');shot('wage-slip')
  check(state()['last_receipt']['quality']==100 and not state()['shift'],'touch-only laundry completes quality and settlement')
  click('Fold the wage')
 

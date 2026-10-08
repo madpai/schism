@@ -23,7 +23,7 @@ python3 scripts/android-playtest.py --device emulator-5584 \
   --adb /path/to/adb --output docs/playtests/android-v020
 ```
 
-Use a fresh isolated citizen; the script never clears an existing profile. The test author reset only the newly created QA application to run the fresh flow, after retaining the separate in-place upgrade evidence. No legacy browser or actual user saves were touched.
+Requires Python 3, Pillow, adb and Tesseract. Use a fresh isolated citizen; the script never clears an existing profile. Launch waits for civic/game interface text, and capture rejects blank frames, so arrival and recovery evidence excludes the loading splash. OCR sorting ignores service-label text when selecting the physical bin; early recapture attempts exposed that test-driver ambiguity, not a simulation failure. The test author reset only the newly created QA application to run the fresh flow, after retaining the separate in-place upgrade evidence. No legacy browser or actual user saves were touched.
 
 ## Refrigerator device fixture
 
