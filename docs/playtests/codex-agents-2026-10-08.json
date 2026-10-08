@@ -1,0 +1,127 @@
+{
+  "checked_at": "2026-10-08T14:24:33.401500+00:00",
+  "specialists": {
+    "schism_android": {
+      "model": "gpt-6.1-sol",
+      "effort": "high"
+    },
+    "schism_architecture": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "schism_economy_persistence": {
+      "model": "gpt-6-astra",
+      "effort": "high"
+    },
+    "schism_exploration": {
+      "model": "gpt-6-luna",
+      "effort": "medium"
+    },
+    "schism_gameplay": {
+      "model": "gpt-6.1-sol",
+      "effort": "medium"
+    },
+    "schism_qa": {
+      "model": "gpt-6-sol",
+      "effort": "high"
+    },
+    "schism_world_content": {
+      "model": "gpt-6-sol",
+      "effort": "medium"
+    }
+  },
+  "native_checked": true,
+  "native_agent_defaults": {
+    "enabled": true,
+    "max_concurrent_threads_per_session": 3,
+    "default_subagent_model": "gpt-6.1-sol",
+    "default_subagent_reasoning_effort": "medium"
+  },
+  "supported_models": {
+    "gpt-6-astra": [
+      "high",
+      "low",
+      "max",
+      "medium",
+      "ultra",
+      "xhigh"
+    ],
+    "gpt-6-luna": [
+      "high",
+      "low",
+      "max",
+      "medium",
+      "xhigh"
+    ],
+    "gpt-6-sol": [
+      "high",
+      "low",
+      "max",
+      "medium",
+      "ultra",
+      "xhigh"
+    ],
+    "gpt-6.1-sol": [
+      "high",
+      "low",
+      "max",
+      "medium",
+      "ultra",
+      "xhigh"
+    ]
+  },
+  "codex_version": "codex-cli 0.161.0",
+  "fresh_session": {
+    "model": "gpt-6.1-sol",
+    "reasoningEffort": "high",
+    "instructionSources": [
+      "/home/commander/schism/AGENTS.md"
+    ]
+  },
+  "live_demo": {
+    "completed": true,
+    "thread_id": "01a11be0-6f9b-75d3-a054-92fdb7610af5",
+    "prompt": ".codex/delegation-demo.txt",
+    "event_log_sha256": "f722bf67058106165de18d344416d42e82d456c443795b3413237a61e2962f8d",
+    "roles_reported_by_fresh_lead": [
+      "schism_exploration",
+      "schism_economy_persistence",
+      "schism_android",
+      "schism_qa"
+    ],
+    "parallel_analysis_then_qa": true,
+    "role_selection": "Fresh CLI lead reported that named roles were accepted without fallback. Current root collaboration tool surface separately tested exact model/effort overrides.",
+    "telemetry_limit": "Spawn receipts expose task identity, not resolved inference model/effort. Model choices are pinned/requested and account catalog-supported; independent provider inference identity was not audited.",
+    "implemented_feature": false
+  },
+  "independent_reviews": {
+    "schism_architecture": {
+      "requested_model": "gpt-6-astra",
+      "requested_effort": "high",
+      "completed": true
+    },
+    "schism_qa": {
+      "requested_model": "gpt-6-sol",
+      "requested_effort": "high",
+      "completed": true
+    },
+    "exploration_research": {
+      "requested_model": "gpt-6-luna",
+      "requested_effort": "medium",
+      "completed": true
+    }
+  },
+  "configuration_sha256": {
+    ".codex/config.toml": "90497779efc90a0a6c10f075053de22ad2f013914b02ff65cda8131940ebcd53",
+    ".codex/agents/schism_android.toml": "45da9e36b5f847fd20063da574ac39041a07b3181a2b347d580a439bdf5c17b7",
+    ".codex/agents/schism_architecture.toml": "3a3549a28f23cfeffb2d2aeaf4b2fdd047956f54ce5126453a7013941869ce54",
+    ".codex/agents/schism_economy_persistence.toml": "f84cc8b030b95a764704e342c7fee801ce1c544f9d76de032adb5b93a2ede4f3",
+    ".codex/agents/schism_exploration.toml": "153ffd6d14d39b24706b62efac00515c9756d43a88d61f33e4ddd9b766a304bc",
+    ".codex/agents/schism_gameplay.toml": "470fd5d13458225f31ec607224afc5bffd6dfb208438ff428c1e5a731ca95397",
+    ".codex/agents/schism_qa.toml": "fd646bb717ab117bb8060e72d1350af58266a27107e7c9c32aadfa0a24ff8c02",
+    ".codex/agents/schism_world_content.toml": "60dee466626b09649e11ae131f3eb8052a8aa845a425c530912e796e4b8edbdf",
+    ".codex/delegation-demo.txt": "4e0ababd8a25958c25870db950cdbfadf046b9f8d81e9800efc0008a8f642a4e",
+    "AGENTS.md": "a3dac5915b393f4dd5f67bbb8f3f81c2653737161497af5d4d309401d422f1ce",
+    "scripts/check-codex-agents.py": "6e1c04a0b4b820a453e185c09a771d5d8286334f57d1a30fca8cf453f0a04223"
+  }
+}

@@ -42,4 +42,6 @@ Start with [`docs/VISION.md`](docs/VISION.md), [`docs/GAMEPLAY.md`](docs/GAMEPLA
 
 The pure command reducer separates simulation from scenes, local save storage and future authority. Saves contain a versioned payload, checksum and two recoverable generations. Time advances through actions, shifts and sleep; the game does not punish absence. Original generated visual prompts, final assets, hotspot maps and provenance live in `mobile/art/`; original audio synthesis is checked in. Bundled font and engine attribution is in [`mobile/assets/ATTRIBUTION.md`](mobile/assets/ATTRIBUTION.md).
 
+Codex development sessions use the repository's [native specialist team](docs/CODEX_AGENTS.md). Start a trusted session in this checkout and describe the task; the lead selects models, delegates substantial work, integrates changes and verifies them. Small edits stay with the lead. Project configuration and specialist instructions live in `.codex/` and `AGENTS.md`.
+
 For the retained browser prototype's setup, Cloudflare hosting and test commands, use [`docs/legacy/README_BROWSER.md`](docs/legacy/README_BROWSER.md). Do not deploy the legacy worker or reset a live database as part of native development.

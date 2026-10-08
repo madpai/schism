@@ -1,0 +1,18 @@
+Prepare a read-only implementation plan for a future SCHISM feature: a repairable
+communal kettle in Block C, with a physical inspection interaction, integer-cost
+repair materials, persisted repair progress, metadata-preserving migration and
+pause/process-death safety. Keep ordinary poverty and object-based interactions.
+
+Use the project's automatic native delegation workflow to obtain the specialist
+advice that materially helps this plan. Choose the roles and models yourself from
+the project instructions; the user should not need to pick them. Parallelize only
+independent analysis, keep at most three children active, and have the lead
+reconcile contracts and verification coverage. For this demonstration, route
+focused mapping/research to its specialist so we can verify its model as well.
+
+All agents are read-only for this run. Read existing project instructions and
+affected code. Do not implement the feature, write files, run builds/device tests,
+commit, publish or modify any player state. Keep each specialist response concise.
+Return the proposed file ownership, acceptance checks, actual agents used, model
+and reasoning settings requested, and any runtime limitation. Distinguish the
+plan from implemented functionality. Inspect the remaining local diff if helpful.
