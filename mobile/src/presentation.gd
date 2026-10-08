@@ -20,8 +20,11 @@ static func crop(path: String,rect: Array) -> AtlasTexture:
  return atlas
 
 static func object_texture(kind: String,condition: String="dirt") -> Texture2D:
- var d = data(); var key = kind
+ var d = data(); var key = "paper" if kind=="note" else kind
  if kind=="uniform" and condition in ["oil","blood"]: key = "uniform_"+condition
+ if d.get("regions",{}).has(key):
+  var rect = d.regions[key]; var source: Texture2D = load(d.atlas)
+  return crop(d.atlas,[float(rect[0])/source.get_width(),float(rect[1])/source.get_height(),float(rect[2])/source.get_width(),float(rect[3])/source.get_height()])
  if d.cells.has(key):
   var index = int(d.cells[key]); var cols = int(d.grid[0]); var rows = int(d.grid[1])
   return crop(d.atlas,[float(index%cols)/cols,float(index/cols)/rows,1.0/cols,1.0/rows])
@@ -33,7 +36,7 @@ static func laundry_state(s: Dictionary) -> Dictionary:
  var w = s.get("shift",{})
  if w.is_empty() or w.get("job","")!="laundry": return {"asset":d.full,"remaining":4,"running":false}
  var remaining = w.get("uniforms",[]).filter(func(u): return not u.get("sorted",false)).size() if w.stage=="inspect" else 0
- var running = w.stage=="washed"
+ var running = w.stage=="washed" and not w.get("hatch_open",false)
  return {"asset":d.running if running else d.open if w.get("hatch_open",false) else d.closed,"remaining":remaining,"running":running}
 
 static func washer_texture(hatch_open: bool,running: bool) -> Texture2D:

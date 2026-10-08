@@ -20,6 +20,8 @@ func _ready() -> void:
   var shader = ShaderMaterial.new(); shader.shader = load("res://shaders/recovered.gdshader")
   shader.set_shader_parameter("instability",0.0); shader.set_shader_parameter("tracking",0.0); shader.set_shader_parameter("degradation",0.0)
   material = shader
+ else:
+  var shader = ShaderMaterial.new(); shader.shader = load("res://shaders/isolated.gdshader"); material = shader
 
 func _process(delta: float) -> void:
  if kind=="washer":

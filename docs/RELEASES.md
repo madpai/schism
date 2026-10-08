@@ -2,6 +2,12 @@
 
 SCHISM development APKs are hosted as versioned prereleases in [GitHub Releases](https://github.com/madpai/schism/releases). This repository is public; no account is needed to download a published APK. This serves the Android package and is independent of the legacy browser city and its hosting.
 
+## 0.4.0 Living City package
+
+This milestone builds a local, tested sideload APK at `builds/sideload/schism-0.4.0.apk`. It is not yet a published GitHub prerelease. Package identity and debug signer are retained; version code is 4, and schema-4 citizens migrate safely to schema 6. Install over the existing app to retain progress. The older public 0.3.0 link below remains unchanged.
+
+Individual laundry handling and saved folding, five civilian backgrounds, contextual favors/inspections, manual administrative tax payment and debt-repayment labor, a guarded service corridor and a repair-unlocked discovery extend the daily routine. Original environments, washer animation and backpack remain intact. Shop sprites now use isolated, validated artwork regions. See `docs/playtests/ANDROID_V040.md` and `HANDOFF.md` for exact evidence and remaining scope.
+
 ## 0.3.0 preview
 
 [Download SCHISM 0.3.0 APK](https://github.com/madpai/schism/releases/download/v0.3.0-alpha/schism-0.3.0.apk)

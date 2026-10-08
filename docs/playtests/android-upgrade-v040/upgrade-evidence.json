@@ -1,0 +1,372 @@
+{
+  "device": "emulator-5582",
+  "package": "org.schism.districtix",
+  "previous_apk": "builds/sideload/schism-0.3.0.apk",
+  "previous_apk_sha256": "531fa7fc72e85d374b01393226688f2f8430858ca1aff4d990ab056307204083",
+  "latest_apk": "builds/schism-android-debug.apk",
+  "latest_apk_sha256": "b8ae7a7b60a8b184a5816ae938f681c0c347ecab56d3a6c7c140044a6ba599d6",
+  "old": {
+    "schema": 4,
+    "revision": 15,
+    "sequence": 15,
+    "minute": 395,
+    "location": "laundry",
+    "credits": 1,
+    "needs_sha256": "a2555ac4fb5d6c2201227b4ef66ad2adf16ae1a4442aaa487ab7f1b4ccea246d",
+    "items_count": 2,
+    "items_sha256": "8f21fb86f5df538d0516e3f7eb331874c3b8439a6cc85e96a2747c3d922b846d",
+    "shift_stage": "inspect",
+    "shift_sha256": "865bdc6821c99e99e39d3c8b572fb4c31417f6c58cf036e20860e43302ca6f90",
+    "payload_sha256": "778d9e5523e9a775d11fc79c1614b28c81d0c082099b41915ae3ccc860f2368b"
+  },
+  "migrated": {
+    "schema": 6,
+    "revision": 15.0,
+    "sequence": 15.0,
+    "minute": 395.0,
+    "location": "laundry",
+    "credits": 1.0,
+    "needs_sha256": "a2555ac4fb5d6c2201227b4ef66ad2adf16ae1a4442aaa487ab7f1b4ccea246d",
+    "items_count": 2,
+    "items_sha256": "6324a1393a695f93689223805e7e61462dc778c26e3ec28f26d0b4c1da5f5bfd",
+    "shift_stage": "inspect",
+    "shift_sha256": "34bd4b92f312c18dc8d4cbbd921239556d03b0a85c37e90dc6ba22a939ae8232",
+    "payload_sha256": "422b4cddfe75a1f8ae5858d9a5f9051f86f23609d23c6ccdbdaf95a6ee82a7e3"
+  },
+  "after_first_pocket": {
+    "schema": 6,
+    "revision": 16,
+    "sequence": 16,
+    "minute": 395.0,
+    "location": "laundry",
+    "credits": 1.0,
+    "needs_sha256": "a2555ac4fb5d6c2201227b4ef66ad2adf16ae1a4442aaa487ab7f1b4ccea246d",
+    "items_count": 2,
+    "items_sha256": "6324a1393a695f93689223805e7e61462dc778c26e3ec28f26d0b4c1da5f5bfd",
+    "shift_stage": "inspect",
+    "shift_sha256": "7ced51e9f99a4fa986bc3b8d87278e409a31f9612f678cf8e2b342918a084cbd",
+    "payload_sha256": "9544cd27ad4e89eb17c62bf759cae1806c6d4b1876410b9430825fa81cdebbc4"
+  },
+  "assertions": [
+    "selected emulator has no SCHISM installation or prior residency files",
+    "selected Android target identifies as an emulator",
+    "SCHISM package is installed",
+    "installed 0.3 APK matches the selected old artifact byte for byte",
+    "0.3 APK starts an unregistered schema 4 citizen",
+    "purchased bread remains a carried item",
+    "old APK saves only the first uniform inspection in an active work order",
+    "old APK wrote a verified private save envelope",
+    "old saved payload equals visible active-shift state",
+    "SCHISM package is installed",
+    "installed 0.4 APK matches the selected latest artifact byte for byte",
+    "background pause wrote an actual verified schema 6 slot",
+    "actual persisted slot advances from schema 4 to schema 6",
+    "migration adds only neutral civilian background and empty city record",
+    "historical wages are not reassessed; first tax cycle starts at saved played time",
+    "active inspection gains false/false/zero garment progress",
+    "every prior payload field equals after removing only schema 6 defaults",
+    "bread identity, custody and all item metadata survive upgrade",
+    "upgrade changes no played time, needs, money or command counters",
+    "process death relaunch resumes the partially inspected work order",
+    "real pocket interaction commits once after migration",
+    "post-upgrade work does not alter the carried bread record",
+    "upgrade flow has no native script, Java or shader-link error"
+  ],
+  "touches": [
+    {
+      "assertion": "selected emulator has no SCHISM installation or prior residency files",
+      "ok": true
+    },
+    {
+      "assertion": "selected Android target identifies as an emulator",
+      "ok": true
+    },
+    {
+      "assertion": "SCHISM package is installed",
+      "ok": true
+    },
+    {
+      "assertion": "installed 0.3 APK matches the selected old artifact byte for byte",
+      "ok": true
+    },
+    {
+      "assertion": "0.3 APK starts an unregistered schema 4 citizen",
+      "ok": true
+    },
+    {
+      "touch": "Sign the residency",
+      "point": [
+        472,
+        1733
+      ]
+    },
+    {
+      "touch": "Fold the paper",
+      "point": [
+        395,
+        1201
+      ]
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "shop",
+      "location": "street",
+      "point": [
+        950,
+        1545
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "food",
+      "location": "shop",
+      "point": [
+        280,
+        1355
+      ]
+    },
+    {
+      "touch": "Take Wrapped black",
+      "point": [
+        402,
+        1059
+      ]
+    },
+    {
+      "assertion": "purchased bread remains a carried item",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "location": "shop",
+      "point": [
+        826,
+        1897
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "bureau",
+      "location": "street",
+      "point": [
+        496,
+        1127
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "ticket",
+      "location": "bureau",
+      "point": [
+        172,
+        1621
+      ]
+    },
+    {
+      "touch": "Put the paper",
+      "point": [
+        478,
+        913
+      ]
+    },
+    {
+      "hotspot": "clerk",
+      "location": "bureau",
+      "point": [
+        901,
+        1156
+      ]
+    },
+    {
+      "touch": "Slide your civic",
+      "point": [
+        341,
+        840
+      ]
+    },
+    {
+      "touch": "Sign Municipal Laundry",
+      "point": [
+        428,
+        915
+      ]
+    },
+    {
+      "hotspot": "exit",
+      "location": "bureau",
+      "point": [
+        167,
+        1973
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "laundry",
+      "location": "street",
+      "point": [
+        907,
+        1146
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "Pull the cart",
+      "point": [
+        251,
+        1479
+      ]
+    },
+    {
+      "touch": "UNIFORM 01",
+      "point": [
+        179,
+        869
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "assertion": "old APK saves only the first uniform inspection in an active work order",
+      "ok": true
+    },
+    {
+      "assertion": "old APK wrote a verified private save envelope",
+      "ok": true
+    },
+    {
+      "assertion": "old saved payload equals visible active-shift state",
+      "ok": true
+    },
+    {
+      "assertion": "SCHISM package is installed",
+      "ok": true
+    },
+    {
+      "assertion": "installed 0.4 APK matches the selected latest artifact byte for byte",
+      "ok": true
+    },
+    {
+      "assertion": "background pause wrote an actual verified schema 6 slot",
+      "ok": true
+    },
+    {
+      "assertion": "actual persisted slot advances from schema 4 to schema 6",
+      "ok": true
+    },
+    {
+      "assertion": "migration adds only neutral civilian background and empty city record",
+      "ok": true
+    },
+    {
+      "assertion": "historical wages are not reassessed; first tax cycle starts at saved played time",
+      "ok": true
+    },
+    {
+      "assertion": "active inspection gains false/false/zero garment progress",
+      "ok": true
+    },
+    {
+      "assertion": "every prior payload field equals after removing only schema 6 defaults",
+      "ok": true
+    },
+    {
+      "assertion": "bread identity, custody and all item metadata survive upgrade",
+      "ok": true
+    },
+    {
+      "assertion": "upgrade changes no played time, needs, money or command counters",
+      "ok": true
+    },
+    {
+      "assertion": "process death relaunch resumes the partially inspected work order",
+      "ok": true
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 01",
+      "point": [
+        179,
+        869
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "assertion": "real pocket interaction commits once after migration",
+      "ok": true
+    },
+    {
+      "assertion": "post-upgrade work does not alter the carried bread record",
+      "ok": true
+    },
+    {
+      "assertion": "upgrade flow has no native script, Java or shader-link error",
+      "ok": true
+    }
+  ],
+  "runtime_log_sha256": "58f96586840caa3670fc7fdc396e34156ab9208d345ac1218e99454826cee8a0",
+  "limits": "Fresh emulator upgrade and touch evidence; no physical phone claim. No residency payload is written to evidence."
+}

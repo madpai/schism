@@ -21,4 +21,10 @@ if rg -q 'SCRIPT ERROR|ERROR:|FAIL' "$log_dir/balance.txt"; then exit 1; fi
 "$godot_bin" --headless --path "$root_dir" --script tests/storage.gd > "$log_dir/storage.txt" 2>&1
 cat "$log_dir/storage.txt"
 if rg -q 'SCRIPT ERROR|ERROR:|FAIL' "$log_dir/storage.txt"; then exit 1; fi
+"$godot_bin" --headless --path "$root_dir" --script tests/living_city.gd > "$log_dir/living.txt" 2>&1
+cat "$log_dir/living.txt"
+if rg -q 'SCRIPT ERROR|ERROR:|FAIL' "$log_dir/living.txt"; then exit 1; fi
+"$godot_bin" --headless --path "$root_dir" --script tests/taxes.gd > "$log_dir/taxes.txt" 2>&1
+cat "$log_dir/taxes.txt"
+if rg -q 'SCRIPT ERROR|ERROR:|FAIL' "$log_dir/taxes.txt"; then exit 1; fi
 python3 "$root_dir/art/validate.py"

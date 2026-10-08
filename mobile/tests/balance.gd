@@ -26,7 +26,11 @@ func _initialize() -> void:
   for action in ["open_hatch","load_washer","dose","dose"]: act({"action":action})
   act({"action":"cycle","cycle":cycle})
   for action in ["close_hatch","start_wash","unload","dry","fold","dispatch","settle_shift"]: act({"action":action})
-  act({"action":"travel","to":"street"}); act({"action":"drink"}); act({"action":"travel","to":"shop"})
+  act({"action":"travel","to":"street"})
+  var tax = int(Sim.tax_summary(s).total)
+  if tax>0:
+   act({"action":"travel","to":"bureau"}); act({"action":"pay_tax","amount":tax}); act({"action":"travel","to":"street"})
+  act({"action":"drink"}); act({"action":"travel","to":"shop"})
   act({"action":"buy","kind":"bread"})
   var bread = s.items[-1].id; act({"action":"consume","id":bread})
   if shift==0: act({"action":"buy","kind":"soap"})

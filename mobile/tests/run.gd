@@ -64,7 +64,7 @@ func _initialize() -> void:
  check(not Sim.apply(s,{"action":"settle_shift"}).ok,"duplicate wage settlement rejected")
  s.needs.energy = 100; s.needs.thirst = 100; s.needs.hunger = 100
  s = laundry(s,"keep")
- check(s.tax_paid==1 and s.tax_remainder==68,"second shift settles carried tax")
+ check(s.tax_paid==0 and s.taxes.accrued==1 and s.tax_remainder==68,"second shift assesses carried tax for manual payment")
  check(s.items.any(func(x): return x.kind=="tape" and x.owner=="player"),"later mystery object has persistent ownership")
  var bad = resident(); bad = laundry(bad,"leave",false)
  check(bad.last_receipt.quality<60 and bad.last_receipt.gross==6 and bad.jobs.laundry.warnings==1,"bad treatment damages work and produces warning")
@@ -134,7 +134,7 @@ func _initialize() -> void:
    freight = act(freight,{"action":"open_crate","index":n})
    freight = act(freight,{"action":"found_choice","id":freight.shift.found,"choice":"return"})
   freight = act(freight,{"action":"route_crate","index":n,"destination":freight.shift.crates[n].destination})
- freight = act(freight,{"action":"settle_shift"}); check(freight.last_receipt.gross==9 and freight.last_receipt.withholding==1 and freight.last_receipt.quality==100,"freight labels, manifest, ownership and wages")
+ freight = act(freight,{"action":"settle_shift"}); check(freight.last_receipt.gross==9 and freight.last_receipt.withholding==0 and freight.last_receipt.tax_assessed==1 and freight.last_receipt.quality==100,"freight labels, manifest, ownership and wages")
  var eaten = resident("freight"); eaten.rng = 1
  eaten = act(eaten,{"action":"begin_shift"}); eaten = act(eaten,{"action":"manifest"})
  for n in range(4):
@@ -175,10 +175,10 @@ func _initialize() -> void:
  var partial = FileAccess.open(path+"/slot0.json.pending",FileAccess.WRITE); partial.store_string("half-written"); partial.close()
  check(store.load_state().revision==inspect.revision,"interrupted pending write cannot replace good state")
  var migrated = Sim.migrate({"schema":1,"revision":9,"identity":{"name":"Old"},"items":[{"id":"history","metadata":{"unknown":"keep me"}}]})
- check(migrated.schema==4 and migrated.identity.name=="Old" and migrated.items[0].metadata.unknown=="keep me" and migrated.jobs.has("freight"),"migration preserves old identity and unknown item metadata")
+ check(migrated.schema==Sim.SCHEMA and migrated.identity.name=="Old" and migrated.items[0].metadata.unknown=="keep me" and migrated.jobs.has("freight"),"migration preserves old identity and unknown item metadata")
  check(migrated.items[0].owner=="player" and migrated.items[0].serial=="history" and migrated.items[0].history is Array,"older item records gain inspectable custody fields without losing identity")
- check(Sim.migrate({"schema":99}).has("error"),"future saves reject without wiping")
- var future = s.duplicate(true); future.schema = 99
+ check(Sim.migrate({"schema":Sim.SCHEMA+1}).has("error"),"future saves reject without wiping")
+ var future = s.duplicate(true); future.schema = Sim.SCHEMA+1
  var payload = JSON.stringify(future)
  var ff = FileAccess.open(path+"/slot1.json",FileAccess.WRITE); ff.store_string(JSON.stringify({"format":"schism-local-v1","revision":future.revision,"payload":payload,"sha256":payload.sha256_text()})); ff.close()
  check(store.load_state().has("error") and not store.save_state(s),"future generation blocks overwrite")

@@ -1,14 +1,22 @@
 class_name SchismSimulation
 extends RefCounted
 
-const SCHEMA = 4
+const SCHEMA = 6
 const COLD_ALLOWANCE = 3 * 1440
+const BACKGROUNDS = {
+ "resident":{"label":"District resident","text":"Block C is the only home I remember."},
+ "factory_laborer":{"label":"Factory laborer","text":"My old textile label reads: dirt / standard, oil / hot, blood / sanitize. Four uniforms take two detergent doses. The laundry still hires through window 3."},
+ "displaced_resident":{"label":"Displaced resident","text":"My relocation notice names Block C. A neighbor on the landing used to carry baskets for the displaced. I should look in after my first shift; they may remember me."},
+ "former_bureaucrat":{"label":"Former bureaucrat","text":"An old count slip names the service corridor relay. Its return-count recording was damaged when the cabinet failed. I could restore it and hear what the clerks copied forward."},
+ "street_survivor":{"label":"Street survivor","text":"My folded street map marks the free public tap. The food kiosk gives one emergency ration per day when I have 2 CR or less. Neither needs a work authorization."},
+ "technical_apprentice":{"label":"Technical apprentice","text":"My training card marks a loose relay in the service corridor cabinet. Reseating it should restore the corridor lamps and the recorder. The kit is left inside; no certification is required."}
+}
 const JOB_SCENES = {"laundry":"laundry", "cleaning":"cleaning", "freight":"freight"}
 const ROUTES = {
  "room":["hall"], "hall":["room","street"],
- "street":["hall","bureau","laundry","cleaning","freight","shop"],
+ "street":["hall","bureau","laundry","cleaning","freight","shop","service"],
  "bureau":["street"], "laundry":["street"], "cleaning":["street"],
- "freight":["street"], "shop":["street"], "camp":[]
+ "freight":["street"], "shop":["street"], "service":["street"], "camp":[]
 }
 
 static func catalog() -> Dictionary:
@@ -17,15 +25,17 @@ static func catalog() -> Dictionary:
 static func initial() -> Dictionary:
  return {
   "schema":SCHEMA, "revision":0, "sequence":0, "serial":0, "rng":48193,
-  "identity":{"name":"William","civic_id":"48193","registered":false,"appearance":"olive"},
+  "identity":{"name":"William","civic_id":"48193","registered":false,"appearance":"olive","background":"resident"},
   "needs":{"hunger":52.0,"thirst":46.0,"energy":58.0,"hygiene":48.0,"health":91.0},
   "credits":4, "illicit_credits":0, "tax_remainder":0, "tax_paid":0,
+  "taxes":_initial_taxes(360),
   "minute":360, "location":"room", "arrival_seen":false,
   "employment":"", "jobs":{"laundry":{"shifts":0,"trust":0,"warnings":0,"promoted":false},"cleaning":{"shifts":0,"trust":0,"warnings":0,"promoted":false},"freight":{"shifts":0,"trust":0,"warnings":0,"promoted":false}},
   "housing":{"tier":"municipal","address":"Block C / Room 17","rent":0,"deposit":0,"next_bill":1440,"arrears":0,"bills":0,"utilities":true},
   "items":[], "room_upgrades":[], "shift":{}, "ticket":false,"id_shown":false,
   "legal":{"suspicion":0,"offenses":0,"record":[],"camp":{}},
   "discoveries":["room"], "events":[], "decisions":[], "relief_day":-1,
+  "city":{"encounters":{},"flags":{},"security_favor":0,"supplies":{"metal":0,"fabric":0}},
   "settings":{"sound":true,"effects":true,"hints":true}, "last_receipt":{}
  }
 
@@ -34,11 +44,70 @@ static func migrate(old: Dictionary) -> Dictionary:
   return {"error":"This save needs a newer SCHISM version. Your files have been preserved."}
  var old_schema = int(old.get("schema",1))
  var s = old.duplicate(true)
+ if old_schema<=5: s.taxes = _initial_taxes(int(s.get("minute",360)))
+ elif not s.get("taxes") is Dictionary or not _valid_taxes(s.taxes): return {"error":"The tax record needs recovery. Your files have been preserved."}
+ for key in ["identity","needs","city","shift","taxes"]:
+  if s.has(key) and not s[key] is Dictionary: return {"error":"The %s record needs recovery. Your files have been preserved."%key}
+ if s.has("items") and not s.items is Array: return {"error":"The possession record needs recovery. Your files have been preserved."}
+ if s.has("city"):
+  for key in ["encounters","flags","supplies"]:
+   if s.city.has(key) and not s.city[key] is Dictionary: return {"error":"The city record needs recovery. Your files have been preserved."}
+ for key in ["jobs","housing","legal","settings"]:
+  if s.has(key) and not s[key] is Dictionary: return {"error":"The %s record needs recovery. Your files have been preserved."%key}
+ for key in ["room_upgrades","discoveries","events","decisions"]:
+  if s.has(key) and not s[key] is Array: return {"error":"The %s record needs recovery. Your files have been preserved."%key}
+ if old_schema>=6:
+  if not s.get("city") is Dictionary or not s.get("legal") is Dictionary or not s.legal.has("camp"): return {"error":"The city or detention record needs recovery. Your files have been preserved."}
+  for field in ["encounters","flags","supplies","security_favor"]:
+   if not s.city.has(field): return {"error":"The city record needs recovery. Your files have been preserved."}
+  for material in ["metal","fabric"]:
+   if not s.city.supplies is Dictionary or not s.city.supplies.has(material): return {"error":"The supply record needs recovery. Your files have been preserved."}
+ var restore_repair_favor = old_schema==5 and s.has("city") and not s.city.has("security_favor") and s.city.get("flags",{}).get("service_repaired",false)==true
  var defaults = initial()
  _defaults(s, defaults)
+ if restore_repair_favor: s.city.security_favor = 1
+ if not _whole_number(s.city.security_favor) or int(s.city.security_favor)<0 or int(s.city.security_favor)>100: return {"error":"The security favor record needs recovery. Your files have been preserved."}
+ if not _valid_taxes(s.taxes): return {"error":"The tax record needs recovery. Your files have been preserved."}
+ for key in ["metal","fabric"]:
+  if not _whole_number(s.city.supplies.get(key)) or int(s.city.supplies[key])<0: return {"error":"The supply record needs recovery. Your files have been preserved."}
+ if not s.legal.camp is Dictionary: return {"error":"The detention record needs recovery. Your files have been preserved."}
+ if not s.legal.camp.is_empty():
+  var camp = s.legal.camp
+  if old_schema>=6:
+   for field in ["reason","minimum_orders","debt_at_entry","worked_off","tax_pause_started","orders","started","active","sorted"]:
+    if not camp.has(field): return {"error":"The detention record needs recovery. Your files have been preserved."}
+  _defaults(camp,{"reason":"crime","minimum_orders":3,"debt_at_entry":0,"worked_off":0,"tax_pause_started":int(s.minute) if old_schema<=5 else int(camp.get("started",s.minute))})
+  if not camp.get("active") is bool or not camp.get("sorted") is Array: return {"error":"The detention progress needs recovery. Your files have been preserved."}
+  var seen_pieces = []
+  for piece in camp.sorted:
+   if not _whole_number(piece) or int(piece) not in [0,1,2] or int(piece) in seen_pieces: return {"error":"The detention sorting needs recovery. Your files have been preserved."}
+   seen_pieces.append(int(piece))
+  if camp.reason not in ["crime","tax","mixed"]: return {"error":"The detention reason needs recovery. Your files have been preserved."}
+  for key in ["minimum_orders","debt_at_entry","worked_off","tax_pause_started","orders","started"]:
+   if not _whole_number(camp.get(key)) or int(camp[key])<0: return {"error":"The detention counter needs recovery. Your files have been preserved."}
+  if int(camp.minimum_orders)!=3 or int(camp.tax_pause_started)>int(s.minute): return {"error":"The detention clock needs recovery. Your files have been preserved."}
+ if not s.identity.background is String or not BACKGROUNDS.has(s.identity.background): return {"error":"The background record needs recovery. Your files have been preserved."}
+ for key in ["service_repaired","relay_heard","neighbor_known","coworker_known"]:
+  if s.city.flags.has(key) and not s.city.flags[key] is bool: return {"error":"A city flag needs recovery. Your files have been preserved."}
+ if s.city.flags.has("inspection_day") and (not _whole_number(s.city.flags.inspection_day) or int(s.city.flags.inspection_day)<0): return {"error":"The inspection day needs recovery. Your files have been preserved."}
+ for id in s.city.encounters:
+  var record = s.city.encounters[id]
+  if not record is Dictionary: return {"error":"An encounter record needs recovery. Your files have been preserved."}
+  for key in ["count","last_day","last_minute"]:
+   if not _whole_number(record.get(key)) or int(record[key])<0: return {"error":"An encounter counter needs recovery. Your files have been preserved."}
+  if not record.get("last_choice") is String: return {"error":"An encounter choice needs recovery. Your files have been preserved."}
+ if not s.shift.is_empty() and s.shift.get("job")=="laundry":
+  if not s.shift.get("uniforms") is Array: return {"error":"The laundry record needs recovery. Your files have been preserved."}
+  for garment in s.shift.uniforms:
+   if not garment is Dictionary: return {"error":"A garment record needs recovery. Your files have been preserved."}
+   var stage = s.shift.get("stage","inspect")
+   _defaults(garment,{"loaded":stage!="inspect","unloaded":stage in ["wet","dry","folded","receipt"],"folds":fold_steps(garment) if stage in ["folded","receipt"] else 0})
+   if not garment.loaded is bool or not garment.unloaded is bool or not _whole_number(garment.folds) or int(garment.folds)<0 or int(garment.folds)>fold_steps(garment): return {"error":"A garment progress record needs recovery. Your files have been preserved."}
  for index in range(s.items.size()):
   var item = s.items[index]
   if not item is Dictionary: return {"error":"An item record needs recovery. Your files have been preserved."}
+  if item.has("metadata") and not item.metadata is Dictionary: return {"error":"An item metadata record needs recovery. Your files have been preserved."}
+  if item.has("history") and not item.history is Array: return {"error":"An item custody record needs recovery. Your files have been preserved."}
   var legacy_id = str(item.get("id","LEGACY-%s-%d"%[s.identity.civic_id,index]))
   _defaults(item,{"id":legacy_id,"kind":"unknown","label":"Recovered possession","owner":"player","rightful_owner":"player","serial":legacy_id,"origin":"Earlier residency record","condition":"worn","legal":"ordinary","acquired_minute":s.minute,"expiry_minute":0,"storage":"bag","cold_minutes":0,"metadata":{},"history":[]})
   s.serial = maxi(int(s.serial),index+1)
@@ -79,6 +148,10 @@ static func _execute(s: Dictionary, c: Dictionary, e: Array) -> String:
   var name = str(c.get("name","")).strip_edges()
   if name.length()<2 or name.length()>24: return "Use a name of 2–24 characters."
   if str(c.get("appearance","olive")) not in ["olive","umber","sand"]: return "Choose an available appearance."
+  var background = c.get("background","resident")
+  if not background is String or not BACKGROUNDS.has(background): return "Choose an available background."
+  s.identity.background = background
+  if background!="resident": _item(s,"note","Personal memento","player","Before District IX",{"background":background,"text":BACKGROUNDS[background].text})
   s.identity.name = name; s.identity.appearance = c.get("appearance","olive"); s.identity.registered = true
   e.append({"type":"thought","text":"I need to find work."})
   return ""
@@ -90,14 +163,20 @@ static func _execute(s: Dictionary, c: Dictionary, e: Array) -> String:
  var camp_active = not s.legal.camp.is_empty() and s.legal.camp.get("active",false)
  if camp_active and action not in ["camp_sort","camp_order","camp_meal","camp_sleep","camp_release"]: return "Your belongings and outside work are held until release."
  match action:
+  "pay_tax": return _pay_tax(s,c,e)
+  "event_choice": return _event_choice(s,c,e)
   "arrival": s.arrival_seen = true
   "travel":
    if not s.shift.is_empty(): return "Finish this work order before leaving."
    var target = str(c.get("to",""))
    if target not in ROUTES.get(s.location,[]): return "There is no doorway there."
+   var from_street = s.location=="street"
    s.location = target
    if target not in s.discoveries: s.discoveries.append(target)
    _advance(s,5)
+   if s.taxes.flagged:
+    if from_street and target!="bureau": _enter_camp(s,e,"tax")
+    elif target=="street": e.append({"type":"notice","text":"OVERDUE CIVIC TAX / INSPECTION FLAG\nProceed directly to the bureau payment counter. Another journey without payment leads to compulsory work."})
   "ticket":
    if s.location!="bureau": return "The dispenser is at the labor bureau."
    s.ticket = true
@@ -117,7 +196,7 @@ static func _execute(s: Dictionary, c: Dictionary, e: Array) -> String:
    if not s.shift.is_empty(): return "Your work order is already on the bench."
    if s.needs.energy<22 or s.needs.health<20: return "I need some rest before I can work."
    _begin_shift(s,job)
-  "inspect_uniform", "inspect_pocket", "sort_uniform", "open_hatch", "load_washer", "dose", "cycle", "close_hatch", "start_wash", "unload", "dry", "fold", "dispatch":
+  "inspect_uniform", "inspect_pocket", "sort_uniform", "open_hatch", "load_washer", "load_garment", "unload_garment", "fold_garment", "dose", "cycle", "close_hatch", "start_wash", "unload", "dry", "fold", "dispatch":
    return _laundry(s,c,e)
   "found_choice": return _found_choice(s,c,e)
   "clean": return _cleaning(s,c,e)
@@ -214,7 +293,7 @@ static func _begin_shift(s: Dictionary,job: String) -> void:
   var stain = {"general":"dirt","factory":"oil","medical":"blood"}[category]
   var uniforms: Array = []
   for n in range(4):
-   uniforms.append({"type":"security" if n==1 and completed==0 else category,"stain":stain,"inspected":false,"pocket_checked":false,"sorted":false,"found":""})
+   uniforms.append({"type":"security" if n==1 and completed==0 else category,"stain":stain,"inspected":false,"pocket_checked":false,"sorted":false,"found":"","loaded":false,"unloaded":false,"folds":0})
   if completed==0 or completed%3==0:
    var object = _item(s,"credits","3 loose credits","found","Security uniform / logged pocket",{"amount":3,"risk":0.32,"evidence":"Security jacket S-184 had a logged pocket receipt."})
    object.rightful_owner = "Worker S-184"; uniforms[1].found = object.id
@@ -235,6 +314,7 @@ static func _begin_shift(s: Dictionary,job: String) -> void:
 static func _laundry(s: Dictionary,c: Dictionary,e: Array) -> String:
  if s.shift.is_empty() or s.shift.job!="laundry" or s.location!="laundry": return "Take a textile work order from the incoming cart."
  var w = s.shift; var action = c.action
+ if c.has("index") and not _whole_number(c.index): return "Choose a garment on this workbench."
  var index = int(c.get("index",w.selected))
  if index<0 or index>=w.uniforms.size(): return "That uniform is not in this batch."
  var u = w.uniforms[index]
@@ -256,6 +336,28 @@ static func _laundry(s: Dictionary,c: Dictionary,e: Array) -> String:
    _work_time(s,20)
   return ""
  match action:
+  "load_garment":
+   if w.stage!="inspect" or not w.hatch_open: return "Open the washer hatch."
+   if not u.sorted: return "Sort this garment before loading it."
+   if u.loaded: return "That garment is already inside."
+   u.loaded = true; w.selected = index
+   if w.uniforms.all(func(g): return g.loaded):
+    w.loaded = true; w.stage = "prepare"; _work_time(s,20)
+   e.append({"type":"sound","name":"cloth"})
+  "unload_garment":
+   if w.stage!="washed": return "Wait until the wash order is complete."
+   if u.unloaded: return "That garment is already on the drying rack."
+   u.unloaded = true; w.hatch_open = true; w.selected = index
+   if w.uniforms.all(func(g): return g.unloaded): w.stage = "wet"; _work_time(s,10)
+   e.append({"type":"sound","name":"cloth"})
+  "fold_garment":
+   if w.stage!="dry": return "Dry the uniforms before folding."
+   var needed = fold_steps(u)
+   if u.folds>=needed: return "That garment is already folded."
+   if not _whole_number(c.get("step")) or int(c.step)!=int(u.folds)+1: return "Fold the next marked region."
+   u.folds += 1; w.selected = index
+   if w.uniforms.all(func(g): return int(g.folds)==fold_steps(g)): w.stage = "folded"; _work_time(s,20)
+   e.append({"type":"sound","name":"cloth"})
   "open_hatch":
    if w.stage not in ["inspect","prepare"]: return "The hatch is locked during this cycle."
    w.hatch_open = true
@@ -263,6 +365,7 @@ static func _laundry(s: Dictionary,c: Dictionary,e: Array) -> String:
    if w.stage!="inspect" or not w.hatch_open: return "Open the washer hatch."
    for garment in w.uniforms:
     if not garment.sorted: return "There are still uniforms on the inspection bench."
+   for garment in w.uniforms: garment.loaded = true
    w.loaded = true; w.stage = "prepare"; _work_time(s,20)
   "dose":
    if w.stage!="prepare" or not w.hatch_open: return "Add detergent before closing the hatch."
@@ -286,12 +389,14 @@ static func _laundry(s: Dictionary,c: Dictionary,e: Array) -> String:
    w.stage = "washed"; _work_time(s,60); e.append({"type":"sound","name":"washer"})
   "unload":
    if w.stage!="washed": return "Wait until the wash order is complete."
+   for garment in w.uniforms: garment.unloaded = true
    w.hatch_open = true; w.stage = "wet"; _work_time(s,10)
   "dry":
    if w.stage!="wet": return "Take the washed bundle out first."
    w.stage = "dry"; _work_time(s,40)
   "fold":
    if w.stage!="dry": return "Dry the uniforms before folding."
+   for garment in w.uniforms: garment.folds = fold_steps(garment)
    w.stage = "folded"; _work_time(s,20); e.append({"type":"sound","name":"cloth"})
   "dispatch":
    if w.stage!="folded": return "The outgoing cart needs folded uniforms."
@@ -344,6 +449,7 @@ static func _freight(s: Dictionary,c: Dictionary,e: Array) -> String:
  if s.location!="freight" or s.shift.is_empty() or s.shift.job!="freight": return "Take a freight work order first."
  var w = s.shift
  if c.action=="manifest": w.manifest_read = true; return ""
+ if c.has("index") and not _whole_number(c.index): return "Choose a garment on this workbench."
  var index = int(c.get("index",w.selected))
  if index<0 or index>=w.crates.size(): return "Unknown crate."
  var crate = w.crates[index]; w.selected = index
@@ -375,11 +481,12 @@ static func _settle(s: Dictionary,e: Array) -> String:
  var gross = int(catalog().jobs[job].gross)+(1 if record.promoted else 0)-(1 if quality<60 else 0)
  var remainder = int(s.tax_remainder)+gross*12
  var tax = int(remainder/100)
- s.tax_remainder = remainder%100; s.tax_paid += tax; s.credits += gross-tax
+ s.tax_remainder = remainder%100; s.taxes.accrued += tax; s.credits += gross
+ _tax_ledger(s,"assessment",tax)
  record.shifts += 1
  if quality>=85: record.trust += 1
  else: record.warnings += 1
- s.last_receipt = {"shift_id":w.id,"job":job,"gross":gross,"withholding":tax,"net":gross-tax,"quality":quality}
+ s.last_receipt = {"shift_id":w.id,"job":job,"gross":gross,"withholding":0,"net":gross,"tax_assessed":tax,"quality":quality}
  e.append({"type":"receipt","data":s.last_receipt.duplicate(true)})
  var detected: Array = []
  for risk in w.risks:
@@ -401,18 +508,22 @@ static func _settle(s: Dictionary,e: Array) -> String:
  if s.legal.offenses>=3 and not detected.is_empty(): _enter_camp(s,e)
  return ""
 
-static func _enter_camp(s: Dictionary,e: Array) -> void:
+static func _enter_camp(s: Dictionary,e: Array,reason: String="crime") -> void:
+ if not s.shift.is_empty() or s.legal.camp.get("active",false): return
+ if reason=="crime" and s.taxes.flagged: reason = "mixed"
  for item in s.items:
   if item.owner=="player" and item.get("storage","bag")=="bag": item.owner = "held"; item.history.append({"minute":s.minute,"custody":"held"})
- s.legal.camp = {"active":true,"orders":0,"sorted":[],"started":s.minute,"address":s.housing.address}
+ s.legal.camp = {"active":true,"orders":0,"sorted":[],"started":s.minute,"address":s.housing.address,"reason":reason,"minimum_orders":3,"debt_at_entry":tax_summary(s).total,"worked_off":0,"tax_pause_started":s.minute}
  s.location = "camp"
- e.append({"type":"notice","text":"DETAINEE 91-447\nThree compulsory work orders. Outside tenancy and employment paused. Personal effects held at intake."})
+ e.append({"type":"notice","text":"DETAINEE 91-447\nAt least three compulsory work orders; tax debt must be worked off for tax detention. Outside tenancy and employment paused. Personal effects held at intake."})
 
 static func _camp(s: Dictionary,c: Dictionary,e: Array) -> String:
  var camp = s.legal.camp
  if s.location!="camp" or camp.is_empty() or not camp.active: return "You have no active correction order."
  match c.action:
   "camp_sort":
+   if camp.orders>=int(camp.minimum_orders) and (camp.reason=="crime" or tax_summary(s).total==0): return "Your work orders are complete."
+   if not _whole_number(c.get("index")): return "Choose a scrap piece."
    var index = int(c.get("index",-1))
    if index not in [0,1,2] or str(c.get("bin","")) not in ["metal","fabric"]: return "Sort the scrap into the marked bins."
    if index in camp.sorted: return "That piece is already counted."
@@ -421,14 +532,21 @@ static func _camp(s: Dictionary,c: Dictionary,e: Array) -> String:
    s.needs.energy = maxf(0,s.needs.energy-2)
   "camp_order":
    if camp.sorted.size()!=3: return "Three sorted pieces make one work order."
-   if camp.orders>=3: return "Your work orders are complete."
+   if camp.orders>=int(camp.minimum_orders) and (camp.reason=="crime" or tax_summary(s).total==0): return "Your work orders are complete."
    camp.orders += 1; camp.sorted = []
+   s.city.supplies.metal += 2; s.city.supplies.fabric += 1
+   var retired = mini(1,int(tax_summary(s).total))
+   if retired>0:
+    _retire_tax(s,retired); s.taxes.worked_off += retired; camp.worked_off += retired; _tax_ledger(s,"work",retired)
    e.append({"type":"notice","text":"WORK ORDER %d / 3 COUNTED\nZero wages."%int(camp.orders)})
   "camp_meal": s.needs.hunger = maxf(45,s.needs.hunger); s.needs.thirst = maxf(55,s.needs.thirst)
   "camp_sleep": _advance(s,120,true); s.needs.energy = minf(70,s.needs.energy+35)
   "camp_release":
-   if camp.orders<3: return "Complete the three work orders before release."
+   if camp.orders<int(camp.minimum_orders): return "Complete the three work orders before release."
+   if camp.reason in ["tax","mixed"] and tax_summary(s).total>0: return "The outstanding tax must be worked off before release."
    s.housing.next_bill += int(s.minute)-int(camp.started)
+   var tax_pause = int(s.minute)-int(camp.tax_pause_started)
+   s.taxes.next_due += tax_pause; s.taxes.grace_until += tax_pause
    for item in s.items:
     if item.owner=="held": item.owner = "player"; item.history.append({"minute":s.minute,"custody":"player"})
    camp.active = false; camp.released = s.minute; s.location = "room"
@@ -507,6 +625,7 @@ static func _advance(s: Dictionary,minutes: int,sleeping: bool=false) -> void:
  if not sleeping: s.needs.energy = maxf(0,s.needs.energy-hours)
  if s.needs.hunger<15 or s.needs.thirst<15: s.needs.health = maxf(10,s.needs.health-hours*1.5)
  if not camp:
+  _tax_clock(s)
   while s.minute>=s.housing.next_bill:
    if s.housing.rent>0:
     if s.credits>=s.housing.rent: s.credits -= int(s.housing.rent)
@@ -529,3 +648,145 @@ static func _threshold_thought(before: Dictionary,s: Dictionary,e: Array) -> voi
   for i in range(thresholds.size()-1,-1,-1):
    if before.needs[need]>thresholds[i] and s.needs[need]<=thresholds[i]:
     e.append({"type":"thought","text":lines[need][i]}); return
+
+static func fold_steps(garment: Dictionary) -> int:
+ return 2 if garment.get("type","")=="medical" else 3
+
+static func _whole_number(value: Variant) -> bool:
+ return value is int or (value is float and is_finite(value) and value==floor(value))
+
+static func available_encounters(s: Dictionary) -> Array:
+ var out: Array = []
+ if not s.identity.registered or not s.shift.is_empty() or s.legal.camp.get("active",false): return out
+ var day = int(s.minute/1440)
+ var shifts = 0
+ for job in s.jobs.values(): shifts += int(job.shifts)
+ var definitions = [
+  {"id":"street_inspection","title":"Service gate inspection","text":"The gate officer holds out a gloved hand beneath the service warning sign. Papers, then passage.","choices":[{"id":"present","label":"Present civic paper · 10 min"},{"id":"wait","label":"Wait in the inspection queue · 20 min"}],"ready":s.location=="service","cooldown":2},
+  {"id":"neighbor_help","title":"The landing basket","text":"A neighbor struggles with a basket. Their hands shake.","choices":[{"id":"carry","label":"Carry the basket upstairs · 20 min"},{"id":"share","label":"Share carried bread or ration paste · 5 min"},{"id":"decline","label":"Keep walking"}],"ready":s.location=="hall" and shifts>=1,"cooldown":3},
+  {"id":"coworker_cover","title":"An empty station","text":"One attendant never arrived. A coworker asks for help clearing their station.","choices":[{"id":"help","label":"Help clear the station · 25 min"},{"id":"decline","label":"Leave it for the next attendant"}],"ready":s.location=="laundry" and s.employment=="laundry" and s.jobs.laundry.shifts>=1,"cooldown":3},
+  {"id":"service_repair","title":"Rattling service cabinet","text":"A loose relay chatters behind the cabinet door. Someone left a maintenance kit.","choices":[{"id":"repair","label":"Reseat the relay and secure the cover · 30 min"}],"ready":s.location=="service" and not s.city.flags.get("service_repaired",false),"cooldown":-1},
+  {"id":"relay_detail","title":"Restored relay recording","text":"The repaired relay has recovered a damaged return-count recording. The playback switch is lit.","choices":[{"id":"listen","label":"Listen beside the cabinet · 10 min"}],"ready":s.location=="service" and s.city.flags.get("service_repaired",false) and not s.city.flags.get("relay_heard",false),"cooldown":-1}
+ ]
+ for definition in definitions:
+  if not definition.ready: continue
+  var previous = s.city.encounters.get(definition.id,{})
+  if not (definition.id=="street_inspection" and s.taxes.flagged) and not previous.is_empty() and (definition.cooldown<0 or day-int(previous.last_day)<int(definition.cooldown)): continue
+  if definition.id=="street_inspection" and int(s.city.security_favor)>0:
+   definition.choices.append({"id":"favor","label":"Mention the service repair · 5 min"})
+  out.append({"object":{"street_inspection":"guard","neighbor_help":"neighbor","coworker_cover":"coworker","service_repair":"cabinet","relay_detail":"relay"}[definition.id],"id":definition.id,"title":definition.title,"text":definition.text+_background_encounter_text(str(s.identity.background),str(definition.id)),"choices":definition.choices.duplicate(true)})
+ return out
+
+static func _event_choice(s: Dictionary,c: Dictionary,e: Array) -> String:
+ var id = str(c.get("event","")); var choice = str(c.get("choice","")); var found = false
+ for encounter in available_encounters(s):
+  if encounter.id==id and encounter.choices.any(func(option): return option.id==choice): found = true; break
+ if not found: return "That encounter or choice is no longer available."
+ var minutes = 0; var text = ""
+ match id:
+  "street_inspection":
+   minutes = 5 if choice=="favor" else 10 if choice=="present" else 20
+   s.legal.suspicion = maxi(0,int(s.legal.suspicion)-2)
+   s.city.flags.inspection_day = int(s.minute/1440)
+   text = "The officer remembers the repaired lights. A quick check, then a nod." if choice=="favor" else "The officer compares the number twice. Then waves me through."
+  "neighbor_help":
+   if choice=="share":
+    var food: Dictionary = {}
+    for item in s.items:
+     if c.has("item_id") and item.id!=str(c.item_id): continue
+     if item.owner=="player" and item.storage=="bag" and item.kind in ["bread","paste"] and not is_spoiled(item,int(s.minute)): food = item; break
+    if food.is_empty(): return "I need unspoiled bread or ration paste in my bag."
+    food.owner = "neighbor"; food.history.append({"minute":s.minute,"custody":"neighbor"}); minutes = 5
+   elif choice=="carry": minutes = 20
+   if choice!="decline":
+    _item(s,"soap","Soap","player","Neighbor's spare supply",catalog().items.soap)
+    s.city.flags.neighbor_known = true
+   text = "They press a spare bar of soap into my hand. \"The service corridor cabinet rattles. It used to power the lamps and a recording relay. Fix it and there might be something left to hear.\"" if choice!="decline" else "The basket scrapes another step behind me."
+  "coworker_cover":
+   if choice=="help":
+    minutes = 25; _item(s,"paste","Ration paste","player","Coworker's spare ration",catalog().items.paste); s.city.flags.coworker_known = true
+   text = "A ration pouch changes hands. No supervisor notices." if choice=="help" else "The empty station stays empty."
+  "service_repair":
+   minutes = 30; s.city.flags.service_repaired = true; s.city.security_favor = mini(100,int(s.city.security_favor)+1)
+   _item(s,"soap","Soap","player","Maintenance cabinet spare supply",catalog().items.soap)
+   text = "The cabinet quiets and the corridor lamps come back on. The gate officer acknowledges the repair. The relay playback light is on: its restored recording is available now."
+  "relay_detail":
+   minutes = 10; s.city.flags.relay_heard = true
+   var note = "SERVICE RELAY / RECORDED RETURN COUNT\n17 present / 18 returned. Leave the extra name on the sheet."
+   _item(s,"note","Relay count transcription","player","Service relay",{"text":note})
+   if "relay_signal" not in s.discoveries: s.discoveries.append("relay_signal")
+   text = note
+ s.city.encounters[id] = {"count":int(s.city.encounters.get(id,{}).get("count",0))+1,"last_day":int(s.minute/1440),"last_minute":int(s.minute),"last_choice":choice}
+ s.decisions.append({"event":id,"choice":choice,"minute":int(s.minute)})
+ if s.decisions.size()>120: s.decisions = s.decisions.slice(-120)
+ _advance(s,minutes)
+ if id=="street_inspection" and s.taxes.flagged:
+  _enter_camp(s,e,"tax")
+  return ""
+ e.append({"type":"thought","text":text})
+ return ""
+
+static func _background_encounter_text(background: String,event: String) -> String:
+ var knowledge = {
+  "factory_laborer":{"coworker_cover":"I remember clearing an absent worker's station on the factory line. Someone still has to count their output.","service_repair":"The chatter sounds like a loose contact on the old line. The kit here should be enough."},
+  "displaced_resident":{"neighbor_help":"I recognize them from the relocation queue. They carried somebody else's basket then, too."},
+  "former_bureaucrat":{"street_inspection":"The guard wants the civic number facing up. I used to file these inspection sheets.","relay_detail":"Recorded return count. I remember those sheets: extra names were copied forward, never crossed out.","service_repair":"This cabinet carried the return counts to the clerks. Repairing it may recover the recording."},
+  "street_survivor":{"street_inspection":"The queue moves eventually. The public tap is still free after the guard lets me through.","neighbor_help":"A shared ration can mean more than a promise. Bread or paste from my bag would do."},
+  "technical_apprentice":{"service_repair":"The training card named this cabinet. Reseat the relay, secure the cover; the tools are already here.","relay_detail":"The recorder is working again. That repeated voice is stored on the relay, not a mechanical rattle."}
+ }
+ var text = str(knowledge.get(background,{}).get(event,""))
+ return "\n\n"+text if text!="" else ""
+
+static func _initial_taxes(minute: int) -> Dictionary:
+ return {"accrued":0,"due":0,"grace_due":0,"next_due":minute+4320,"grace_until":minute+5760,"flagged":false,"worked_off":0,"ledger":[]}
+
+static func tax_summary(s: Dictionary) -> Dictionary:
+ var t = s.taxes
+ return {"accrued":int(t.accrued),"due":int(t.due),"grace_due":int(t.grace_due),"overdue":int(t.due)-int(t.grace_due),"total":int(t.due)+int(t.accrued),"next_due":int(t.next_due),"grace_until":int(t.grace_until),"flagged":t.flagged,"paid":int(s.tax_paid),"worked_off":int(t.worked_off)}
+
+static func _valid_taxes(t: Dictionary) -> bool:
+ for key in ["accrued","due","grace_due","next_due","grace_until","worked_off"]:
+  if not _whole_number(t.get(key)) or int(t[key])<0: return false
+ if not t.get("flagged") is bool or not t.get("ledger") is Array: return false
+ if t.ledger.size()>120: return false
+ if int(t.grace_due)>int(t.due) or t.flagged!=(int(t.due)>int(t.grace_due)): return false
+ if int(t.next_due)<=0 or int(t.grace_until)<=0: return false
+ if int(t.grace_due)>0 and int(t.grace_until)>=int(t.next_due): return false
+ for entry in t.ledger:
+  if not entry is Dictionary or not entry.get("type") is String: return false
+  if not _whole_number(entry.get("minute")) or int(entry.minute)<0 or not _whole_number(entry.get("amount")) or int(entry.amount)<0: return false
+ return true
+
+static func _tax_ledger(s: Dictionary,type: String,amount: int,minute: int=-1) -> void:
+ s.taxes.ledger.append({"type":type,"amount":amount,"minute":int(s.minute) if minute<0 else minute})
+ if s.taxes.ledger.size()>120: s.taxes.ledger = s.taxes.ledger.slice(-120)
+
+static func _tax_clock(s: Dictionary) -> void:
+ var t = s.taxes
+ while true:
+  # An older bill's grace must expire before a later billing cycle is assessed.
+  if int(t.grace_due)>0 and int(t.grace_until)<=int(s.minute) and int(t.grace_until)<=int(t.next_due):
+   _tax_ledger(s,"grace_expired",int(t.grace_due),int(t.grace_until)); t.grace_due = 0
+  elif int(t.next_due)<=int(s.minute):
+   var boundary = int(t.next_due); var bill = int(t.accrued)
+   t.due += bill; t.accrued = 0; t.grace_due = bill; t.grace_until = boundary+1440; t.next_due = boundary+4320
+   _tax_ledger(s,"bill",bill,boundary)
+  else: break
+ t.flagged = int(t.due)>int(t.grace_due)
+
+static func _retire_tax(s: Dictionary,amount: int) -> void:
+ var t = s.taxes
+ var overdue_payment = mini(amount,int(t.due)-int(t.grace_due)); t.due -= overdue_payment; amount -= overdue_payment
+ var grace_payment = mini(amount,int(t.grace_due)); t.grace_due -= grace_payment; t.due -= grace_payment; amount -= grace_payment
+ t.accrued -= amount
+ t.flagged = int(t.due)>int(t.grace_due)
+
+static func _pay_tax(s: Dictionary,c: Dictionary,e: Array) -> String:
+ if s.location!="bureau" or not s.shift.is_empty() or s.legal.camp.get("active",false): return "Tax payments are taken at the bureau counter after work."
+ if not _whole_number(c.get("amount")) or int(c.amount)<=0: return "Choose a positive whole-credit payment."
+ var amount = int(c.amount)
+ if amount>int(s.credits): return "I cannot pay more credits than I have."
+ if amount>int(tax_summary(s).total): return "That is more than the outstanding tax."
+ _retire_tax(s,amount); s.credits -= amount; s.tax_paid += amount; _tax_ledger(s,"payment",amount)
+ e.append({"type":"thought","text":"The clerk stamps the payment. Keep the receipt."})
+ return ""

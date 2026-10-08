@@ -1,0 +1,49 @@
+{
+  "pipeline_version": 3,
+  "assets": [
+    {
+      "id": "service",
+      "version": 1,
+      "file": "assets/scenes/service-v1.png",
+      "tool": "image_gen.imagegen / built-in",
+      "source": "/home/commander/.codex/generated_images/01a11c05-e33d-7b12-9a76-241852c2a495/exec-14158204-aba1-4f48-8576-9a098ef7ad88.png",
+      "sha256": "3b65cbf3c7d86124d98096bd1b35b8f9a164de6cc4d3388b641b18ed17cf3d4e",
+      "prompt": "art/prompts/service-v1.txt",
+      "prompt_sha256": "f5487dca3a4ed2c8794a8e3948b52a0d7f2bd334db473b63cc5a9a0bda5c9d42",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "license": "Original generated artwork for SCHISM; no third-party artwork.",
+      "references": [
+        {
+          "file": "assets/scenes/street-v1.png",
+          "sha256": "e57ce667590804f450294f406c70039cbd365733298c16810f7eff50aac2a92e"
+        }
+      ]
+    },
+    {
+      "id": "objects-v2",
+      "version": 2,
+      "file": "assets/objects/objects-v2.png",
+      "tool": "image_gen.imagegen / built-in",
+      "source": "/home/commander/.codex/generated_images/01a11c05-e33d-7b12-9a76-241852c2a495/exec-d8592059-808f-4006-b279-bfaab8c2c552.png",
+      "sha256": "2361aa82e1eb4687cd5afcfece6718858835763efcef88c90fc44e2568a43ad1",
+      "prompt": "art/prompts/objects-v2.txt",
+      "prompt_sha256": "6d2de72144a2d83907e9619c3b6cfae4dd336443a670eff12d488ec5a8f49cca",
+      "dimensions": [
+        1254,
+        1254
+      ],
+      "mode": "RGBA",
+      "license": "Original generated artwork for SCHISM; no third-party artwork.",
+      "references": []
+    }
+  ],
+  "authored_maps": {
+    "data/scenes.json": "ecbede6775c4696a21350d6e1ec676523723013df7f30718f46e1686d4c26eb6",
+    "data/objects.json": "5aac56fa7086b47307650ae66941c23dcb8c48926dad735ebd27af730f450939"
+  },
+  "composition": "Service cabinet, repair-unlocked relay and barred guard gate; original backgrounds unchanged. Item regions are individually authored; low-alpha residue discarded at runtime. Original objects-v1 retained with original provenance."
+}

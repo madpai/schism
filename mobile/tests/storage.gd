@@ -52,7 +52,7 @@ func _initialize() -> void:
  var legacy = home(); legacy.schema = 3; legacy.minute += 5000
  legacy.items[-1].erase("storage"); legacy.items[-1].erase("cold_minutes"); legacy.items[-1].metadata.custom_owner_note = "Do not lose this"
  var migrated = Sim.migrate(legacy)
- check(migrated.schema==4 and migrated.items[-1].cold_minutes==4320 and migrated.items[-1].metadata.custom_owner_note=="Do not lose this","v3 upgrade preserves the old fridge allowance, identity and unknown metadata")
+ check(migrated.schema==Sim.SCHEMA and migrated.items[-1].cold_minutes==4320 and migrated.items[-1].metadata.custom_owner_note=="Do not lose this","v3 upgrade preserves the old fridge allowance, identity and unknown metadata")
  check(Sim.apply(migrated,{"action":"consume","id":migrated.items[-1].id}).ok,"previously usable food remains usable after upgrade")
  check(Sim.migrate(migrated).items[-1].cold_minutes==4320,"migration cannot grant preservation twice")
  var sparse = Sim.migrate({"schema":3,"items":[{"id":"IX-48193-00100","serial":"R-00100","metadata":{}}]})
@@ -67,6 +67,6 @@ func _initialize() -> void:
  check(store.save_state(migrated),"write migrated preservation and item location")
  var loaded = store.load_state()
  check(loaded.items[-1].storage=="bag" and loaded.items[-1].cold_minutes==4320,"save/load preserves storage and accrued cooling")
- var future = Sim.migrate({"schema":5})
+ var future = Sim.migrate({"schema":Sim.SCHEMA+1})
  check(future.has("error"),"unsupported future storage records remain protected")
  print("SCHISM storage: %d checks passed; %d failed."%[passed,failed]); quit(1 if failed else 0)

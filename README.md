@@ -14,7 +14,7 @@ Open `mobile/project.godot` in Godot 4.7.2 and run. On Android, install the debu
 
 Tap objects in the current scene. Follow doors through the hallway to the street. At the bureau, take a ticket and present your ID. All three jobs are playable; laundry has the most developed interaction sequence. CIVIC ID opens your body/needs/employment record. BAG looks inside a worn backpack; tap the actual possessions inside it. Settings include sound, reduced effects and object hints.
 
-Nine illustrated locations, five needs, local identity, three jobs, taxes, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. The locker and refrigerator hold individual belongings; carried food earns no refrigerator bonus. The incoming laundry cart empties as garments are sorted; an open hatch and tumbling cloth follow the saved machine state. Close-ups use consistent raster art. Bureau sheets scroll inside fixed phone bounds. Travel cues are brief and quiet. Damaged media remains unexplained. No multiplayer service or monetization is required.
+Ten illustrated locations, five civilian backgrounds, persistent contextual encounters, five needs, local identity, three jobs, manual bureau tax payments, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. The locker and refrigerator hold individual belongings; carried food earns no refrigerator bonus. The incoming laundry cart empties as garments are sorted; individual loading, collection and sleeve/hem folds stay saved. An open hatch and tumbling cloth follow the saved machine state. Experienced workers can choose quicker bundle actions. A guarded service corridor rewards player-chosen repairs and immediate investigation; neighbors, coworkers and inspection officers vary the routine. Close-ups use consistent raster art. Bureau sheets scroll inside fixed phone bounds. Travel cues are brief and quiet. Damaged media remains unexplained. No multiplayer service or monetization is required.
 
 ## Check and build
 
@@ -25,16 +25,16 @@ GODOT=/path/to/Godot_v4.7.2-stable_linux.x86_64 mobile/tools/check.sh
 GODOT=/path/to/Godot_v4.7.2-stable_linux.x86_64 mobile/tools/build.sh
 ```
 
-The check runs the headless simulation and native UI tests, verifies original asset hashes and checks scene zones. The build creates `builds/schism-android-debug.apk` and `builds/schism-linux.x86_64`, then prints their SHA-256 hashes. Build outputs and keystores are ignored by Git. Store signing is a separate release step; never commit a keystore.
+Python 3 and Pillow are needed for source-alpha/provenance validation. The check runs the headless simulation and native UI tests, verifies original asset hashes and checks scene zones. The build creates `builds/schism-android-debug.apk` and `builds/schism-linux.x86_64`, then prints their SHA-256 hashes. Build outputs and keystores are ignored by Git. Store signing is a separate release step; never commit a keystore.
 
 For Android touch, interrupted-work and resolution testing on a **fresh, isolated emulator**:
 
 ```sh
 adb -s emulator-5584 install --no-incremental builds/schism-android-debug.apk
-python3 scripts/android-playtest.py --device emulator-5584 --adb /path/to/adb
+python3 scripts/android-living-playtest.py --device emulator-5584 --adb /path/to/adb --extended
 ```
 
-The playtest uses Python 3, Pillow, `tesseract` and real Android taps. Add `--presentation` to inspect bureau papers at three sizes, tap inside the bag and measure the rendered washer motion. It refuses to reset an existing citizen. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID.md`](docs/playtests/ANDROID.md) for measured evidence and limits.
+The playtest uses Python 3, Pillow, `tesseract` and real Android taps. The Living City runner inspects tactile work and the service corridor at three sizes, uses the backpack, measures the rendered washer motion and plays the daily encounters. `--extended` also checks familiar work and Day 2 inspection. It refuses an existing citizen; `--resume` requires its own isolated QA checkpoint. The older runner remains for historical builds. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID_V040.md`](docs/playtests/ANDROID_V040.md) for this milestone’s measured evidence and limits.
 
 ## Design and handoff
 

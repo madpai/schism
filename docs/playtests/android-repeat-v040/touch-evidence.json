@@ -1,0 +1,392 @@
+{
+  "apk_sha256": "b8ae7a7b60a8b184a5816ae938f681c0c347ecab56d3a6c7c140044a6ba599d6",
+  "device": "emulator-5584",
+  "steps": [
+    {
+      "assertion": "selected citizen belongs to the explicitly marked isolated Living City run",
+      "ok": true
+    },
+    {
+      "assertion": "marked citizen is eligible for familiar work",
+      "ok": true
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "laundry",
+      "location": "street",
+      "point": [
+        907,
+        1146
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "Pull the cart",
+      "point": [
+        251,
+        1479
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 01",
+      "point": [
+        179,
+        869
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "GENERAL",
+      "point": [
+        320,
+        1549
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 02",
+      "point": [
+        683,
+        869
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "Place in Lost Property",
+      "point": [
+        495,
+        1351
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 02",
+      "point": [
+        683,
+        869
+      ]
+    },
+    {
+      "touch": "GENERAL",
+      "point": [
+        320,
+        1549
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 03",
+      "point": [
+        182,
+        1292
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "GENERAL",
+      "point": [
+        320,
+        1549
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 04",
+      "point": [
+        685,
+        1292
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "GENERAL",
+      "point": [
+        320,
+        1549
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Pull the hatch",
+      "point": [
+        461,
+        1460
+      ]
+    },
+    {
+      "touch": "lift the remaining",
+      "point": [
+        617,
+        750
+      ]
+    },
+    {
+      "assertion": "familiar loading visible without scrolling loads every garment",
+      "ok": true
+    },
+    {
+      "touch": "Tip one measured",
+      "point": [
+        311,
+        1475
+      ]
+    },
+    {
+      "touch": "Tip one measured",
+      "point": [
+        311,
+        1475
+      ]
+    },
+    {
+      "touch": "STANDARD",
+      "point": [
+        206,
+        1642
+      ]
+    },
+    {
+      "touch": "Push the hatch",
+      "point": [
+        487,
+        1813
+      ]
+    },
+    {
+      "touch": "Press the green",
+      "point": [
+        411,
+        1647
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "collect the remaining",
+      "point": [
+        697,
+        1278
+      ]
+    },
+    {
+      "assertion": "familiar collection is visible before the cloth surface",
+      "ok": true
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Hang the bundle",
+      "point": [
+        351,
+        1835
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "fold the remaining",
+      "point": [
+        652,
+        687
+      ]
+    },
+    {
+      "hotspot": "outgoing",
+      "location": "laundry",
+      "point": [
+        998,
+        1298
+      ]
+    },
+    {
+      "touch": "Place folded",
+      "point": [
+        225,
+        1031
+      ]
+    },
+    {
+      "touch": "Slide your timecard",
+      "point": [
+        308,
+        1036
+      ]
+    },
+    {
+      "touch": "Fold the wage",
+      "point": [
+        495,
+        1615
+      ]
+    },
+    {
+      "assertion": "familiar controls complete one quality-100 daily work loop",
+      "ok": true
+    },
+    {
+      "assertion": "familiar-work-settlement: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "familiar-work-settlement",
+      "revision": 253,
+      "payload_sha256": "32503e5d6aa07624a784ef80b7bd6b0132308ba5323d37b10798f9d7b75afec8"
+    }
+  ],
+  "receipt": {
+    "gross": 7,
+    "job": "laundry",
+    "net": 7,
+    "quality": 100,
+    "shift_id": "33981-shift-228",
+    "tax_assessed": 1,
+    "withholding": 0
+  }
+}

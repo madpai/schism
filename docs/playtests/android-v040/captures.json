@@ -1,0 +1,129 @@
+{
+  "selection": "Selected unaltered native screenshots; redundant OCR/failure captures omitted. See parent evidence page for exact build scope.",
+  "files": {
+    "bag-deeper-pocket.png": {
+      "sha256": "479ea5ee240d3f59ac5f29006699c2fe58ec142a062ccf8ea4d05c964e99263b",
+      "bytes": 1671278
+    },
+    "bureau-authorizations.png": {
+      "sha256": "dec3f2dfe40e7719c2f2e751fc6ea76851264259614a8113a5b1df02401177a6",
+      "bytes": 569066
+    },
+    "cloth-before-fold.png": {
+      "sha256": "52c741825576ebf575496ce5331b72e699a635b76fa062ffec9540b01802fe79",
+      "bytes": 415942
+    },
+    "cloth-drag-after.png": {
+      "sha256": "23fdeaa1499d5fc1f344bdf5823511b6014b395e31d703de2ad770dc99ef94e7",
+      "bytes": 775584
+    },
+    "cloth-drag-before.png": {
+      "sha256": "ca655319a2a82bec7c14ee868727cbacccfc5f9af464ded59d67f68abcff8b55",
+      "bytes": 779616
+    },
+    "cloth-folding-1080x2400.png": {
+      "sha256": "4b5b78c0f91545de5e3f99fdfe6895c7d5ba38503b464d44cc1ea82d958d4429",
+      "bytes": 419994
+    },
+    "cloth-folding-360x640.png": {
+      "sha256": "50b6288e54c327561c5feb434aae425d1f92e00e99fc458f3603a2d7d4563a04",
+      "bytes": 104494
+    },
+    "cloth-folding-390x844.png": {
+      "sha256": "f2181d959468110054d5ad6cfe81d21dcc9824b8b1c272afa9cb21ea45cffb9c",
+      "bytes": 133717
+    },
+    "cloth-one-fold.png": {
+      "sha256": "072f71f6f7044e3e645f25dbba0ac6b4cbe7c9b402bba0c1350d1f80346096dc",
+      "bytes": 419426
+    },
+    "cloth-partially-loaded.png": {
+      "sha256": "813ed8d329faad59b119bd274023072b5571108f39f8a89a0665376a165fb880",
+      "bytes": 755514
+    },
+    "cloth-partially-unloaded.png": {
+      "sha256": "9d71ab2e04edee0b601b807a289eeb662e8a3a342f7bfc2f7a2ce6d9780d4883",
+      "bytes": 1223600
+    },
+    "coworker_cover-choice.png": {
+      "sha256": "2ff163d922c1d83f3ec2edb18d24018456459b5ccacbd1bc069b27c4a39262a0",
+      "bytes": 435516
+    },
+    "day-two-security-inspection.png": {
+      "sha256": "252e10029b0b1211deb36f287021c40815bedb3a5e17ff6caca7bec8926f1f95",
+      "bytes": 533050
+    },
+    "home-after-survival-loop.png": {
+      "sha256": "011c659479eaaa1d29cc3064a01647aab51def79f6cf41b2c088dd3c635ed9ac",
+      "bytes": 2702237
+    },
+    "living-city-complete-resumed.png": {
+      "sha256": "42ede2d2be353dac2768a877759423d99d1e2eee128834b40eb366fdeaeeb6c4",
+      "bytes": 3301317
+    },
+    "neighbor_help-choice.png": {
+      "sha256": "9b99374b678472322f6cae9367d3734f790484def5a9563da5cc87b6fd984d61",
+      "bytes": 382283
+    },
+    "registration-background.png": {
+      "sha256": "5edcbb56f60c7ad9c4c6d2dd096b4de3d0eed52767f376c164e822a9a8ac241e",
+      "bytes": 593260
+    },
+    "relay_detail-choice.png": {
+      "sha256": "b533a2c3f629052e7b0118bac364d0a2b31ed0156a68bfc73c5c4c1daca8ee06",
+      "bytes": 431291
+    },
+    "second-shift-familiar-folding.png": {
+      "sha256": "fe0de422e66465a6fc01ace21a2ac2b2d52dfc2cc763f3018bcf6dd79a30f1b8",
+      "bytes": 439320
+    },
+    "second-wage-slip.png": {
+      "sha256": "0ea063585ae6ef76a26e8208f02da7404bcebce6ce866bb2ddd0c845503725d4",
+      "bytes": 453456
+    },
+    "service-daytime-1080x2400.png": {
+      "sha256": "c15677923212bb119387364e9397e1146fbc67bbe52aff72c171abf833a24a1c",
+      "bytes": 3315369
+    },
+    "service-daytime-360x640.png": {
+      "sha256": "778f95f2ee2403890edc60e741c88c4309cec716d7efd7f3fbde71f3bb593017",
+      "bytes": 414134
+    },
+    "service-daytime-390x844.png": {
+      "sha256": "2777497b1736893eb6b55fa917883a4c0135ff1cfba8ec975e0a08276f948fd4",
+      "bytes": 586978
+    },
+    "service-daytime.png": {
+      "sha256": "d2a3e25d34a6790a3712476a2c66a35f708813b505d19018ba254057fdd75d11",
+      "bytes": 3310174
+    },
+    "service_repair-after.png": {
+      "sha256": "68b4cc24f637efa9f56944aa6f1af55fd0af37d4b528d355a736a2eb0f002333",
+      "bytes": 3407878
+    },
+    "service_repair-choice.png": {
+      "sha256": "d3ffdea7366a635bda12ecaca28fdbb3b90f3bfecb9bd8218aa691bd46cf0d08",
+      "bytes": 590432
+    },
+    "shop-shelf-top.png": {
+      "sha256": "f1c8ea67a01e038f778d9943389091687d10ddd2e376161f98c9afbfef11f6ef",
+      "bytes": 672135
+    },
+    "shop-stew-tea-top.png": {
+      "sha256": "b2e72ce2d1cfb82faffc0b63edacd4f8f227e5202dc94b90cea61185b1f5cb3d",
+      "bytes": 436454
+    },
+    "shop-water-soap-top.png": {
+      "sha256": "2efdfcd7d1066d03a8f82f7c0c11ca94dd0c9a52ed34470b022daa9c68133d37",
+      "bytes": 404754
+    },
+    "washer-running-a.png": {
+      "sha256": "dcf0c524ec720a7d3ba1d67ecd23ff759496b29ef0629b84edeb1df45c9bd7e5",
+      "bytes": 2583978
+    },
+    "washer-running-b.png": {
+      "sha256": "b361b666ecd2a012cf4f9a5df97ef3546f75c808d70f7a6d7c37875e79ef1a11",
+      "bytes": 2567247
+    }
+  }
+}

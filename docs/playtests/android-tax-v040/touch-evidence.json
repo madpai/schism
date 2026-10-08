@@ -1,0 +1,1636 @@
+{
+  "apk_sha256": "b8ae7a7b60a8b184a5816ae938f681c0c347ecab56d3a6c7c140044a6ba599d6",
+  "device": "emulator-5584",
+  "steps": [
+    {
+      "assertion": "selected citizen belongs to the explicitly marked isolated Living City run",
+      "ok": true
+    },
+    {
+      "assertion": "new full-gross wage has a payable tax assessment",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "location": "service",
+      "point": [
+        108,
+        1393
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "bureau",
+      "location": "street",
+      "point": [
+        496,
+        1127
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "tax",
+      "location": "bureau",
+      "point": [
+        896,
+        1849
+      ]
+    },
+    {
+      "hotspot": "tax",
+      "location": "bureau",
+      "point": [
+        298,
+        479
+      ]
+    },
+    {
+      "assertion": "tax-payment-counter 360x640: inspecting/scaling changes no saved field",
+      "ok": true
+    },
+    {
+      "hotspot": "tax",
+      "location": "bureau",
+      "point": [
+        323,
+        648
+      ]
+    },
+    {
+      "assertion": "tax-payment-counter 390x844: inspecting/scaling changes no saved field",
+      "ok": true
+    },
+    {
+      "hotspot": "tax",
+      "location": "bureau",
+      "point": [
+        896,
+        1849
+      ]
+    },
+    {
+      "assertion": "tax-payment-counter 1080x2400: inspecting/scaling changes no saved field",
+      "ok": true
+    },
+    {
+      "hotspot": "tax",
+      "location": "bureau",
+      "point": [
+        896,
+        1849
+      ]
+    },
+    {
+      "touch": "across the counter",
+      "point": [
+        505,
+        1620
+      ]
+    },
+    {
+      "assertion": "physical office payment retires exactly the displayed debt and wallet amount",
+      "ok": true
+    },
+    {
+      "assertion": "manual-tax-payment: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "manual-tax-payment",
+      "revision": 119,
+      "payload_sha256": "d5193c0e8cc3d075f514b9f73e10a1d0e1ef368a689675b6f67a2d87e2677d3a"
+    },
+    {
+      "hotspot": "exit",
+      "location": "bureau",
+      "point": [
+        167,
+        1973
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "laundry",
+      "location": "street",
+      "point": [
+        907,
+        1146
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "Pull the cart",
+      "point": [
+        251,
+        1479
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 01",
+      "point": [
+        179,
+        869
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "MEDICAL",
+      "point": [
+        821,
+        1716
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 02",
+      "point": [
+        683,
+        869
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "MEDICAL",
+      "point": [
+        821,
+        1716
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 03",
+      "point": [
+        182,
+        1292
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "MEDICAL",
+      "point": [
+        821,
+        1716
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "location": "laundry",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 04",
+      "point": [
+        685,
+        1292
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "MEDICAL",
+      "point": [
+        821,
+        1716
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Pull the hatch",
+      "point": [
+        461,
+        1460
+      ]
+    },
+    {
+      "assertion": "selected citizen belongs to the explicitly marked isolated Living City run",
+      "ok": true
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Load uniform 01",
+      "point": [
+        423,
+        1708
+      ]
+    },
+    {
+      "touch": "Load uniform 02",
+      "point": [
+        424,
+        1708
+      ]
+    },
+    {
+      "touch": "Load uniform 03",
+      "point": [
+        433,
+        1708
+      ]
+    },
+    {
+      "touch": "Load uniform 04",
+      "point": [
+        432,
+        1708
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Tip one measured",
+      "point": [
+        311,
+        1475
+      ]
+    },
+    {
+      "touch": "Tip one measured",
+      "point": [
+        311,
+        1475
+      ]
+    },
+    {
+      "touch": "SANITIZE",
+      "point": [
+        871,
+        1642
+      ]
+    },
+    {
+      "touch": "Push the hatch",
+      "point": [
+        487,
+        1813
+      ]
+    },
+    {
+      "touch": "Press the green",
+      "point": [
+        411,
+        1647
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Collect wet uniform 01",
+      "point": [
+        528,
+        2253
+      ]
+    },
+    {
+      "touch": "Collect wet uniform 02",
+      "point": [
+        531,
+        2253
+      ]
+    },
+    {
+      "touch": "Collect wet uniform 03",
+      "point": [
+        529,
+        2253
+      ]
+    },
+    {
+      "touch": "Collect wet uniform 04",
+      "point": [
+        530,
+        2253
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Hang the bundle",
+      "point": [
+        351,
+        1835
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "location": "laundry",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "fold the remaining",
+      "point": [
+        652,
+        1763
+      ]
+    },
+    {
+      "hotspot": "outgoing",
+      "location": "laundry",
+      "point": [
+        998,
+        1298
+      ]
+    },
+    {
+      "touch": "Place folded",
+      "point": [
+        225,
+        1031
+      ]
+    },
+    {
+      "hotspot": "outgoing",
+      "location": "laundry",
+      "point": [
+        998,
+        1298
+      ]
+    },
+    {
+      "touch": "Slide your timecard",
+      "point": [
+        308,
+        1036
+      ]
+    },
+    {
+      "touch": "Fold the wage",
+      "point": [
+        495,
+        1615
+      ]
+    },
+    {
+      "assertion": "new shift pays full gross and records unpaid assessment instead of withholding",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "location": "laundry",
+      "point": [
+        135,
+        890
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "hall",
+      "location": "street",
+      "point": [
+        135,
+        1213
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "room",
+      "location": "hall",
+      "point": [
+        172,
+        1175
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "shop",
+      "location": "street",
+      "point": [
+        950,
+        1545
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "food",
+      "location": "shop",
+      "point": [
+        280,
+        1355
+      ]
+    },
+    {
+      "assertion": "selected citizen belongs to the explicitly marked isolated Living City run",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "location": "shop",
+      "point": [
+        826,
+        1897
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "hall",
+      "location": "street",
+      "point": [
+        135,
+        1213
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "room",
+      "location": "hall",
+      "point": [
+        172,
+        1175
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "shop",
+      "location": "street",
+      "point": [
+        950,
+        1545
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "food",
+      "location": "shop",
+      "point": [
+        280,
+        1355
+      ]
+    },
+    {
+      "touch": "Take Wrapped black",
+      "point": [
+        402,
+        1059
+      ]
+    },
+    {
+      "touch": "Previous pocket",
+      "point": [
+        288,
+        2274
+      ]
+    },
+    {
+      "touch": "Look deeper",
+      "point": [
+        775,
+        2275
+      ]
+    },
+    {
+      "touch": "Wrapped black bread",
+      "point": [
+        432,
+        1815
+      ]
+    },
+    {
+      "assertion": "bag item inspection displays a serial record",
+      "ok": true
+    },
+    {
+      "touch": "Unwrap and eat",
+      "point": [
+        542,
+        1485
+      ]
+    },
+    {
+      "hotspot": "exit",
+      "location": "shop",
+      "point": [
+        826,
+        1897
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "hall",
+      "location": "street",
+      "point": [
+        135,
+        1213
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "room",
+      "location": "hall",
+      "point": [
+        172,
+        1175
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "shop",
+      "location": "street",
+      "point": [
+        950,
+        1545
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "food",
+      "location": "shop",
+      "point": [
+        280,
+        1355
+      ]
+    },
+    {
+      "touch": "Take Wrapped black",
+      "point": [
+        402,
+        1059
+      ]
+    },
+    {
+      "touch": "Previous pocket",
+      "point": [
+        292,
+        1986
+      ]
+    },
+    {
+      "touch": "Look deeper",
+      "point": [
+        775,
+        2324
+      ]
+    },
+    {
+      "touch": "Wrapped black bread",
+      "point": [
+        430,
+        1815
+      ]
+    },
+    {
+      "assertion": "bag item inspection displays a serial record",
+      "ok": true
+    },
+    {
+      "touch": "Unwrap and eat",
+      "point": [
+        542,
+        1485
+      ]
+    },
+    {
+      "hotspot": "exit",
+      "location": "shop",
+      "point": [
+        826,
+        1897
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "hall",
+      "location": "street",
+      "point": [
+        135,
+        1213
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "room",
+      "location": "hall",
+      "point": [
+        172,
+        1175
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "shop",
+      "location": "street",
+      "point": [
+        950,
+        1545
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "food",
+      "location": "shop",
+      "point": [
+        280,
+        1355
+      ]
+    },
+    {
+      "touch": "Take Wrapped black",
+      "point": [
+        402,
+        1059
+      ]
+    },
+    {
+      "touch": "Previous pocket",
+      "point": [
+        292,
+        1986
+      ]
+    },
+    {
+      "touch": "Look deeper",
+      "point": [
+        775,
+        2324
+      ]
+    },
+    {
+      "touch": "Wrapped black bread",
+      "point": [
+        430,
+        1815
+      ]
+    },
+    {
+      "assertion": "bag item inspection displays a serial record",
+      "ok": true
+    },
+    {
+      "touch": "Unwrap and eat",
+      "point": [
+        542,
+        1485
+      ]
+    },
+    {
+      "hotspot": "exit",
+      "location": "shop",
+      "point": [
+        826,
+        1897
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "hall",
+      "location": "street",
+      "point": [
+        135,
+        1213
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "room",
+      "location": "hall",
+      "point": [
+        172,
+        1175
+      ]
+    },
+    {
+      "assertion": "navigation keeps no unfinished work order",
+      "ok": true
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "location": "room",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "location": "room",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "assertion": "unpaid invoice flags only after three played days and one-day grace",
+      "ok": true
+    },
+    {
+      "assertion": "deadline flags safely without teleporting the sleeping citizen into detention",
+      "ok": true
+    },
+    {
+      "assertion": "overdue-tax-flag: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "overdue-tax-flag",
+      "revision": 205,
+      "payload_sha256": "50426ce2d831447c70e1ae4249abe120b31654807bf4a2b980a884de149a750a"
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "assertion": "inspection warning permits direct bureau payment before enforcement",
+      "ok": true
+    },
+    {
+      "hotspot": "laundry",
+      "location": "street",
+      "point": [
+        907,
+        1146
+      ]
+    },
+    {
+      "assertion": "selected citizen belongs to the explicitly marked isolated Living City run",
+      "ok": true
+    },
+    {
+      "assertion": "unpaid invoice flags only after three played days and one-day grace",
+      "ok": true
+    },
+    {
+      "assertion": "deadline flags safely without teleporting the sleeping citizen into detention",
+      "ok": true
+    },
+    {
+      "assertion": "overdue-tax-flag: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "overdue-tax-flag",
+      "revision": 207,
+      "payload_sha256": "2e6e2b162a78e7149f6c6d51f22561d3a62090f82d3d1e8be3adafabd0eeb727"
+    },
+    {
+      "assertion": "inspection warning permits direct bureau payment before enforcement",
+      "ok": true
+    },
+    {
+      "hotspot": "laundry",
+      "location": "street",
+      "point": [
+        907,
+        1146
+      ]
+    },
+    {
+      "assertion": "street inspection admits the flagged citizen to debt-repayment work",
+      "ok": true
+    },
+    {
+      "assertion": "tax-detention-intake: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "tax-detention-intake",
+      "revision": 208,
+      "payload_sha256": "63fc81868201f0356016e3f6151e41cb0a7da3c09b9082518899ae7e0f8cf94b"
+    },
+    {
+      "hotspot": "meal",
+      "location": "camp",
+      "point": [
+        966,
+        1973
+      ]
+    },
+    {
+      "touch": "Eat the camp ration",
+      "point": [
+        539,
+        1238
+      ]
+    },
+    {
+      "hotspot": "scrap",
+      "location": "camp",
+      "point": [
+        642,
+        1441
+      ]
+    },
+    {
+      "touch": "METAL",
+      "point": [
+        317,
+        1686
+      ]
+    },
+    {
+      "touch": "FABRIC",
+      "point": [
+        814,
+        1421
+      ]
+    },
+    {
+      "touch": "METAL",
+      "point": [
+        317,
+        1155
+      ]
+    },
+    {
+      "touch": "Push the sorted tray",
+      "point": [
+        320,
+        1061
+      ]
+    },
+    {
+      "assertion": "city supply order counts exactly once",
+      "ok": true
+    },
+    {
+      "assertion": "first-debt-work-order: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "first-debt-work-order",
+      "revision": 213,
+      "payload_sha256": "b3166c46fdcde36656d19d623905cb829f27048567ab2e1267995845ad83633f"
+    },
+    {
+      "hotspot": "meal",
+      "location": "camp",
+      "point": [
+        966,
+        1973
+      ]
+    },
+    {
+      "touch": "Eat the camp ration",
+      "point": [
+        539,
+        1238
+      ]
+    },
+    {
+      "hotspot": "scrap",
+      "location": "camp",
+      "point": [
+        642,
+        1441
+      ]
+    },
+    {
+      "touch": "METAL",
+      "point": [
+        317,
+        1686
+      ]
+    },
+    {
+      "touch": "FABRIC",
+      "point": [
+        814,
+        1421
+      ]
+    },
+    {
+      "touch": "METAL",
+      "point": [
+        317,
+        1155
+      ]
+    },
+    {
+      "touch": "Push the sorted tray",
+      "point": [
+        320,
+        1061
+      ]
+    },
+    {
+      "assertion": "city supply order counts exactly once",
+      "ok": true
+    },
+    {
+      "hotspot": "meal",
+      "location": "camp",
+      "point": [
+        966,
+        1973
+      ]
+    },
+    {
+      "touch": "Eat the camp ration",
+      "point": [
+        539,
+        1238
+      ]
+    },
+    {
+      "hotspot": "scrap",
+      "location": "camp",
+      "point": [
+        642,
+        1441
+      ]
+    },
+    {
+      "touch": "METAL",
+      "point": [
+        317,
+        1686
+      ]
+    },
+    {
+      "touch": "FABRIC",
+      "point": [
+        814,
+        1421
+      ]
+    },
+    {
+      "touch": "METAL",
+      "point": [
+        317,
+        1155
+      ]
+    },
+    {
+      "touch": "Push the sorted tray",
+      "point": [
+        320,
+        1061
+      ]
+    },
+    {
+      "assertion": "city supply order counts exactly once",
+      "ok": true
+    },
+    {
+      "assertion": "labor supplies city and retires tax without wages or fictitious cash payment",
+      "ok": true
+    },
+    {
+      "hotspot": "clerk",
+      "location": "camp",
+      "point": [
+        934,
+        652
+      ]
+    },
+    {
+      "touch": "Present the completed",
+      "point": [
+        389,
+        1686
+      ]
+    },
+    {
+      "assertion": "cleared debt and minimum production permit release to the citizen room",
+      "ok": true
+    },
+    {
+      "assertion": "held belongings return with conserved identity on release",
+      "ok": true
+    },
+    {
+      "assertion": "tax-camp-release: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "tax-camp-release",
+      "revision": 224,
+      "payload_sha256": "bc2e41bdb633181b0ed15456ee7f306de90c062e81533ab5594aad07360c4eb3"
+    },
+    {
+      "assertion": "tax flow has no native script or Java errors",
+      "ok": true
+    }
+  ],
+  "taxes": {
+    "accrued": 0.0,
+    "due": 0.0,
+    "flagged": false,
+    "grace_due": 0.0,
+    "grace_until": 7470.0,
+    "ledger": [
+      {
+        "amount": 1.0,
+        "minute": 1520.0,
+        "type": "assessment"
+      },
+      {
+        "amount": 1.0,
+        "minute": 2055.0,
+        "type": "payment"
+      },
+      {
+        "amount": 1.0,
+        "minute": 2305.0,
+        "type": "assessment"
+      },
+      {
+        "amount": 1.0,
+        "minute": 5760.0,
+        "type": "bill"
+      },
+      {
+        "amount": 1.0,
+        "minute": 7200.0,
+        "type": "grace_expired"
+      },
+      {
+        "amount": 1.0,
+        "minute": 7395.0,
+        "type": "work"
+      }
+    ],
+    "next_due": 10350.0,
+    "worked_off": 1.0
+  },
+  "supplies": {
+    "fabric": 3.0,
+    "metal": 6.0
+  },
+  "limits": "Isolated emulator touch evidence; no physical-phone test.",
+  "build_scope": {
+    "final_apk_sha256": "b8ae7a7b60a8b184a5816ae938f681c0c347ecab56d3a6c7c140044a6ba599d6",
+    "initial_office_and_gross_wage_apk_sha256": "f1e90a1d92f6115d1567d1edb0839c33febe9e22cca4cabf8eee52a9f34ce528",
+    "final_apk_phases": "invoice/grace/flag/street warning/detention/city supplies/release; final change only repositions familiar laundry controls"
+  },
+  "harness_corrections": [
+    "Authored shop target food and label Wrapped black bread corrected before resumed feeding.",
+    "Street warning modal closed before selecting onward travel.",
+    "Resume retained the same marked citizen and prior successful assertions; no save reset."
+  ]
+}

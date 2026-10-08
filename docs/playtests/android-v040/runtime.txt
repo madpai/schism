@@ -1,0 +1,21 @@
+--------- beginning of main
+10-08 15:40:52.642 12060 12131 I godot   : Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+10-08 15:40:52.873 12060 12131 E godot   : WARNING: Failed to load cached shader, recompiling.
+10-08 15:40:52.873 12060 12131 E godot   :    at: _load_from_cache (drivers/gles3/shader_gles3.cpp:615)
+10-08 15:40:54.470 12060 12131 I godot   : OpenGL API OpenGL ES 3.1 (OpenGL ES 3.1.0 (ANGLE 2.1.17841 git hash: 5fa2e61da947)) - Compatibility - Using Device: Google (Google Inc. (Google)) - Android Emulator OpenGL ES Translator (ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0))
+10-08 15:40:54.473 12060 12131 I godot   : 
+10-08 15:41:33.365 12461 12493 I godot   : Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+10-08 15:41:33.616 12461 12493 E godot   : WARNING: Failed to load cached shader, recompiling.
+10-08 15:41:33.616 12461 12493 E godot   :    at: _load_from_cache (drivers/gles3/shader_gles3.cpp:615)
+10-08 15:41:34.507 12461 12493 I godot   : OpenGL API OpenGL ES 3.1 (OpenGL ES 3.1.0 (ANGLE 2.1.17841 git hash: 5fa2e61da947)) - Compatibility - Using Device: Google (Google Inc. (Google)) - Android Emulator OpenGL ES Translator (ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0))
+10-08 15:41:34.510 12461 12493 I godot   : 
+10-08 15:42:28.231 12981 13011 I godot   : Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+10-08 15:42:28.450 12981 13011 E godot   : WARNING: Failed to load cached shader, recompiling.
+10-08 15:42:28.451 12981 13011 E godot   :    at: _load_from_cache (drivers/gles3/shader_gles3.cpp:615)
+10-08 15:42:29.308 12981 13011 I godot   : OpenGL API OpenGL ES 3.1 (OpenGL ES 3.1.0 (ANGLE 2.1.17841 git hash: 5fa2e61da947)) - Compatibility - Using Device: Google (Google Inc. (Google)) - Android Emulator OpenGL ES Translator (ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0))
+10-08 15:42:29.311 12981 13011 I godot   : 
+10-08 15:42:37.762 13069 13100 I godot   : Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+10-08 15:42:37.920 13069 13100 E godot   : WARNING: Failed to load cached shader, recompiling.
+10-08 15:42:37.920 13069 13100 E godot   :    at: _load_from_cache (drivers/gles3/shader_gles3.cpp:615)
+10-08 15:42:38.794 13069 13100 I godot   : OpenGL API OpenGL ES 3.1 (OpenGL ES 3.1.0 (ANGLE 2.1.17841 git hash: 5fa2e61da947)) - Compatibility - Using Device: Google (Google Inc. (Google)) - Android Emulator OpenGL ES Translator (ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver-5.0.0))
+10-08 15:42:38.796 13069 13100 I godot   :

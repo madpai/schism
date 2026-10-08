@@ -1,37 +1,249 @@
 {
-  "version": 1,
-  "atlas": "res://assets/objects/objects-v1.png",
-  "grid": [4, 4],
+  "version": 2,
+  "atlas": "res://assets/objects/objects-v2.png",
+  "grid": [
+    4,
+    4
+  ],
   "cells": {
-    "uniform": 0, "uniform_oil": 1, "uniform_blood": 2, "folded": 3,
-    "credits": 4, "tape": 5, "bread": 6, "paste": 7,
-    "stew": 8, "water": 9, "soap": 10, "tea": 11,
-    "kettle": 12, "mug": 13, "radio": 14, "fridge": 15
+    "uniform": 0,
+    "uniform_oil": 1,
+    "uniform_blood": 2,
+    "folded": 3,
+    "credits": 4,
+    "tape": 5,
+    "bread": 6,
+    "paste": 7,
+    "stew": 8,
+    "water": 9,
+    "soap": 10,
+    "tea": 11,
+    "kettle": 12,
+    "mug": 13,
+    "radio": 14,
+    "fridge": 15
   },
   "backpack": {
     "asset": "res://assets/objects/backpack-v1.png",
-    "compartment": [0.2, 0.26, 0.6, 0.49],
+    "compartment": [
+      0.2,
+      0.26,
+      0.6,
+      0.49
+    ],
     "page_size": 4,
     "composition": "Look down into the open main compartment. Civic paper and key in side pocket are fixed scenery; only real carried item instances are clickable."
   },
   "crops": {
-    "locker": {"asset": "res://assets/scenes/room-v1.png", "rect": [0.72, 0.26, 0.28, 0.40]},
-    "crate": {"asset": "res://assets/scenes/freight-v1.png", "rect": [0.22, 0.43, 0.2, 0.17]},
-    "scrap": {"asset": "res://assets/scenes/camp-v1.png", "rect": [0.35, 0.49, 0.3, 0.24]},
-    "blanket": {"asset": "res://assets/scenes/room-v1.png", "rect": [0.02, 0.57, 0.45, 0.3]},
-    "paper": {"asset": "res://assets/objects/backpack-v1.png", "rect": [0.13, 0.26, 0.15, 0.23]},
-    "shelf": {"asset": "res://assets/scenes/shop-v1.png", "rect": [0.60, 0.3, 0.37, 0.12]}
+    "locker": {
+      "asset": "res://assets/scenes/room-v1.png",
+      "rect": [
+        0.72,
+        0.26,
+        0.28,
+        0.4
+      ]
+    },
+    "crate": {
+      "asset": "res://assets/scenes/freight-v1.png",
+      "rect": [
+        0.22,
+        0.43,
+        0.2,
+        0.17
+      ]
+    },
+    "scrap": {
+      "asset": "res://assets/scenes/camp-v1.png",
+      "rect": [
+        0.35,
+        0.49,
+        0.3,
+        0.24
+      ]
+    },
+    "blanket": {
+      "asset": "res://assets/scenes/room-v1.png",
+      "rect": [
+        0.02,
+        0.57,
+        0.45,
+        0.3
+      ]
+    },
+    "paper": {
+      "asset": "res://assets/objects/backpack-v1.png",
+      "rect": [
+        0.13,
+        0.26,
+        0.15,
+        0.23
+      ]
+    },
+    "shelf": {
+      "asset": "res://assets/scenes/shop-v1.png",
+      "rect": [
+        0.6,
+        0.3,
+        0.37,
+        0.12
+      ]
+    },
+    "cabinet": {
+      "asset": "res://assets/scenes/service-v1.png",
+      "rect": [
+        0.2,
+        0.42,
+        0.29,
+        0.3
+      ]
+    },
+    "relay": {
+      "asset": "res://assets/scenes/service-v1.png",
+      "rect": [
+        0.84,
+        0.3,
+        0.13,
+        0.18
+      ]
+    }
   },
   "laundry": {
     "closed": "res://assets/scenes/laundry-empty-v2.png",
     "open": "res://assets/scenes/laundry-open-v2.png",
     "running": "res://assets/scenes/laundry-running-v2.png",
     "full": "res://assets/scenes/laundry-v1.png",
-    "cart_rect": [0.0, 0.52, 0.34, 0.29],
-    "washer_crop": [0.15, 0.21, 0.67, 0.51],
-    "drum_center": [0.585, 0.468],
-    "drum_radius": [0.122, 0.081],
-    "controls": [0.45, 0.235, 0.34, 0.072],
-    "hatch": [0.43, 0.36, 0.31, 0.21]
-  }
+    "cart_rect": [
+      0.0,
+      0.52,
+      0.34,
+      0.29
+    ],
+    "washer_crop": [
+      0.15,
+      0.21,
+      0.67,
+      0.51
+    ],
+    "drum_center": [
+      0.585,
+      0.468
+    ],
+    "drum_radius": [
+      0.122,
+      0.081
+    ],
+    "controls": [
+      0.45,
+      0.235,
+      0.34,
+      0.072
+    ],
+    "hatch": [
+      0.43,
+      0.36,
+      0.31,
+      0.21
+    ]
+  },
+  "alpha_cutoff": 16,
+  "regions": {
+    "uniform": [
+      48,
+      77,
+      245,
+      229
+    ],
+    "uniform_oil": [
+      356,
+      76,
+      246,
+      230
+    ],
+    "uniform_blood": [
+      647,
+      77,
+      239,
+      230
+    ],
+    "folded": [
+      963,
+      117,
+      234,
+      182
+    ],
+    "credits": [
+      65,
+      424,
+      214,
+      137
+    ],
+    "tape": [
+      359,
+      413,
+      230,
+      170
+    ],
+    "bread": [
+      659,
+      375,
+      237,
+      224
+    ],
+    "paste": [
+      970,
+      422,
+      233,
+      166
+    ],
+    "stew": [
+      55,
+      689,
+      254,
+      182
+    ],
+    "water": [
+      433,
+      644,
+      107,
+      247
+    ],
+    "soap": [
+      670,
+      696,
+      224,
+      168
+    ],
+    "tea": [
+      982,
+      664,
+      196,
+      216
+    ],
+    "kettle": [
+      68,
+      935,
+      231,
+      252
+    ],
+    "mug": [
+      404,
+      993,
+      194,
+      177
+    ],
+    "radio": [
+      708,
+      899,
+      144,
+      300
+    ],
+    "fridge": [
+      992,
+      914,
+      187,
+      280
+    ]
+  },
+  "region_notes": "Explicit native pixel regions enclose each complete silhouette with an eight-pixel alpha gutter. Grid generation is approximate; never infer regions by equal division. Shader ignores alpha <=16, matching validation."
 }

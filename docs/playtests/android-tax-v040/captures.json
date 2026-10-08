@@ -1,0 +1,53 @@
+{
+  "selection": "Selected unaltered native screenshots; redundant OCR/failure captures omitted. See parent evidence page for exact build scope.",
+  "files": {
+    "city-supply-order-1.png": {
+      "sha256": "523bba482ee652a2e6936880049a951ff2c4999281aa28b9ea57baeb96aa30ce",
+      "bytes": 403351
+    },
+    "city-supply-order-3.png": {
+      "sha256": "6fa06a8d8d916e60e05b4a371ee1508b109a7d84a1bff332ce42adf3cefaf1b5",
+      "bytes": 376951
+    },
+    "full-gross-new-tax-assessment.png": {
+      "sha256": "d5c5efddd73ccbc1da112ec006a0731404159723ed4103216aa057424a94545c",
+      "bytes": 453176
+    },
+    "overdue-street-payment-warning.png": {
+      "sha256": "209ec46468d58eb168844f751fcd0e613ff75033025903b6998a8eaadf6dac06",
+      "bytes": 2896662
+    },
+    "tax-camp-intake.png": {
+      "sha256": "4f0cf7e25f7e2ab59d535d7595571854534a1f7ff79d6a3f450a2b801c27881d",
+      "bytes": 332256
+    },
+    "tax-camp-release-resumed.png": {
+      "sha256": "ae07497181a8b3007153e37039d5d59e7b318447e38f1f12b93508e4f5d0cd36",
+      "bytes": 2699374
+    },
+    "tax-debt-cleared-release.png": {
+      "sha256": "0eea20a99584294e57af45b27bb008af4ff6a87f57558e8decb868c6305c5537",
+      "bytes": 579210
+    },
+    "tax-invoice-one-day-grace.png": {
+      "sha256": "9e662095ba2d61be3d12fb97413781bda4b74be36dbabe650d80cbb35f1ca7ac",
+      "bytes": 2691081
+    },
+    "tax-payment-counter-1080x2400.png": {
+      "sha256": "90ad5b6b27e1facbd60504b1dab5a8dd4de5428ad014d0cc5b8ce8e0858e1dd6",
+      "bytes": 594619
+    },
+    "tax-payment-counter-360x640.png": {
+      "sha256": "a5b23ab933de70b20569b318ec565026745cfe3e89bfcbccb86b097c1be0c195",
+      "bytes": 110039
+    },
+    "tax-payment-counter-390x844.png": {
+      "sha256": "6d5162784fea15b9d2469edea064810d0ed1df329d45c121294c2d981c2f257b",
+      "bytes": 144218
+    },
+    "tax-payment-stamped.png": {
+      "sha256": "cace78f2de32272bfd1990d6688be7633d135b73dd918d45bb68710ef5063b9b",
+      "bytes": 500209
+    }
+  }
+}

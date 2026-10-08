@@ -1,0 +1,17 @@
+{
+  "selection": "Unaltered old/new APK native captures; see upgrade receipt for exact hashes.",
+  "files": {
+    "old-partial-shift.png": {
+      "sha256": "b4581ed94744d95143cd154383cbabdcdd06fd0cd03e9b7cc9f9d8ee89871b81",
+      "bytes": 454598
+    },
+    "old-registration.png": {
+      "sha256": "d1589d3171995b6caa8e9a1acc033dd2c4dcd75283e1b81e2468a27fc905ac6e",
+      "bytes": 432300
+    },
+    "upgraded-first-uniform-pocket.png": {
+      "sha256": "5375c89ff020551f71cb34771cf9787b604e97407ec857e41c99eb03ee5ee75a",
+      "bytes": 421918
+    }
+  }
+}

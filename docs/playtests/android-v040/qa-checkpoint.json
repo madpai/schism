@@ -1,0 +1,21 @@
+{
+  "device": "emulator-5584",
+  "package": "org.schism.districtix",
+  "identity_sha256": "e8e7dee6b0c4b8b95c64c3f423ffbc0f808924cb98eb76e164970e47a4de3ddd",
+  "done": [
+    "registered",
+    "employment",
+    "laundry",
+    "coworker_cover",
+    "service_repair",
+    "neighbor_help",
+    "shopping",
+    "washed-home",
+    "slept-home",
+    "home",
+    "relay_detail",
+    "extended-second-shift",
+    "extended-rest",
+    "extended-inspection"
+  ]
+}

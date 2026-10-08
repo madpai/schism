@@ -1,0 +1,21 @@
+{
+  "selection": "Selected unaltered native screenshots; redundant OCR/failure captures omitted. See parent evidence page for exact build scope.",
+  "files": {
+    "familiar-collection-before-cloth.png": {
+      "sha256": "e9becc0c01d329255b981cd33ee084cfc82caec276968d44170aaf277bac8b86",
+      "bytes": 1196626
+    },
+    "familiar-folding-before-cloth.png": {
+      "sha256": "7566d1e6ccea52a169829351436b94b262fa0785254512fcf932ae7f9759c559",
+      "bytes": 433266
+    },
+    "familiar-load-before-cloth.png": {
+      "sha256": "1a46d35969146da2be31c712fc4fb13c0d3081a55db70d543d6ac4f5c8bdc4e0",
+      "bytes": 785007
+    },
+    "familiar-work-settlement-resumed.png": {
+      "sha256": "46cbab1f22b91ac2018aa6413983d6ea3887e4213a93aeddf96fb5fd6cd5182b",
+      "bytes": 2721814
+    }
+  }
+}

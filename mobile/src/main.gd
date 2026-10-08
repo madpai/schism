@@ -5,6 +5,7 @@ const Visual = preload("res://src/presentation.gd")
 const Prop = preload("res://src/prop.gd")
 const Atmosphere = preload("res://src/environment.gd")
 const Sound = preload("res://src/audio.gd")
+const ClothActivity = preload("res://src/cloth_activity.gd")
 const INK = Color("d4d0b7")
 const MUTED = Color("a3aa92")
 const ACCENT = Color("c2b476")
@@ -118,7 +119,7 @@ func _render_world() -> void:
  _scene_objects(area,s)
  _room_props(area,s)
  var bottom = VBoxContainer.new(); bottom.position = Vector2(16,size.y-114); bottom.size = Vector2(size.x-32,108); content.add_child(bottom)
- var caption = _label(_context(s,data.subtitle),19); caption.modulate = MUTED; caption.custom_minimum_size.y = 31; bottom.add_child(caption)
+ var caption = _label(_context(s,data.subtitle),19); caption.modulate = MUTED; caption.custom_minimum_size.y = 31; caption.autowrap_mode = TextServer.AUTOWRAP_OFF; caption.clip_text = true; caption.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS; bottom.add_child(caption)
  var dock = HBoxContainer.new(); dock.add_theme_constant_override("separation",10); bottom.add_child(dock)
  var status = _button("CIVIC ID",_status); status.name = "status"; status.size_flags_horizontal = Control.SIZE_EXPAND_FILL; dock.add_child(status)
  var bag = _button("BAG  /  %d"%_inventory().size(),_bag); bag.name = "bag"; bag.size_flags_horizontal = Control.SIZE_EXPAND_FILL; dock.add_child(bag)
@@ -242,9 +243,18 @@ func _registration() -> void:
  _body("DISTRICT IX\nHousing: Block C / Room 17\nBalance: 4 CR\nEmployment: UNASSIGNED",25)
  _body("Name for the registry",19)
  var name_input = LineEdit.new(); name_input.name = "resident_name"; name_input.text = "William"; name_input.max_length = 24; name_input.custom_minimum_size.y = 64; sheet_body.add_child(name_input)
- var appearance = OptionButton.new(); appearance.custom_minimum_size.y = 64; appearance.add_item("Olive / cropped hair"); appearance.add_item("Umber / cropped hair"); appearance.add_item("Sand / cropped hair"); sheet_body.add_child(appearance)
+ _body("Portrait tint / registry photograph",19)
+ var appearance = OptionButton.new(); appearance.name = "appearance_tint"; appearance.custom_minimum_size.y = 64; appearance.add_item("Olive / cropped hair"); appearance.add_item("Umber / cropped hair"); appearance.add_item("Sand / cropped hair"); sheet_body.add_child(appearance)
+ _body("Previous occupation / civilian history",19)
+ var background = OptionButton.new(); background.name = "resident_background"; background.custom_minimum_size.y = 64
+ var origins = ["factory_laborer","displaced_resident","former_bureaucrat","street_survivor","technical_apprentice"]
+ for origin in origins: background.add_item(Sim.BACKGROUNDS[origin].label)
+ sheet_body.add_child(background)
+ var history = _body(Sim.BACKGROUNDS[origins[0]].text,20)
+ background.item_selected.connect(func(index): history.text = Sim.BACKGROUNDS[origins[index]].text)
+ _body("This describes where you came from. Every occupation and opportunity remains open to every resident.",19)
  _body("The train has gone. They gave you a key.\n\nTap objects to live here. Your bag and civic papers stay within reach. Time passes when you act.")
- var submit = _button("Sign the residency paper",func(): _do({"action":"register","name":name_input.text,"appearance":["olive","umber","sand"][appearance.selected]},_arrival)); submit.name = "register"; sheet_body.add_child(submit)
+ var submit = _button("Sign the residency paper",func(): _do({"action":"register","name":name_input.text,"appearance":["olive","umber","sand"][appearance.selected],"background":origins[background.selected]},_arrival)); submit.name = "register"; sheet_body.add_child(submit)
 
 func _arrival() -> void:
  _sheet("BLOCK C  /  ROOM 17")
@@ -253,6 +263,8 @@ func _arrival() -> void:
 
 func _hotspot(id: String) -> void:
  var s = Session.state
+ var encounters = {"guard":"street_inspection","neighbor":"neighbor_help","coworker":"coworker_cover","cabinet":"service_repair","relay":"relay_detail"}
+ if encounters.has(id): _encounter(encounters[id]); return
  match s.location:
   "room":
    match id:
@@ -281,8 +293,9 @@ func _hotspot(id: String) -> void:
      if not s.ticket: _thought("I suppose I need a ticket.")
      elif not s.id_shown:
       _sheet("WINDOW 3"); _body('The clerk holds out a hand.\n\n“Identification.”'); _action("Slide your civic ID under the glass",{"action":"show_id"},_vacancies)
-     else: _vacancies()
+     else: _bureau_counter()
     "vacancies": _vacancies()
+    "tax": _tax_counter()
   "laundry":
    match id:
     "exit": _travel("street")
@@ -302,6 +315,27 @@ func _hotspot(id: String) -> void:
   "cleaning": _cleaning(id)
   "freight": _freight(id)
   "camp": _camp(id)
+  "service":
+   if id=="exit": _travel("street")
+
+func _encounter(id: String) -> void:
+ var available = Sim.available_encounters(Session.state)
+ var encounter = available.filter(func(entry): return entry.id==id)
+ if encounter.is_empty():
+  var descriptions = {
+   "street_inspection":["SERVICE GATE / OFFICER","Your civic paper still carries the inspection stamp. The officer returns to watching the gate."],
+   "neighbor_help":["BLOCK C / NEIGHBOR","An empty basket rests beside the neighbor's door. They nod if they recognize you."],
+   "coworker_cover":["TEXTILE SERVICES / ROTA","The rota lists no extra station you can cover right now. Your own work authorization is still valid."],
+   "service_repair":["SERVICE CABINET","The relay is seated, the lamps are steady, and the gate officer has logged your help. The repaired recording unit is beside the gate."],
+   "relay_detail":["RESTORED RELAY","The recorder needs the service cabinet's power. Once repaired, you can hear its recovered recording immediately."]
+  }
+  if id=="relay_detail" and Session.state.city.flags.get("relay_heard",false): descriptions[id][1] = "You copied the return count onto a paper in your bag. The relay repeats the same damaged recording."
+  var detail = descriptions[id]; _sheet(detail[0]); _prop("paper" if id in ["street_inspection","coworker_cover"] else "relay" if id=="relay_detail" else "cabinet" if id=="service_repair" else "water",160); _body(detail[1]); return
+ var event = encounter[0]
+ _sheet(event.title.to_upper())
+ _prop("paper" if id in ["street_inspection","coworker_cover"] else "relay" if id=="relay_detail" else "cabinet" if id=="service_repair" else "water",160)
+ _body(event.text)
+ for choice in event.choices: _action(choice.label,{"action":"event_choice","event":event.id,"choice":choice.id})
 
 func _travel(target: String) -> void:
  _close_sheet()
@@ -341,6 +375,9 @@ func _status() -> void:
  if s.needs.hygiene<40: conditions.append("Stained clothing")
  if s.needs.health<65: conditions.append("Bruising")
  _body("Condition: "+(", ".join(conditions) if not conditions.is_empty() else "Getting by"))
+ var origin = Sim.BACKGROUNDS.get(s.identity.get("background","resident"),{})
+ if not origin.is_empty(): _body("Civilian history: "+origin.label,20)
+ _body("Security favors recorded: %d"%int(s.city.get("security_favor",0)),20)
  _body("Credits: %d CR\nEmployment: %s\nHousing: %s"%[int(s.credits),Sim.catalog().jobs.get(s.employment,{}).get("name","UNASSIGNED"),s.housing.address])
  if not s.employment.is_empty():
   var record = s.jobs[s.employment]; _body("Completed shifts: %d\nEmployer trust: %d\nWarnings: %d"%[int(record.shifts),int(record.trust),int(record.warnings)],20)
@@ -445,6 +482,48 @@ func _possession(kind: String) -> void:
   if not tea.is_empty(): _action("Boil water and make tea",{"action":"consume","id":tea.id})
   else: _body("A tin of tea from the kiosk would make an evening of it.")
 
+func _played_date(minute: int) -> String:
+ return "Day %d / %02d:%02d"%[int(minute/1440)+1,int(minute/60)%24,minute%60]
+
+func _bureau_counter() -> void:
+ _sheet("WINDOW 3 / ADMINISTRATIVE COUNTER")
+ _prop("paper",145,"CIVIC PAPER / PAYMENT SLIP")
+ _body('The clerk points to two stacks of papers. “Work authorization. Civic taxes.”',22)
+ var work = _button("Read the work authorization papers",_vacancies); sheet_body.add_child(work)
+ var tax = _button("Present tax payment slip at the counter",_tax_counter); tax.name = "open_tax_counter"; sheet_body.add_child(tax)
+
+func _tax_counter() -> void:
+ var s = Session.state; var taxes = s.taxes
+ var accrued = int(taxes.accrued); var due = int(taxes.due); var total = accrued+due
+ var overdue = maxi(0,due-int(taxes.grace_due))
+ _sheet("WINDOW 3 / CIVIC TAX PAYMENT")
+ _prop("paper",145,"ASSESSMENT / CIVIC NUMBER "+s.identity.civic_id)
+ _body("Unpaid balance: %d CR\nInvoiced: %d CR\nNew assessments: %d CR\nOverdue: %d CR\nYour wallet: %d CR"%[total,due,accrued,overdue,int(s.credits)],24)
+ if total==0:
+  _body("PAID / NO TAX DEBT\nThe clerk stamps the slip. No payment is required.",22)
+ else:
+  if accrued>0: _body("Next assessment deadline: "+_played_date(int(taxes.next_due)),20)
+  if int(taxes.grace_due)>0:
+   _body("Invoice in grace: %d CR\nOne played day to pay, until %s."%[int(taxes.grace_due),_played_date(int(taxes.grace_until))],20)
+  if taxes.flagged:
+   _body("UNPAID / SECURITY RECORD FLAGGED\nProceed directly here after a street warning. Ignoring payment or a gate inspection leads to compulsory work. Clear the debt to remove the flag.",22)
+  _body("Your wages are paid in full. Settle assessed tax at this counter. Deadlines follow your actions; closing the phone adds no debt.",20)
+  var full = _action("Slide %d CR across the counter / pay the full unpaid tax balance"%total,{"action":"pay_tax","amount":total,"expected_revision":int(s.revision)},_tax_counter)
+  full.name = "tax_pay_full"; full.disabled = int(s.credits)<total or not s.shift.is_empty()
+  if int(s.credits)<total:
+   _body("Not enough credits for full payment. The clerk accepts an affordable part of the balance.",20)
+   if int(s.credits)>0:
+    var part = _action("Slide %d CR across the counter / make an affordable partial tax payment"%int(s.credits),{"action":"pay_tax","amount":int(s.credits),"expected_revision":int(s.revision)},_tax_counter)
+    part.name = "tax_pay_partial"; part.disabled = not s.shift.is_empty()
+   else: _body("Your wallet is empty. Payment remains available when you have credits.",20)
+  elif total>1:
+   var part = _action("Place 1 CR on the payment slip / pay part of the unpaid tax balance",{"action":"pay_tax","amount":1,"expected_revision":int(s.revision)},_tax_counter)
+   part.name = "tax_pay_partial"; part.disabled = not s.shift.is_empty()
+  if not s.shift.is_empty(): _body("Finish your work order before making a tax payment.",20)
+ if not taxes.ledger.is_empty():
+  var entry = taxes.ledger.back()
+  _body("LAST LEDGER STAMP\n%s / %d CR\n%s"%[str(entry.type).to_upper(),int(entry.amount),_played_date(int(entry.minute))],19)
+
 func _vacancies() -> void:
  _sheet("WINDOW 3 / WORK AUTHORIZATION")
  if not Session.state.id_shown:
@@ -457,6 +536,7 @@ func _vacancies() -> void:
  if not Session.state.employment.is_empty() and Session.state.jobs[Session.state.employment].shifts>=12:
   _body("NOTICE OF INTERNAL VACANCY\n"+Sim.catalog().jobs[Session.state.employment].advanced+"\nTwelve completed shifts. One more credit. A supply key.")
   _action("Present your completed shift record",{"action":"promote"})
+ var tax = _button("Present tax payment slip at the counter",_tax_counter); tax.name = "open_tax_counter"; sheet_body.add_child(tax)
  var tenancy = _button("Inspect the tenancy papers",_tenancy); sheet_body.add_child(tenancy)
 
 func _tenancy() -> void:
@@ -526,22 +606,46 @@ func _found(id: String) -> void:
  _action("Put in your pocket",{"action":"found_choice","id":id,"choice":"keep"})
  _action("Leave it where it was",{"action":"found_choice","id":id,"choice":"leave"})
 
+func _cloth_activity(mode: String,index: int=0) -> Control:
+ var activity = ClothActivity.new(); activity.name = "cloth_"+mode
+ activity.mode = mode; activity.uniforms = Session.state.shift.uniforms.duplicate(true)
+ activity.selected = index; activity.hatch_open = Session.state.shift.get("hatch_open",false)
+ activity.custom_minimum_size = Vector2(0,284 if mode=="fold" else 416)
+ activity.command_requested.connect(func(command): _do(command,_washer))
+ sheet_body.add_child(activity); return activity
+
 func _washer() -> void:
  var s = Session.state
  _sheet("INDUSTRIAL WASHER 03")
- var prop = _prop("washer",270)
- if s.shift.is_empty(): _body("The machine is quiet. Today's uniforms are in the incoming cart."); return
- var w = s.shift; prop.hatch_open = w.get("hatch_open",false); prop.active = w.stage=="washed"
- if w.stage=="inspect": _touch_prop(prop,Rect2(.42,.35,.52,.40),"HATCH",{"action":"open_hatch"},_washer)
- if w.stage=="prepare":
-  if w.hatch_open: _touch_prop(prop,Rect2(.28,.025,.20,.20),"DOSE",{"action":"dose"},_washer)
-  else: _touch_prop(prop,Rect2(.42,.35,.52,.40),"START",{"action":"start_wash"},_wash_animation)
- if w.stage=="washed": _touch_prop(prop,Rect2(.42,.35,.52,.40),"HANDLE",{"action":"unload"},_washer)
+ if s.shift.is_empty():
+  _prop("washer",270); _body("The machine is quiet. Today's uniforms are in the incoming cart."); return
+ if s.shift.job!="laundry": _body("This machine needs a textile work order."); return
+ var w = s.shift
+ var familiar = int(s.jobs.laundry.shifts)>0
+ var tactile = w.stage in ["washed","dry"] or (w.stage=="inspect" and w.hatch_open)
+ if not tactile:
+  var prop = _prop("washer",270); prop.hatch_open = w.get("hatch_open",false); prop.active = w.stage=="washed"
+  if w.stage=="inspect": _touch_prop(prop,Rect2(.42,.35,.52,.40),"HATCH",{"action":"open_hatch"},_washer)
+  if w.stage=="prepare":
+   if w.hatch_open: _touch_prop(prop,Rect2(.28,.025,.20,.20),"DOSE",{"action":"dose"},_washer)
+   else: _touch_prop(prop,Rect2(.42,.35,.52,.40),"START",{"action":"start_wash"},_wash_animation)
  match w.stage:
   "inspect":
-   _body("CAPACITY: 4 UNIFORMS\nTwo measured doses. Oil: hot wash. Blood: sanitize. Ordinary dirt: standard.",22)
-   _action("Pull the hatch handle",{"action":"open_hatch"},_washer)
-   _action("Lift the sorted bundle into the drum",{"action":"load_washer"},_washer)
+   if not w.hatch_open:
+    _body("CAPACITY: 4 UNIFORMS\nTwo measured doses. Oil: hot wash. Blood: sanitize. Ordinary dirt: standard.",22)
+    _action("Pull the hatch handle",{"action":"open_hatch"},_washer)
+   else:
+    _body("Lift each sorted garment from the basket into the open drum. Drag it, or tap its picture or label.",20)
+    if familiar: _action("Familiar work / lift the remaining bundle",{"action":"load_washer"},_washer)
+    _cloth_activity("load")
+    var loaded = 0
+    for index in range(w.uniforms.size()):
+     var garment = w.uniforms[index]
+     if garment.get("loaded",false): loaded += 1; continue
+     if garment.sorted: _action("Load uniform %02d / %s"%[index+1,garment.type],{"action":"load_garment","index":index},_washer)
+    _body("%d / %d garments in the drum"%[loaded,w.uniforms.size()],20)
+    if w.uniforms.any(func(garment): return not garment.sorted):
+     var bench = _button("Return to the inspection bench",_cart); sheet_body.add_child(bench)
   "prepare":
    _body("Detergent: %d / 2 doses\nSelected cycle: %s\nHatch: %s"%[int(w.doses),w.cycle.to_upper(),"OPEN" if w.hatch_open else "CLOSED"])
    if w.hatch_open: _action("Tip one measured dose into the drawer",{"action":"dose"},_washer)
@@ -551,10 +655,36 @@ func _washer() -> void:
    if w.hatch_open: _action("Push the hatch shut",{"action":"close_hatch"},_washer)
    else: _action("Press the green start switch",{"action":"start_wash"},_wash_animation)
   "washed":
-   _body("The drain knocks. The drum slows to a stop.")
-   _action("Open the hatch and take out the wet bundle",{"action":"unload"},_washer)
-  "wet": _body("Wet cloth drags at your wrists."); _action("Hang the bundle in the drying rack",{"action":"dry"},_washer)
-  "dry": _body("Warm cloth. Four empty uniforms."); _action("Fold sleeves, body, then stack",{"action":"fold"},_outgoing)
+   # Keep the established running shader visible until the short visual cycle finishes.
+   var running = _prop("washer",230); running.active = not w.get("hatch_open",false); running.hatch_open = w.get("hatch_open",false)
+   _body("The drain knocks. Lift the damp garments into the basket. Drag down, or tap each garment.",20)
+   if familiar: _action("Familiar work / collect the remaining bundle",{"action":"unload"},_washer)
+   _cloth_activity("unload")
+   for index in range(w.uniforms.size()):
+    if not w.uniforms[index].get("unloaded",false): _action("Collect wet uniform %02d"%[index+1],{"action":"unload_garment","index":index},_washer)
+  "wet":
+   _body("Wet cloth drags at your wrists. Every garment is in the collection basket.")
+   _prop("uniform",180,"CLEAN / DAMP")
+   _action("Hang the bundle in the drying rack",{"action":"dry"},_washer)
+  "dry":
+   var next_index = -1; var complete = 0
+   for index in range(w.uniforms.size()):
+    var garment = w.uniforms[index]; var required = 2 if garment.type=="medical" else 3
+    if int(garment.get("folds",0))>=required: complete += 1
+    elif next_index<0: next_index = index
+   _body("FOLDING BENCH / %d OF %d STACKED"%[complete,w.uniforms.size()],20)
+   if complete>0: _prop("folded",90,"CLEAN / FOLDED")
+   if familiar: _action("Familiar work / fold the remaining load",{"action":"fold"},_outgoing)
+   if next_index>=0:
+    var garment = w.uniforms[next_index]
+    _body("Uniform %02d / %s"%[next_index+1,str(garment.type).to_upper()],23)
+    var activity = _cloth_activity("fold",next_index)
+    _body("Tap the marked cloth region, or use the action below. Each fold stays saved.",20)
+    _action(activity.next_fold_text(),{"action":"fold_garment","index":next_index,"step":int(garment.get("folds",0))+1},_washer)
+  "folded":
+   _prop("folded",180,"CLEAN / FOLDED")
+   _body("Four uniforms stacked. The outgoing cart is waiting.")
+   var outgoing = _button("Carry the stack to the outgoing cart",_outgoing); sheet_body.add_child(outgoing)
   _: _body("The folded load belongs in the outgoing cart.")
 
 func _wash_animation() -> void:
@@ -583,8 +713,10 @@ func _lost_property() -> void:
 func _receipt(data: Dictionary) -> void:
  _sheet("SHIFT WAGE SLIP")
  _body("MUNICIPAL PAYROLL / DISTRICT IX\n"+Sim.catalog().jobs[data.job].name.to_upper(),22)
- _body("Gross:          %d CR\nCivic withholding:  %d CR\nPaid:           %d CR\n\nService quality:  %d%%"%[int(data.gross),int(data.withholding),int(data.net),int(data.quality)],27)
- _body("Civic balance: %d CR\nThe fractional tax assessment carries to the next wage slip."%int(Session.state.credits),20)
+ _body("Gross: %d CR\nPaid in full: %d CR\nTax assessed: %d CR / unpaid\n\nService quality: %d%%"%[int(data.gross),int(data.net),int(data.get("tax_assessed",0)),int(data.quality)],27)
+ var taxes = Session.state.taxes
+ _body("Wallet: %d CR\nTotal unpaid tax: %d CR\nPresent your payment slip at Window 3 in the labor bureau. No tax is taken from your wage."%[int(Session.state.credits),int(taxes.due)+int(taxes.accrued)],20)
+ _body("Next assessment deadline: "+_played_date(int(taxes.next_due))+". Each invoice allows one played day of grace.",20)
  for notice in pending_notices: _body(notice,22)
  pending_notices = []
  var button = _button("Fold the wage slip",func():
@@ -651,16 +783,31 @@ func _crate(index: int) -> void:
  for destination in ["BLOCK C","CLINIC","TEXTILES"]: _action("Slide into "+destination+" lane",{"action":"route_crate","index":index,"destination":destination})
 
 func _camp(id: String) -> void:
- var camp = Session.state.legal.camp
- _sheet("DETAINEE 91-447 / %d ORDERS REMAINING"%(3-int(camp.orders)))
+ var s = Session.state; var camp = s.legal.camp
+ var minimum = int(camp.get("minimum_orders",3)); var reason = str(camp.get("reason","crime"))
+ var debt = int(s.taxes.due)+int(s.taxes.accrued)
+ var remaining = maxi(0,minimum-int(camp.orders))
+ _sheet("DETAINEE 91-447 / %d ORDERS REMAINING"%remaining)
+ _body("INTAKE: "+{"crime":"Inventory offenses","tax":"Unpaid civic tax","mixed":"Inventory offenses and unpaid civic tax"}.get(reason,reason),20)
  match id:
   "bunk": _body("The blanket smells of the last occupant."); _action("Lie down on the camp bunk",{"action":"camp_sleep"})
   "meal": _prop("stew",160); _body("Thin paste. Metal cup. No charge and no comfort."); _action("Eat the camp ration",{"action":"camp_meal"})
   "clerk":
-   _body("Three production orders. No wages. Outside bills remain paused.")
-   _action("Present the completed work orders",{"action":"camp_release"})
+   _prop("paper",120,"CORRECTION / WORK RECORD")
+   _body("Orders counted: %d / %d minimum\nTax debt remaining: %d CR\nTax worked off here: %d CR"%[int(camp.orders),minimum,debt,int(camp.get("worked_off",0))],23)
+   _body("Each completed order supplies the city with 2 metal pieces and 1 fabric piece. It earns no wages and works off up to 1 CR of tax debt. Outside bills and employment remain paused.",20)
+   if reason in ["tax","mixed"]:
+    _body("Release requires the minimum work orders AND no tax debt. Additional work orders remain available until the unpaid balance is cleared.",20)
+   else: _body("Your inventory correction requires %d orders. Tax debt does not extend this intake."%minimum,20)
+   var release = _action("Present the completed work orders / request release",{"action":"camp_release","expected_revision":int(s.revision)})
+   release.name = "camp_request_release"; release.disabled = remaining>0 or (reason in ["tax","mixed"] and debt>0)
+   if release.disabled: _body("The release window stays shut until the recorded requirements are met.",20)
   "scrap":
    _body("Sort three pieces. Metal to the steel bin; fabric to the cloth bin.")
+   _body("CITY SUPPLIES: %d metal / %d fabric\nTax balance: %d CR / each counted order works off up to 1 CR."%[int(s.city.supplies.metal),int(s.city.supplies.fabric),debt],20)
+   var finished = int(camp.orders)>=minimum and (reason=="crime" or debt==0)
+   if finished:
+    _body("The required production is counted. Present the work record at the release window.",20); return
    for n in range(3):
     if n in camp.sorted: continue
     _body(["Bent steel plate","Oily uniform offcut","Copper pipe stub"][n],24)
@@ -674,7 +821,7 @@ func _settings() -> void:
  _body("Your life is saved after every action. Pausing or closing SCHISM freezes personal time.",21)
  for pair in [["sound","Machine soundscape"],["effects","Analog instability"],["hints","Object labels"]]:
   _action(pair[1]+" / "+("ON" if Session.state.settings[pair[0]] else "OFF"),{"action":"setting","key":pair[0],"value":not Session.state.settings[pair[0]]},_settings)
- _body("SCHISM 0.3 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
+ _body("SCHISM 0.4 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
  var save = _button("Save and put the phone down",func(): Session.flush(); _close_sheet()); sheet_body.add_child(save)
 
 func _notification(what: int) -> void:
