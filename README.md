@@ -8,7 +8,7 @@ The active game is [`mobile/`](mobile/), built with **Godot 4.7.2, GDScript and 
 
 ## Play
 
-[Download the Android sideload preview](https://github.com/madpai/schism/releases/download/v0.3.0-alpha/schism-0.3.0.apk). Installation, update and checksum details are in [docs/RELEASES.md](docs/RELEASES.md).
+[Download the Android sideload preview](https://github.com/madpai/schism/releases/download/v0.4.0-alpha/schism-0.4.0.apk). Installation, update and checksum details are in [docs/RELEASES.md](docs/RELEASES.md).
 
 Open `mobile/project.godot` in Godot 4.7.2 and run. On Android, install the debug APK produced below. The package is `org.schism.districtix`. This is a playable development slice, not a production store release.
 

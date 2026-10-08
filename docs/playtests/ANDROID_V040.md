@@ -1,6 +1,6 @@
 # Living City 0.4.0 validation
 
-Godot 4.7.2, Compatibility renderer; Android package `org.schism.districtix`, version code 4, schema 6. The tested debug APK has SHA-256 `b8ae7a7b60a8b184a5816ae938f681c0c347ecab56d3a6c7c140044a6ba599d6`. Original scenes and washer frames are preserved. This is a local sideload package; no public release was published during this milestone.
+Godot 4.7.2, Compatibility renderer; Android package `org.schism.districtix`, version code 4, schema 6. The tested debug APK has SHA-256 `b8ae7a7b60a8b184a5816ae938f681c0c347ecab56d3a6c7c140044a6ba599d6`. Original scenes and washer frames are preserved. The same tested sideload package is published as `v0.4.0-alpha`; `docs/releases/v0.4.0-publication.json` records download verification.
 
 ## Integrated checks
 
