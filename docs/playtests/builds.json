@@ -1,0 +1,19 @@
+{
+  "date": "2026-10-08",
+  "source_commit": "a5b6e61e86433d3182e4aa711ecd4bc5af34236e",
+  "godot": "4.7.2.stable.official.ed1daf0bf",
+  "artifacts": [
+    {
+      "file": "builds/schism-android-debug.apk",
+      "bytes": 73142685,
+      "sha256": "4ff9d905845bd2685825eab39753f02f24cb8333af784aabae10fd63905bdbe1",
+      "distribution": "debug development build; ignored local output"
+    },
+    {
+      "file": "builds/schism-linux.x86_64",
+      "bytes": 90012984,
+      "sha256": "31cdb8ab1b0837a10513efe2f2be165bfee5aa90a8c12cda04319681e79f24e0",
+      "distribution": "debug development build; ignored local output"
+    }
+  ]
+}

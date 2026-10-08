@@ -1,0 +1,103 @@
+TOUCH: Sign the residency at 472 1733
+TOUCH: Fold the paper at 395 1201
+PASS: arrival identity and 4 CR persist
+OBJECT: sink
+TOUCH: Cup your hands at 432 697
+OBJECT: door
+OBJECT: stairs
+OBJECT: bureau
+OBJECT: ticket
+TOUCH: Put the paper at 478 913
+OBJECT: clerk
+TOUCH: Slide your civic at 341 840
+OBJECT: vacancies
+PASS: 360x640: Municipal Laundry paper is readable through bounded scrolling
+PASS: 360x640: Civic Sanitation paper is readable through bounded scrolling
+PASS: 360x640: Freight Sorter paper is readable through bounded scrolling
+OBJECT: vacancies
+PASS: 390x844: Municipal Laundry paper is readable through bounded scrolling
+PASS: 390x844: Civic Sanitation paper is readable through bounded scrolling
+PASS: 390x844: Freight Sorter paper is readable through bounded scrolling
+OBJECT: vacancies
+PASS: 1080x2400: Municipal Laundry paper is readable through bounded scrolling
+PASS: 1080x2400: Civic Sanitation paper is readable through bounded scrolling
+PASS: 1080x2400: Freight Sorter paper is readable through bounded scrolling
+OBJECT: vacancies
+PASS: reading all bureau papers at three sizes changes no citizen state
+TOUCH: Sign Municipal Laundry at 428 915
+PASS: bureau ticket/ID/authorization touch path
+OBJECT: exit
+OBJECT: laundry
+OBJECT: cart
+TOUCH: Pull the cart at 251 1479
+TOUCH: UNIFORM 01 at 179 869
+TOUCH: Unfold and read at 440 1308
+TOUCH: Turn out the at 381 1380
+TOUCH: GENERAL at 320 1549
+TOUCH: UNIFORM 02 at 683 869
+TOUCH: Unfold and read at 440 1308
+TOUCH: Turn out the at 381 1380
+TOUCH: Place in Lost Property at 495 1351
+OBJECT: cart
+TOUCH: UNIFORM 02 at 683 869
+TOUCH: SECURITY at 822 1549
+OBJECT: cart
+TOUCH: UNIFORM 03 at 182 1292
+TOUCH: Unfold and read at 440 1308
+TOUCH: Turn out the at 381 1380
+TOUCH: GENERAL at 320 1549
+TOUCH: UNIFORM 04 at 685 1292
+TOUCH: Unfold and read at 440 1308
+TOUCH: Turn out the at 381 1380
+TOUCH: GENERAL at 320 1549
+OBJECT: washer
+TOUCH: Pull the hatch at 461 1460
+OBJECT: washer
+TOUCH: Lift the sorted at 310 1627
+TOUCH: Tip one measured at 311 1475
+TOUCH: Tip one measured at 311 1475
+PASS: home + force-stop/relaunch preserves every simulation field; no offline decay
+OBJECT: washer
+TOUCH: STANDARD at 206 1642
+TOUCH: Push the hatch at 487 1813
+TOUCH: Press the green at 411 1647
+PASS: rendered washer glass changes between actual running frames
+OBJECT: washer
+TOUCH: Open the hatch and at 360 1314
+TOUCH: Hang the bundle at 351 1331
+TOUCH: Fold sleeves at 363 1330
+TOUCH: Place folded at 225 1031
+TOUCH: Slide your timecard at 308 1036
+PASS: touch-only laundry completes quality and settlement
+TOUCH: Fold the wage at 495 1405
+PASS: first shift 7 CR paid once
+OBJECT: exit
+OBJECT: shop
+OBJECT: food
+TOUCH: Take Wrapped black at 402 1059
+PASS: touching the actual bread inside the backpack opens its identity record
+TOUCH: Unwrap and eat at 542 1485
+OBJECT: water
+TOUCH: Take Bottled water at 473 1054
+TOUCH: Bottled water at 444 1640
+TOUCH: Open and drink at 541 1484
+OBJECT: water
+TOUCH: Take Municipal soap at 469 1684
+OBJECT: exit
+OBJECT: hall
+OBJECT: room
+OBJECT: sink
+TOUCH: Wash face at 423 862
+OBJECT: bed
+TOUCH: Pull the blanket at 443 913
+OBJECT: paper
+PASS: work -> food/water/soap -> home -> sleep loop
+PASS: home + force-stop/relaunch preserves every simulation field; no offline decay
+PASS: 360x640: real status overlay displays needs
+PASS: 360x640: scene and status usable; state retained
+PASS: 390x844: real status overlay displays needs
+PASS: 390x844: scene and status usable; state retained
+PASS: 1080x2400: real status overlay displays needs
+PASS: 1080x2400: scene and status usable; state retained
+PASS: no native script, Java crash or GLES shader errors
+ANDROID TOUCH LOOP PASSED

@@ -4,3 +4,16 @@ dist/
 .wrangler/
 .env
 .local-data/
+
+# Native Godot build/cache; never commit personal state or signing material
+mobile/.godot/
+builds/
+*.keystore
+*.jks
+*.apk
+*.aab
+*.log
+
+# Python verification caches
+__pycache__/
+*.pyc

@@ -1,0 +1,17 @@
+{
+  "previous": {
+    "duration_seconds": 1.2,
+    "source_peak": 0.520751953125,
+    "source_rms": 0.03986303795841696,
+    "runtime_volume_db": -9,
+    "estimated_output_peak": 0.18476976543828527
+  },
+  "current": {
+    "duration_seconds": 0.26,
+    "source_peak": 0.1065673828125,
+    "source_rms": 0.013981949602644568,
+    "runtime_volume_db": -27,
+    "estimated_output_peak": 0.004760190136081429
+  },
+  "scope": "Deterministic source waveform and configured player gain; not physical-speaker or subjective listening evidence. Interior doors use -23 dB; other work effects use -12 dB. Travel chooses one effect."
+}

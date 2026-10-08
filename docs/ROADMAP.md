@@ -1,0 +1,22 @@
+# Build in evidence-backed phases
+
+> DO NOT TURN SCHISM BACK INTO A MENU-HEAVY DASHBOARD GAME. The player interacts with places and objects.
+
+Implemented foundations (playable development slice; see evidence and release gates below):
+
+0 Audit: preserve browser v0.10, source/asset inventory and baseline tests.
+1 Vision: native portrait Godot, commands, saves, authored hotspots, asset provenance, future authority boundaries.
+2 Visual: room/hall/street/bureau/laundry, transitions, ambient sound, legible shaders and typography.
+3 Life: identity, five needs, owned items, buying/consuming, taps/washing/sleep, taxes, recovery.
+4 Laundry: inspect/sort/treat/load/wash/dry/fold/dispatch, resumable stages, quality and wage slip.
+5 Crime: lost property choices, evidence-driven deterministic detection and records.
+6 Other jobs: smaller but complete cleaning and freight shifts with discoveries and pay.
+7 Home/progression: visible possessions, appliances, played-day rent/deposits, earned vacancy/certification.
+8 Camp: playable finite unpaid orders, custody, paused outside bills, release.
+9 Shared world preparation: authority contract only, no MMO service.
+
+Next polish gates: unaided phone playtests and retention over several sessions; audio mix on physical speakers; deeper object-state and housing scene art; richer garment damage and more authored batches; utility failures with fair recovery; tenancy/career content; ambiguous recorded media; accessible portrait variation; production signing and store packaging. Document measured versus untested behavior in HANDOFF and docs/playtests/ANDROID.md. Do not describe all creative goals as complete merely because an APK exists.
+
+0.2.0 adds physical garment selection, household item storage, powered refrigeration, additive save upgrade and a versioned HTTPS sideload distribution. Next: richer layered work animation, physical-phone playtests and more authored everyday/mystery content. Keep the public preview versioned and preserve update signing compatibility.
+
+0.3.0 addresses player feedback: raster close-ups/garments/possessions, an interactive backpack interior, gradual cart emptying, compatible open/running washer art, bounded bureau sheets and quieter travel. Future work: more meaningful pocket objects, authored batches and ambient changes; improve storage interiors and personal-room upgrades with the same art language. Physical-speaker review remains necessary.

@@ -1,0 +1,11 @@
+# A phone is the primary controller
+
+> DO NOT TURN SCHISM BACK INTO A MENU-HEAVY DASHBOARD GAME. The player interacts with places and objects.
+
+Portrait viewport: 480×900 logical units, canvas stretch, expand for taller phones. At 360px width, a 64-unit target is 48px. Physical targets are enlarged without overlapping unrelated props. Work targets and contextual controls live within the lower reach zone when possible. Sheets have fixed viewport bounds and an internal vertical scroll. Button text wraps within the available width, including all three labor authorizations. Long copy never determines panel width or forces the close target off screen. Body text is 19–24 logical units. Minor object captions may be 16; every pictured object also has a full-size readable tap alternative.
+
+No hover, joystick, precision dragging or forced landscape. Tap object → inspect → contextual manipulation; tap alternatives always exist. BAG opens a first-person view inside the canvas backpack. Four real carried items occupy each compartment page with generous tap targets. Empty space stays empty; civic paper/key in the side pocket are fixed scenery. Tap an item to inspect its identity, history and contextual actions. Label alternatives and deeper-pocket paging keep unfamiliar silhouettes and larger inventories usable. Installed appliances are accessed at home, outside the backpack. Android Back closes a sheet first; on scene it opens pause/settings. Reduce effects, mute and hotspot hint settings persist. Travel plays one cue after a successful scene change: a soft 260 ms contact entering the street or a muted door at interiors. No repeated walking loop or door-plus-steps sequence. Work controls stay more audible.
+
+Each successful command saves before the next interaction. Background/pause/back/close also flush. In-progress machine stages persist; on resume their short visual animation restarts without a second charge. No elapsed-wall-time survival drain, rent or robbery while closed. Process death recovers the latest verified save; previous generations protect interrupted writes.
+
+Verification includes headless simulation, GUI input flow, Android installation/startup, force-stop/relaunch and multiple emulated phone sizes. Emulator evidence does not replace physical-phone ergonomic or audio review.

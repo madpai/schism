@@ -1,0 +1,697 @@
+{
+  "package": "org.schism.districtix",
+  "apk_sha256": "531fa7fc72e85d374b01393226688f2f8430858ca1aff4d990ab056307204083",
+  "device": "emulator-5584",
+  "follow_up": false,
+  "presentation": true,
+  "platform": "Android API 34 emulator / ANGLE SwiftShader",
+  "sizes": [
+    {
+      "width": 360,
+      "height": 640,
+      "density": 160
+    },
+    {
+      "width": 390,
+      "height": 844,
+      "density": 160
+    },
+    {
+      "width": 1080,
+      "height": 2400,
+      "density": 420
+    }
+  ],
+  "steps": [
+    {
+      "touch": "Sign the residency",
+      "point": [
+        472,
+        1733
+      ]
+    },
+    {
+      "touch": "Fold the paper",
+      "point": [
+        395,
+        1201
+      ]
+    },
+    {
+      "assertion": "arrival identity and 4 CR persist",
+      "ok": true
+    },
+    {
+      "hotspot": "sink",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Cup your hands",
+      "point": [
+        432,
+        697
+      ]
+    },
+    {
+      "hotspot": "door",
+      "point": [
+        545,
+        985
+      ]
+    },
+    {
+      "hotspot": "stairs",
+      "point": [
+        961,
+        1574
+      ]
+    },
+    {
+      "hotspot": "bureau",
+      "point": [
+        496,
+        1127
+      ]
+    },
+    {
+      "hotspot": "ticket",
+      "point": [
+        172,
+        1621
+      ]
+    },
+    {
+      "touch": "Put the paper",
+      "point": [
+        478,
+        913
+      ]
+    },
+    {
+      "hotspot": "clerk",
+      "point": [
+        901,
+        1156
+      ]
+    },
+    {
+      "touch": "Slide your civic",
+      "point": [
+        341,
+        840
+      ]
+    },
+    {
+      "hotspot": "vacancies",
+      "point": [
+        250,
+        394
+      ]
+    },
+    {
+      "assertion": "360x640: Municipal Laundry paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "assertion": "360x640: Civic Sanitation paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "assertion": "360x640: Freight Sorter paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "hotspot": "vacancies",
+      "point": [
+        271,
+        529
+      ]
+    },
+    {
+      "assertion": "390x844: Municipal Laundry paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "assertion": "390x844: Civic Sanitation paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "assertion": "390x844: Freight Sorter paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "hotspot": "vacancies",
+      "point": [
+        750,
+        1507
+      ]
+    },
+    {
+      "assertion": "1080x2400: Municipal Laundry paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "assertion": "1080x2400: Civic Sanitation paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "assertion": "1080x2400: Freight Sorter paper is readable through bounded scrolling",
+      "ok": true
+    },
+    {
+      "hotspot": "vacancies",
+      "point": [
+        750,
+        1507
+      ]
+    },
+    {
+      "assertion": "reading all bureau papers at three sizes changes no citizen state",
+      "ok": true
+    },
+    {
+      "touch": "Sign Municipal Laundry",
+      "point": [
+        428,
+        915
+      ]
+    },
+    {
+      "assertion": "bureau ticket/ID/authorization touch path",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "point": [
+        167,
+        1973
+      ]
+    },
+    {
+      "hotspot": "laundry",
+      "point": [
+        907,
+        1146
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "Pull the cart",
+      "point": [
+        251,
+        1479
+      ]
+    },
+    {
+      "touch": "UNIFORM 01",
+      "point": [
+        179,
+        869
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "GENERAL",
+      "point": [
+        320,
+        1549
+      ]
+    },
+    {
+      "touch": "UNIFORM 02",
+      "point": [
+        683,
+        869
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "Place in Lost Property",
+      "point": [
+        495,
+        1351
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 02",
+      "point": [
+        683,
+        869
+      ]
+    },
+    {
+      "touch": "SECURITY",
+      "point": [
+        822,
+        1549
+      ]
+    },
+    {
+      "hotspot": "cart",
+      "point": [
+        172,
+        1536
+      ]
+    },
+    {
+      "touch": "UNIFORM 03",
+      "point": [
+        182,
+        1292
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "GENERAL",
+      "point": [
+        320,
+        1549
+      ]
+    },
+    {
+      "touch": "UNIFORM 04",
+      "point": [
+        685,
+        1292
+      ]
+    },
+    {
+      "touch": "Unfold and read",
+      "point": [
+        440,
+        1308
+      ]
+    },
+    {
+      "touch": "Turn out the",
+      "point": [
+        381,
+        1380
+      ]
+    },
+    {
+      "touch": "GENERAL",
+      "point": [
+        320,
+        1549
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Pull the hatch",
+      "point": [
+        461,
+        1460
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Lift the sorted",
+      "point": [
+        310,
+        1627
+      ]
+    },
+    {
+      "touch": "Tip one measured",
+      "point": [
+        311,
+        1475
+      ]
+    },
+    {
+      "touch": "Tip one measured",
+      "point": [
+        311,
+        1475
+      ]
+    },
+    {
+      "assertion": "home + force-stop/relaunch preserves every simulation field; no offline decay",
+      "ok": true
+    },
+    {
+      "hotspot": "washer",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "STANDARD",
+      "point": [
+        206,
+        1642
+      ]
+    },
+    {
+      "touch": "Push the hatch",
+      "point": [
+        487,
+        1813
+      ]
+    },
+    {
+      "touch": "Press the green",
+      "point": [
+        411,
+        1647
+      ]
+    },
+    {
+      "assertion": "rendered washer glass changes between actual running frames",
+      "ok": true
+    },
+    {
+      "measurement": "washer-glass RGB RMS frame difference",
+      "value": 20.76001609986945,
+      "region": [
+        507,
+        966,
+        756,
+        1270
+      ]
+    },
+    {
+      "hotspot": "washer",
+      "point": [
+        610,
+        1099
+      ]
+    },
+    {
+      "touch": "Open the hatch and",
+      "point": [
+        360,
+        1314
+      ]
+    },
+    {
+      "touch": "Hang the bundle",
+      "point": [
+        351,
+        1331
+      ]
+    },
+    {
+      "touch": "Fold sleeves",
+      "point": [
+        363,
+        1330
+      ]
+    },
+    {
+      "touch": "Place folded",
+      "point": [
+        225,
+        1031
+      ]
+    },
+    {
+      "touch": "Slide your timecard",
+      "point": [
+        308,
+        1036
+      ]
+    },
+    {
+      "assertion": "touch-only laundry completes quality and settlement",
+      "ok": true
+    },
+    {
+      "touch": "Fold the wage",
+      "point": [
+        495,
+        1405
+      ]
+    },
+    {
+      "assertion": "first shift 7 CR paid once",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "point": [
+        135,
+        890
+      ]
+    },
+    {
+      "hotspot": "shop",
+      "point": [
+        950,
+        1545
+      ]
+    },
+    {
+      "hotspot": "food",
+      "point": [
+        280,
+        1355
+      ]
+    },
+    {
+      "touch": "Take Wrapped black",
+      "point": [
+        402,
+        1059
+      ]
+    },
+    {
+      "assertion": "touching the actual bread inside the backpack opens its identity record",
+      "ok": true
+    },
+    {
+      "touch": "Unwrap and eat",
+      "point": [
+        542,
+        1485
+      ]
+    },
+    {
+      "hotspot": "water",
+      "point": [
+        270,
+        1840
+      ]
+    },
+    {
+      "touch": "Take Bottled water",
+      "point": [
+        473,
+        1054
+      ]
+    },
+    {
+      "touch": "Bottled water",
+      "point": [
+        444,
+        1640
+      ]
+    },
+    {
+      "touch": "Open and drink",
+      "point": [
+        541,
+        1484
+      ]
+    },
+    {
+      "hotspot": "water",
+      "point": [
+        270,
+        1840
+      ]
+    },
+    {
+      "touch": "Take Municipal soap",
+      "point": [
+        469,
+        1684
+      ]
+    },
+    {
+      "hotspot": "exit",
+      "point": [
+        826,
+        1897
+      ]
+    },
+    {
+      "hotspot": "hall",
+      "point": [
+        135,
+        1213
+      ]
+    },
+    {
+      "hotspot": "room",
+      "point": [
+        172,
+        1175
+      ]
+    },
+    {
+      "hotspot": "sink",
+      "point": [
+        194,
+        1137
+      ]
+    },
+    {
+      "touch": "Wash face",
+      "point": [
+        423,
+        862
+      ]
+    },
+    {
+      "hotspot": "bed",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        913
+      ]
+    },
+    {
+      "hotspot": "paper",
+      "point": [
+        691,
+        1859
+      ]
+    },
+    {
+      "assertion": "work -> food/water/soap -> home -> sleep loop",
+      "ok": true
+    },
+    {
+      "assertion": "home + force-stop/relaunch preserves every simulation field; no offline decay",
+      "ok": true
+    },
+    {
+      "assertion": "360x640: real status overlay displays needs",
+      "ok": true
+    },
+    {
+      "assertion": "360x640: scene and status usable; state retained",
+      "ok": true
+    },
+    {
+      "assertion": "390x844: real status overlay displays needs",
+      "ok": true
+    },
+    {
+      "assertion": "390x844: scene and status usable; state retained",
+      "ok": true
+    },
+    {
+      "assertion": "1080x2400: real status overlay displays needs",
+      "ok": true
+    },
+    {
+      "assertion": "1080x2400: scene and status usable; state retained",
+      "ok": true
+    },
+    {
+      "assertion": "no native script, Java crash or GLES shader errors",
+      "ok": true
+    }
+  ],
+  "final": {
+    "revision": 49,
+    "location": "room",
+    "credits": 6.0,
+    "needs": {
+      "energy": 100.0,
+      "health": 95.0,
+      "hunger": 61.3333333333333,
+      "hygiene": 70.8333333333333,
+      "thirst": 81.0
+    },
+    "employment": "laundry",
+    "shifts": 1.0,
+    "receipt": {
+      "gross": 7,
+      "job": "laundry",
+      "net": 7,
+      "quality": 100,
+      "shift_id": "56589-shift-12",
+      "withholding": 0
+    },
+    "identity_registered": true
+  },
+  "limits": "Not a physical-phone audio, ergonomics or retention test."
+}

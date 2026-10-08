@@ -1,0 +1,155 @@
+{
+  "fixture": "Isolated QA citizen starts in shop with 200 CR; fixture used only to cover the 60 CR appliance without replaying many shifts. Purchases, installation, storage, sleep, interruption and consumption use real touch controls. This is not a balance or earned-progression claim.",
+  "steps": [
+    {
+      "hotspot": "goods",
+      "point": [
+        858,
+        909
+      ]
+    },
+    {
+      "touch": "Take Refurbished cold",
+      "point": [
+        360,
+        2275
+      ]
+    },
+    {
+      "hotspot": "food",
+      "point": [
+        280,
+        1355
+      ]
+    },
+    {
+      "touch": "Take Wrapped black",
+      "point": [
+        402,
+        1187
+      ]
+    },
+    {
+      "hotspot": "exit",
+      "point": [
+        826,
+        1897
+      ]
+    },
+    {
+      "hotspot": "hall",
+      "point": [
+        135,
+        1213
+      ]
+    },
+    {
+      "hotspot": "room",
+      "point": [
+        172,
+        1175
+      ]
+    },
+    {
+      "touch": "Refurbished cold",
+      "point": [
+        332,
+        979
+      ]
+    },
+    {
+      "touch": "Place in your room",
+      "point": [
+        540,
+        1787
+      ]
+    },
+    {
+      "touch": "Set down Wrapped black",
+      "point": [
+        472,
+        1306
+      ]
+    },
+    {
+      "assertion": "installed cabinet touch stores the purchased food",
+      "ok": true
+    },
+    {
+      "hotspot": "bed",
+      "point": [
+        270,
+        1678
+      ]
+    },
+    {
+      "touch": "Pull the blanket",
+      "point": [
+        443,
+        1031
+      ]
+    },
+    {
+      "assertion": "sleep accrues only actual refrigerator preservation",
+      "ok": true
+    },
+    {
+      "assertion": "home + force-stop/relaunch preserves every simulation field; no offline decay",
+      "ok": true
+    },
+    {
+      "touch": "Wrapped black",
+      "point": [
+        349,
+        1133
+      ]
+    },
+    {
+      "touch": "Unwrap and eat",
+      "point": [
+        542,
+        1615
+      ]
+    },
+    {
+      "assertion": "stored food can be eaten at home after interrupted play",
+      "ok": true
+    }
+  ],
+  "final_storage": {
+    "acquired_minute": 1150.0,
+    "cold_minutes": 480.0,
+    "condition": "intact",
+    "expiry_minute": 5470.0,
+    "history": [
+      {
+        "custody": "player",
+        "minute": 1150.0
+      },
+      {
+        "minute": 1165.0,
+        "storage": "fridge"
+      },
+      {
+        "custody": "consumed",
+        "minute": 1645.0
+      }
+    ],
+    "id": "IX-44288-00006",
+    "kind": "bread",
+    "label": "Wrapped black bread",
+    "legal": "ordinary",
+    "metadata": {
+      "description": "Dense, sour. Better than an empty stomach.",
+      "food": 42.0,
+      "label": "Wrapped black bread",
+      "price": 3.0,
+      "shelf_days": 3.0
+    },
+    "origin": "Food kiosk",
+    "owner": "consumed",
+    "rightful_owner": "player",
+    "serial": "R-00006",
+    "storage": "fridge"
+  }
+}

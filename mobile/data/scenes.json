@@ -1,0 +1,567 @@
+{
+  "version": 1,
+  "scenes": {
+    "room": {
+      "title": "BLOCK C / ROOM 17",
+      "subtitle": "Your door still closes.",
+      "audio": "room",
+      "hotspots": [
+        {
+          "id": "bed",
+          "label": "Metal bed",
+          "rect": [
+            0.02,
+            0.55,
+            0.46,
+            0.43
+          ]
+        },
+        {
+          "id": "sink",
+          "label": "Chipped sink",
+          "rect": [
+            0.08,
+            0.4,
+            0.2,
+            0.16
+          ]
+        },
+        {
+          "id": "locker",
+          "label": "Locker",
+          "rect": [
+            0.74,
+            0.29,
+            0.26,
+            0.36
+          ]
+        },
+        {
+          "id": "door",
+          "label": "Hallway",
+          "rect": [
+            0.36,
+            0.23,
+            0.29,
+            0.34
+          ]
+        },
+        {
+          "id": "paper",
+          "label": "Tenancy paper",
+          "rect": [
+            0.55,
+            0.79,
+            0.18,
+            0.14
+          ]
+        }
+      ],
+      "asset": "room-v1.png"
+    },
+    "hall": {
+      "title": "BLOCK C / SECOND FLOOR",
+      "subtitle": "Someone is awake behind the wall.",
+      "audio": "hall",
+      "hotspots": [
+        {
+          "id": "room",
+          "label": "Room 17",
+          "rect": [
+            0.02,
+            0.18,
+            0.28,
+            0.64
+          ]
+        },
+        {
+          "id": "stairs",
+          "label": "Stairwell",
+          "rect": [
+            0.78,
+            0.5,
+            0.22,
+            0.42
+          ]
+        },
+        {
+          "id": "notice",
+          "label": "Municipal notice",
+          "rect": [
+            0.49,
+            0.36,
+            0.26,
+            0.2
+          ]
+        }
+      ],
+      "asset": "hall-v1.png"
+    },
+    "street": {
+      "title": "DISTRICT IX / RAINLINE",
+      "subtitle": "The train ends here.",
+      "audio": "street",
+      "hotspots": [
+        {
+          "id": "hall",
+          "label": "Block C",
+          "rect": [
+            0.01,
+            0.37,
+            0.23,
+            0.3
+          ]
+        },
+        {
+          "id": "bureau",
+          "label": "Labor bureau",
+          "rect": [
+            0.29,
+            0.36,
+            0.34,
+            0.23
+          ]
+        },
+        {
+          "id": "laundry",
+          "label": "Laundromat",
+          "rect": [
+            0.69,
+            0.37,
+            0.3,
+            0.23
+          ]
+        },
+        {
+          "id": "shop",
+          "label": "Food stall",
+          "rect": [
+            0.77,
+            0.59,
+            0.22,
+            0.21
+          ]
+        },
+        {
+          "id": "cleaning",
+          "label": "Civic annex",
+          "rect": [
+            0.02,
+            0.12,
+            0.26,
+            0.13
+          ]
+        },
+        {
+          "id": "freight",
+          "label": "Freight depot",
+          "rect": [
+            0.67,
+            0.12,
+            0.29,
+            0.13
+          ]
+        },
+        {
+          "id": "tap",
+          "label": "Public tap",
+          "rect": [
+            0.07,
+            0.77,
+            0.2,
+            0.15
+          ]
+        }
+      ],
+      "asset": "street-v1.png"
+    },
+    "bureau": {
+      "title": "MUNICIPAL LABOR ALLOCATION",
+      "subtitle": "Have your civic identification ready.",
+      "audio": "bureau",
+      "hotspots": [
+        {
+          "id": "ticket",
+          "label": "Ticket dispenser",
+          "rect": [
+            0.01,
+            0.59,
+            0.3,
+            0.29
+          ]
+        },
+        {
+          "id": "clerk",
+          "label": "Window 3",
+          "rect": [
+            0.67,
+            0.39,
+            0.33,
+            0.2
+          ]
+        },
+        {
+          "id": "vacancies",
+          "label": "Vacancy papers",
+          "rect": [
+            0.46,
+            0.58,
+            0.47,
+            0.19
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.02,
+            0.86,
+            0.27,
+            0.12
+          ]
+        }
+      ],
+      "asset": "bureau-v1.png"
+    },
+    "laundry": {
+      "title": "MUNICIPAL TEXTILE SERVICES",
+      "subtitle": "Every uniform belongs to somebody.",
+      "audio": "laundry",
+      "hotspots": [
+        {
+          "id": "cart",
+          "label": "Incoming uniforms",
+          "rect": [
+            0.01,
+            0.53,
+            0.3,
+            0.32
+          ]
+        },
+        {
+          "id": "washer",
+          "label": "Washer 03",
+          "rect": [
+            0.33,
+            0.3,
+            0.47,
+            0.32
+          ]
+        },
+        {
+          "id": "detergent",
+          "label": "Detergent",
+          "rect": [
+            0.78,
+            0.72,
+            0.22,
+            0.27
+          ]
+        },
+        {
+          "id": "controls",
+          "label": "Cycle controls",
+          "rect": [
+            0.46,
+            0.22,
+            0.34,
+            0.08
+          ]
+        },
+        {
+          "id": "outgoing",
+          "label": "Outgoing cart",
+          "rect": [
+            0.85,
+            0.43,
+            0.15,
+            0.27
+          ]
+        },
+        {
+          "id": "tray",
+          "label": "Lost Property tray",
+          "rect": [
+            0.02,
+            0.87,
+            0.36,
+            0.11
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.02,
+            0.22,
+            0.21,
+            0.26
+          ]
+        }
+      ],
+      "asset": "laundry-v1.png"
+    },
+    "cleaning": {
+      "title": "CIVIC ANNEX / NIGHT SERVICES",
+      "subtitle": "Do not read what you clean around.",
+      "audio": "cleaning",
+      "hotspots": [
+        {
+          "id": "supplies",
+          "label": "Mop and bucket",
+          "rect": [
+            0.01,
+            0.67,
+            0.24,
+            0.27
+          ]
+        },
+        {
+          "id": "floor",
+          "label": "Floor stains",
+          "rect": [
+            0.29,
+            0.67,
+            0.42,
+            0.27
+          ]
+        },
+        {
+          "id": "desk",
+          "label": "Desk surface",
+          "rect": [
+            0.5,
+            0.5,
+            0.49,
+            0.22
+          ]
+        },
+        {
+          "id": "bin",
+          "label": "Waste bin",
+          "rect": [
+            0.8,
+            0.73,
+            0.19,
+            0.23
+          ]
+        },
+        {
+          "id": "receipt",
+          "label": "Timecard",
+          "rect": [
+            0.87,
+            0.31,
+            0.13,
+            0.11
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.09,
+            0.29,
+            0.25,
+            0.32
+          ]
+        }
+      ],
+      "asset": "cleaning-v1.png"
+    },
+    "freight": {
+      "title": "DISTRICT IX / FREIGHT DEPOT",
+      "subtitle": "The manifest is a version of the truth.",
+      "audio": "freight",
+      "hotspots": [
+        {
+          "id": "incoming",
+          "label": "Incoming crates",
+          "rect": [
+            0.21,
+            0.45,
+            0.68,
+            0.13
+          ]
+        },
+        {
+          "id": "manifest",
+          "label": "Manifest",
+          "rect": [
+            0.01,
+            0.44,
+            0.18,
+            0.14
+          ]
+        },
+        {
+          "id": "lane_a",
+          "label": "BLOCK C",
+          "rect": [
+            0.01,
+            0.62,
+            0.3,
+            0.19
+          ]
+        },
+        {
+          "id": "lane_b",
+          "label": "CLINIC",
+          "rect": [
+            0.35,
+            0.62,
+            0.3,
+            0.19
+          ]
+        },
+        {
+          "id": "lane_c",
+          "label": "TEXTILES",
+          "rect": [
+            0.68,
+            0.62,
+            0.3,
+            0.19
+          ]
+        },
+        {
+          "id": "receipt",
+          "label": "Timecard",
+          "rect": [
+            0.89,
+            0.32,
+            0.11,
+            0.11
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.04,
+            0.28,
+            0.24,
+            0.14
+          ]
+        }
+      ],
+      "asset": "freight-v1.png"
+    },
+    "shop": {
+      "title": "RAINLINE / FOOD KIOSK",
+      "subtitle": "You can smell something warm.",
+      "audio": "shop",
+      "hotspots": [
+        {
+          "id": "food",
+          "label": "Bread and rations",
+          "rect": [
+            0.03,
+            0.52,
+            0.46,
+            0.15
+          ]
+        },
+        {
+          "id": "stew",
+          "label": "Stew pot",
+          "rect": [
+            0.58,
+            0.5,
+            0.39,
+            0.16
+          ]
+        },
+        {
+          "id": "water",
+          "label": "Water and soap",
+          "rect": [
+            0.04,
+            0.76,
+            0.42,
+            0.18
+          ]
+        },
+        {
+          "id": "goods",
+          "label": "Secondhand shelf",
+          "rect": [
+            0.61,
+            0.3,
+            0.37,
+            0.12
+          ]
+        },
+        {
+          "id": "relief",
+          "label": "Municipal meal chit",
+          "rect": [
+            0.03,
+            0.32,
+            0.26,
+            0.14
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.58,
+            0.8,
+            0.37,
+            0.16
+          ]
+        }
+      ],
+      "asset": "shop-v1.png"
+    },
+    "camp": {
+      "title": "MUNICIPAL CORRECTION / WORK HALL",
+      "subtitle": "Your time has a new owner.",
+      "audio": "camp",
+      "hotspots": [
+        {
+          "id": "scrap",
+          "label": "Sorting bench",
+          "rect": [
+            0.22,
+            0.49,
+            0.75,
+            0.3
+          ]
+        },
+        {
+          "id": "bunk",
+          "label": "Camp bunk",
+          "rect": [
+            0.01,
+            0.5,
+            0.18,
+            0.2
+          ]
+        },
+        {
+          "id": "meal",
+          "label": "Ration bowl",
+          "rect": [
+            0.79,
+            0.84,
+            0.21,
+            0.16
+          ]
+        },
+        {
+          "id": "clerk",
+          "label": "Release window",
+          "rect": [
+            0.74,
+            0.14,
+            0.25,
+            0.17
+          ]
+        }
+      ],
+      "asset": "camp-v1.png"
+    }
+  }
+}

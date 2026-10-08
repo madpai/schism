@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "jobs": {
+    "laundry": {
+      "name": "Municipal Laundry Attendant",
+      "gross": 7,
+      "scene": "laundry",
+      "advanced": "Textile Services Assistant",
+      "key": "Supply Room 4 key",
+      "description": "Uniform washing, drying and folding. Four-hour order. Civic withholding applies."
+    },
+    "cleaning": {
+      "name": "Civic Sanitation Worker",
+      "gross": 8,
+      "scene": "cleaning",
+      "advanced": "Building Custodian",
+      "key": "Restricted Floor key",
+      "description": "Floors, bins and office surfaces. Four-hour order. Civic withholding applies."
+    },
+    "freight": {
+      "name": "Freight Sorter",
+      "gross": 9,
+      "scene": "freight",
+      "advanced": "Inventory Clerk",
+      "key": "Warehouse cage key",
+      "description": "Inspect labels and route sealed cargo. Four-hour order. Civic withholding applies."
+    }
+  },
+  "items": {
+    "bread": {
+      "label": "Wrapped black bread",
+      "price": 3,
+      "food": 42,
+      "shelf_days": 3,
+      "description": "Dense, sour. Better than an empty stomach."
+    },
+    "paste": {
+      "label": "Municipal ration paste",
+      "price": 2,
+      "food": 30,
+      "shelf_days": 7,
+      "description": "Civic nutrition. No flavor specified."
+    },
+    "stew": {
+      "label": "Canteen stew",
+      "price": 5,
+      "food": 65,
+      "health": 3,
+      "shelf_days": 1,
+      "description": "A dented bowl, still warm."
+    },
+    "water": {
+      "label": "Bottled water",
+      "price": 1,
+      "water": 50,
+      "description": "The cap has not been broken."
+    },
+    "soap": {
+      "label": "Municipal soap",
+      "price": 1,
+      "uses": 3,
+      "description": "Three washes. Smells of disinfectant."
+    },
+    "mug": {
+      "label": "Chipped enamel mug",
+      "price": 3,
+      "upgrade": true,
+      "description": "A cup that belongs to you."
+    },
+    "blanket": {
+      "label": "Thick secondhand blanket",
+      "price": 9,
+      "upgrade": true,
+      "description": "A little less cold at night."
+    },
+    "shelf": {
+      "label": "Salvaged wall shelf",
+      "price": 8,
+      "upgrade": true,
+      "description": "Somewhere to put the things you keep."
+    },
+    "kettle": {
+      "label": "Municipal K-2 kettle",
+      "price": 18,
+      "upgrade": true,
+      "description": "Repaired heating coil. The lid rattles."
+    },
+    "radio": {
+      "label": "KANTO R-3 pocket receiver",
+      "price": 24,
+      "upgrade": true,
+      "description": "Owner marking: MARA. Battery cover missing. Tape adapter fitted."
+    },
+    "fridge": {
+      "label": "Refurbished cold cabinet",
+      "price": 60,
+      "upgrade": true,
+      "description": "Not pretty. Keeps food for three extra days."
+    },
+    "tea": {
+      "label": "Tin of bitter tea",
+      "price": 2,
+      "water": 25,
+      "requires": "kettle",
+      "description": "Needs your own kettle."
+    }
+  },
+  "tax_percent": 12,
+  "vacancy_shifts": 12
+}

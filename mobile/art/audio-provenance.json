@@ -1,0 +1,186 @@
+{
+  "generator": "synthesize_audio.py",
+  "seed_family": 48193,
+  "assets": [
+    {
+      "id": "room",
+      "file": "assets/audio/room.wav",
+      "sha256": "8f9374142aa1902135040a88d20daa24bafd7fd31a0bddcdfb92355866eded51",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "hall",
+      "file": "assets/audio/hall.wav",
+      "sha256": "8853b4073341e7c73340c27583860b26880387fa429e40619e5deea3f43a3459",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "street",
+      "file": "assets/audio/street.wav",
+      "sha256": "39184092a2e837edd42597c35b445942555705e5a8f30f4f5daf35c6fbbb29a0",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "bureau",
+      "file": "assets/audio/bureau.wav",
+      "sha256": "89cf360300b02b2294e97cc90c7b452fde8e2b963b4362a7cae2507d7a9a0894",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "laundry",
+      "file": "assets/audio/laundry.wav",
+      "sha256": "dbb51aaa09154ddf1fa098522dc74b11757c5f0703e6ae6d0df6ad55f586de42",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "cleaning",
+      "file": "assets/audio/cleaning.wav",
+      "sha256": "7acfdea8d8d9dbfd73aa84eb05bee1853f13a28af687d07f457169a4adad7d57",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "freight",
+      "file": "assets/audio/freight.wav",
+      "sha256": "ffa63eed6b39f808361e8cfcf436d3feb12e8d659d296dcef18f64bd6a3a6599",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "shop",
+      "file": "assets/audio/shop.wav",
+      "sha256": "9e729b675833810dfe78a69a80eff6484c225c6dbac392d99d25e5dd554703ab",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "camp",
+      "file": "assets/audio/camp.wav",
+      "sha256": "370a4174b61208d4e91f6dedf9d527fb0a6d4d8f766c7d7700c662942aa10c3c",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Fluorescent/motor harmonics and filtered industrial/rain noise; seamless eight-second loop",
+      "rate": 22050,
+      "duration": 8.0
+    },
+    {
+      "id": "door",
+      "file": "assets/audio/door.wav",
+      "sha256": "5f0067290f6713b961b4bd6273e15e6392c4cb82caeabf3e6f327b0f47edc01e",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile door effect",
+      "rate": 22050,
+      "duration": 0.42
+    },
+    {
+      "id": "footsteps",
+      "file": "assets/audio/footsteps.wav",
+      "sha256": "981fa24a7e53f698bbf28deb7088d8576901ff539f25f84533a944e46c97ba62",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Single soft 260 ms travel contact; no repeated steps",
+      "rate": 22050,
+      "duration": 0.26
+    },
+    {
+      "id": "cloth",
+      "file": "assets/audio/cloth.wav",
+      "sha256": "98acc155947b1b1a3c260552e8caf2815a3f21e5e9c8b9d258596cbb45a9a6c8",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile cloth effect",
+      "rate": 22050,
+      "duration": 0.42
+    },
+    {
+      "id": "mop",
+      "file": "assets/audio/mop.wav",
+      "sha256": "8c043a25d070f004ef3630cb8ca30e9e20b0a85b938c1a88de23742efa9bc776",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile mop effect",
+      "rate": 22050,
+      "duration": 0.42
+    },
+    {
+      "id": "coin",
+      "file": "assets/audio/coin.wav",
+      "sha256": "4cd76cd99bb356f693d1f9fc4ad7c7d261c732df992e12fdf777471e6052a6fc",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile coin effect",
+      "rate": 22050,
+      "duration": 0.42
+    },
+    {
+      "id": "beep",
+      "file": "assets/audio/beep.wav",
+      "sha256": "9cafc2ddfb20de26c2f3d4667ccad831a8d4ae868b45db618ecbb9926a06fe95",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile beep effect",
+      "rate": 22050,
+      "duration": 0.42
+    },
+    {
+      "id": "washer",
+      "file": "assets/audio/washer.wav",
+      "sha256": "66dcea70eba1fdcd9726287b8c56b37d711a47c45445a20676e36c192a5bc0bf",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile washer effect",
+      "rate": 22050,
+      "duration": 1.2
+    },
+    {
+      "id": "buzzer",
+      "file": "assets/audio/buzzer.wav",
+      "sha256": "f44c6e933dee0464fbbc6e523a4d2b3d3c30612df096becb732ccabed0e06d11",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile buzzer effect",
+      "rate": 22050,
+      "duration": 0.42
+    },
+    {
+      "id": "drain",
+      "file": "assets/audio/drain.wav",
+      "sha256": "26ee0cfdd80e8126f217d9cbc7aff001431997a15e8672d0869ca312f48edd77",
+      "license": "Original project asset; repository owner controls distribution",
+      "source": "Original deterministic oscillator/noise synthesis; no third-party samples",
+      "description": "Original tactile drain effect",
+      "rate": 22050,
+      "duration": 1.2
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+TOUCH: Sign the residency
+TOUCH: Fold the paper
+PASS: arrival identity and 4 CR persist
+OBJECT: sink
+TOUCH: Cup your hands
+OBJECT: door
+OBJECT: stairs
+OBJECT: bureau
+OBJECT: ticket
+TOUCH: Put the paper
+OBJECT: clerk
+TOUCH: Slide your civic
+TOUCH: Sign Municipal Laundry
+PASS: bureau ticket/ID/authorization touch path
+OBJECT: exit
+OBJECT: laundry
+OBJECT: cart
+TOUCH: Pull the cart
+TOUCH: UNIFORM 01
+TOUCH: Unfold and read
+TOUCH: Turn out the
+TOUCH: GENERAL
+TOUCH: UNIFORM 02
+TOUCH: Unfold and read
+TOUCH: Turn out the
+TOUCH: Place in Lost Property
+OBJECT: cart
+TOUCH: UNIFORM 02
+TOUCH: SECURITY
+TOUCH: UNIFORM 03
+TOUCH: Unfold and read
+TOUCH: Turn out the
+TOUCH: GENERAL
+TOUCH: UNIFORM 04
+TOUCH: Unfold and read
+TOUCH: Turn out the
+TOUCH: GENERAL
+OBJECT: washer
+TOUCH: Pull the hatch
+TOUCH: Lift the sorted
+TOUCH: Tip one measured
+TOUCH: Tip one measured
+PASS: home + force-stop/relaunch preserves every simulation field; no offline decay
+OBJECT: washer
+TOUCH: STANDARD
+TOUCH: Push the hatch
+TOUCH: Press the green
+TOUCH: Open the hatch and
+TOUCH: Hang the bundle
+TOUCH: Fold sleeves
+TOUCH: Place folded
+TOUCH: Slide your timecard
+PASS: touch-only laundry completes quality and settlement
+TOUCH: Fold the wage
+PASS: first shift 7 CR paid once
+OBJECT: exit
+OBJECT: shop
+OBJECT: food
+TOUCH: Take Wrapped black
+TOUCH: Wrapped black
+TOUCH: Unwrap and eat
+OBJECT: water
+TOUCH: Take Bottled water
+TOUCH: Bottled water
+TOUCH: Open and drink
+OBJECT: water
+TOUCH: Take Municipal soap
+OBJECT: exit
+OBJECT: hall
+OBJECT: room
+OBJECT: sink
+TOUCH: Wash face
+OBJECT: bed
+TOUCH: Pull the blanket
+OBJECT: paper
+PASS: work -> food/water/soap -> home -> sleep loop
+PASS: home + force-stop/relaunch preserves every simulation field; no offline decay
+PASS: 360x640: real status overlay displays needs
+PASS: 360x640: scene and status usable; state retained
+PASS: 390x844: real status overlay displays needs
+PASS: 390x844: scene and status usable; state retained
+PASS: 1080x2400: real status overlay displays needs
+PASS: 1080x2400: scene and status usable; state retained
+PASS: no native script, Java crash or GLES shader errors
+ANDROID TOUCH LOOP PASSED

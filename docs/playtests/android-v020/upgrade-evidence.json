@@ -1,0 +1,74 @@
+{
+  "before_version": "0.1.0",
+  "after_version": "0.2.0",
+  "steps": [
+    {
+      "assertion": "existing v0.1.0 profile is present before upgrading",
+      "ok": true
+    },
+    {
+      "touch": "Save and put",
+      "point": [
+        363,
+        1604
+      ]
+    },
+    {
+      "assertion": "in-place APK upgrade preserves every prior field and adds only storage schema defaults",
+      "ok": true
+    },
+    {
+      "hotspot": "locker",
+      "point": [
+        939,
+        1118
+      ]
+    },
+    {
+      "touch": "Set down Municipal soap",
+      "point": [
+        537,
+        1369
+      ]
+    },
+    {
+      "assertion": "real locker interaction stores an owned possession",
+      "ok": true
+    },
+    {
+      "assertion": "home + force-stop/relaunch preserves every simulation field; no offline decay",
+      "ok": true
+    },
+    {
+      "hotspot": "locker",
+      "point": [
+        939,
+        1118
+      ]
+    },
+    {
+      "touch": "Municipal soap",
+      "point": [
+        413,
+        1195
+      ]
+    },
+    {
+      "touch": "Put it in your bag",
+      "point": [
+        543,
+        1614
+      ]
+    },
+    {
+      "assertion": "stored possession can be retrieved after process death",
+      "ok": true
+    }
+  ],
+  "identity_preserved": true,
+  "money_preserved": true,
+  "needs_preserved": true,
+  "revision_before": 49,
+  "migration_schema": 4,
+  "final_revision": 51
+}
