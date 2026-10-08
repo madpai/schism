@@ -1,0 +1,699 @@
+{
+  "pipeline_version": 1,
+  "style": "SCHISM PSX municipal / green fluorescent + amber practical / portrait 2:3",
+  "reproducibility": "Prompts preserve intent; exact committed images and hashes reproduce builds. Generation itself is nondeterministic. Object animation and overlays are native Godot code.",
+  "assets": [
+    {
+      "id": "bureau",
+      "version": 1,
+      "file": "assets/scenes/bureau-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-59d3fe6c-dea4-4a93-afea-bfb614feb5a8.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "2e8b6c53c6348117df54fe750b43a2ec5d03cbe4a9b0ce36006c86b355a04950",
+      "prompt": "art/prompts/bureau-v1.txt",
+      "prompt_sha256": "ab07513c9a6704e684c5263633a6783442b2c4ab0ec20c80468d0ec48ba25dff",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "Have your civic identification ready.",
+      "hotspots": [
+        {
+          "id": "ticket",
+          "label": "Ticket dispenser",
+          "rect": [
+            0.01,
+            0.59,
+            0.3,
+            0.29
+          ]
+        },
+        {
+          "id": "clerk",
+          "label": "Window 3",
+          "rect": [
+            0.67,
+            0.39,
+            0.33,
+            0.2
+          ]
+        },
+        {
+          "id": "vacancies",
+          "label": "Vacancy papers",
+          "rect": [
+            0.46,
+            0.58,
+            0.47,
+            0.19
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.02,
+            0.86,
+            0.27,
+            0.12
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "camp",
+      "version": 1,
+      "file": "assets/scenes/camp-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-682b6b8f-64e7-49c5-b5d4-223b088ed2cb.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "d7e2d31a49d5a4f11562761be2d2f40911d75c51ce0a61d01c7471f19c7fd90b",
+      "prompt": "art/prompts/camp-v1.txt",
+      "prompt_sha256": "2bb8a4d5f30f357bfb734434acc181f03ff963017dd0f397f70e0d54353a4562",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "Your time has a new owner.",
+      "hotspots": [
+        {
+          "id": "scrap",
+          "label": "Sorting bench",
+          "rect": [
+            0.22,
+            0.49,
+            0.75,
+            0.3
+          ]
+        },
+        {
+          "id": "bunk",
+          "label": "Camp bunk",
+          "rect": [
+            0.01,
+            0.5,
+            0.18,
+            0.2
+          ]
+        },
+        {
+          "id": "meal",
+          "label": "Ration bowl",
+          "rect": [
+            0.79,
+            0.84,
+            0.21,
+            0.16
+          ]
+        },
+        {
+          "id": "clerk",
+          "label": "Release window",
+          "rect": [
+            0.74,
+            0.14,
+            0.25,
+            0.17
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "citizen",
+      "version": 1,
+      "file": "assets/scenes/citizen-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-ddac9d69-2e38-4351-9450-3de6f2fc149c.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "4cc29e22dd08e900632e9dd277157acdaa2b60753f8ab294bad09fa7278837b4",
+      "prompt": "art/prompts/citizen-v1.txt",
+      "prompt_sha256": "bff8cf6a19136c2795421d752aa7a4a5efe97261911a6db68eb49c16357a6010",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "alpha_range": [
+        0,
+        254
+      ],
+      "composition": "Ordinary full-body citizen / condition layers added by runtime",
+      "hotspots": [],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "cleaning",
+      "version": 1,
+      "file": "assets/scenes/cleaning-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-1e002617-0419-4c3a-8ca9-eba2bd57ad69.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "6f8a91d1469b2c4da52c90155228d9b690c394419670c90db80afe0bfb4feefe",
+      "prompt": "art/prompts/cleaning-v1.txt",
+      "prompt_sha256": "c1795efa53634614ab2405fdb2931e2acf3de455b696415540cfcd7e622f9baf",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "Do not read what you clean around.",
+      "hotspots": [
+        {
+          "id": "supplies",
+          "label": "Mop and bucket",
+          "rect": [
+            0.01,
+            0.67,
+            0.24,
+            0.27
+          ]
+        },
+        {
+          "id": "floor",
+          "label": "Floor stains",
+          "rect": [
+            0.29,
+            0.67,
+            0.42,
+            0.27
+          ]
+        },
+        {
+          "id": "desk",
+          "label": "Desk surface",
+          "rect": [
+            0.5,
+            0.5,
+            0.49,
+            0.22
+          ]
+        },
+        {
+          "id": "bin",
+          "label": "Waste bin",
+          "rect": [
+            0.8,
+            0.73,
+            0.19,
+            0.23
+          ]
+        },
+        {
+          "id": "receipt",
+          "label": "Timecard",
+          "rect": [
+            0.87,
+            0.31,
+            0.13,
+            0.11
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.09,
+            0.29,
+            0.25,
+            0.32
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "freight",
+      "version": 1,
+      "file": "assets/scenes/freight-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-739c286f-4dd0-4bd3-8f4e-8739468d1d4c.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "3619c6022232f899b755a598b56b8d594d3342c98340164fcacfca1aa5bf3ce4",
+      "prompt": "art/prompts/freight-v1.txt",
+      "prompt_sha256": "a4b4b9ef5b715544e8b3ea2c867fd010abb3a36cf89ff38d9cd33286e59e90de",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "The manifest is a version of the truth.",
+      "hotspots": [
+        {
+          "id": "incoming",
+          "label": "Incoming crates",
+          "rect": [
+            0.21,
+            0.45,
+            0.68,
+            0.13
+          ]
+        },
+        {
+          "id": "manifest",
+          "label": "Manifest",
+          "rect": [
+            0.01,
+            0.44,
+            0.18,
+            0.14
+          ]
+        },
+        {
+          "id": "lane_a",
+          "label": "BLOCK C",
+          "rect": [
+            0.01,
+            0.62,
+            0.3,
+            0.19
+          ]
+        },
+        {
+          "id": "lane_b",
+          "label": "CLINIC",
+          "rect": [
+            0.35,
+            0.62,
+            0.3,
+            0.19
+          ]
+        },
+        {
+          "id": "lane_c",
+          "label": "TEXTILES",
+          "rect": [
+            0.68,
+            0.62,
+            0.3,
+            0.19
+          ]
+        },
+        {
+          "id": "receipt",
+          "label": "Timecard",
+          "rect": [
+            0.89,
+            0.32,
+            0.11,
+            0.11
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.04,
+            0.28,
+            0.24,
+            0.14
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "hall",
+      "version": 1,
+      "file": "assets/scenes/hall-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-33a2b450-7568-4a7a-8b65-8c4435bf80be.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "4fa6a2078d14d079fcecd8ebb927c7920a99ffe6995b49559fb6d56c43f7069e",
+      "prompt": "art/prompts/hall-v1.txt",
+      "prompt_sha256": "e5ac0e0610c30c0b6505b26cbf278259c8d3f8c6c2f60f06abd57ea53cbbebdc",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "Someone is awake behind the wall.",
+      "hotspots": [
+        {
+          "id": "room",
+          "label": "Room 17",
+          "rect": [
+            0.02,
+            0.18,
+            0.28,
+            0.64
+          ]
+        },
+        {
+          "id": "stairs",
+          "label": "Stairwell",
+          "rect": [
+            0.78,
+            0.5,
+            0.22,
+            0.42
+          ]
+        },
+        {
+          "id": "notice",
+          "label": "Municipal notice",
+          "rect": [
+            0.49,
+            0.36,
+            0.26,
+            0.2
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "laundry",
+      "version": 1,
+      "file": "assets/scenes/laundry-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-66a3835f-bb77-476a-a65e-5939a0b23a50.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "2134a96e5ab6dfed33e75ac916a8014da658679dc1fbc561fce818ab6b0ffd31",
+      "prompt": "art/prompts/laundry-v1.txt",
+      "prompt_sha256": "5bd88a58dd4a3ca32d82913b5cde4eddbc414c6c16c159bc85307120fd70fe23",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "Every uniform belongs to somebody.",
+      "hotspots": [
+        {
+          "id": "cart",
+          "label": "Incoming uniforms",
+          "rect": [
+            0.01,
+            0.53,
+            0.3,
+            0.32
+          ]
+        },
+        {
+          "id": "washer",
+          "label": "Washer 03",
+          "rect": [
+            0.33,
+            0.3,
+            0.47,
+            0.32
+          ]
+        },
+        {
+          "id": "detergent",
+          "label": "Detergent",
+          "rect": [
+            0.78,
+            0.72,
+            0.22,
+            0.27
+          ]
+        },
+        {
+          "id": "controls",
+          "label": "Cycle controls",
+          "rect": [
+            0.46,
+            0.22,
+            0.34,
+            0.08
+          ]
+        },
+        {
+          "id": "outgoing",
+          "label": "Outgoing cart",
+          "rect": [
+            0.85,
+            0.43,
+            0.15,
+            0.27
+          ]
+        },
+        {
+          "id": "tray",
+          "label": "Lost Property tray",
+          "rect": [
+            0.02,
+            0.87,
+            0.36,
+            0.11
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.02,
+            0.22,
+            0.21,
+            0.26
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "room",
+      "version": 1,
+      "file": "assets/scenes/room-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-df88bf8b-b577-4fb9-a3a4-77c08ade7008.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "6abb928ce877801a92fc49705da8865aaf08669f461b5f6c51ab136ceecb6004",
+      "prompt": "art/prompts/room-v1.txt",
+      "prompt_sha256": "8ab09b9291d277e4aa4c0a962a8ea0fefd3fe04492cf35cb343e2ea5ea9e4760",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "Your door still closes.",
+      "hotspots": [
+        {
+          "id": "bed",
+          "label": "Metal bed",
+          "rect": [
+            0.02,
+            0.55,
+            0.46,
+            0.43
+          ]
+        },
+        {
+          "id": "sink",
+          "label": "Chipped sink",
+          "rect": [
+            0.08,
+            0.4,
+            0.2,
+            0.16
+          ]
+        },
+        {
+          "id": "locker",
+          "label": "Locker",
+          "rect": [
+            0.74,
+            0.29,
+            0.26,
+            0.36
+          ]
+        },
+        {
+          "id": "door",
+          "label": "Hallway",
+          "rect": [
+            0.36,
+            0.23,
+            0.29,
+            0.34
+          ]
+        },
+        {
+          "id": "paper",
+          "label": "Tenancy paper",
+          "rect": [
+            0.55,
+            0.79,
+            0.18,
+            0.14
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "shop",
+      "version": 1,
+      "file": "assets/scenes/shop-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-f3f1cad1-d866-4011-b3fc-18b88f7ef972.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "f676e56eee27ccfb25f61be9e45757f52091a5f9a34020fd6ced3c9d9a947a6b",
+      "prompt": "art/prompts/shop-v1.txt",
+      "prompt_sha256": "3c9e4f8fb4cbd841b4ff85bad35caf9e6176aa46ac02ea388b6e7f9ee491e024",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "You can smell something warm.",
+      "hotspots": [
+        {
+          "id": "food",
+          "label": "Bread and rations",
+          "rect": [
+            0.03,
+            0.52,
+            0.46,
+            0.15
+          ]
+        },
+        {
+          "id": "stew",
+          "label": "Stew pot",
+          "rect": [
+            0.58,
+            0.5,
+            0.39,
+            0.16
+          ]
+        },
+        {
+          "id": "water",
+          "label": "Water and soap",
+          "rect": [
+            0.04,
+            0.76,
+            0.42,
+            0.18
+          ]
+        },
+        {
+          "id": "goods",
+          "label": "Secondhand shelf",
+          "rect": [
+            0.61,
+            0.3,
+            0.37,
+            0.12
+          ]
+        },
+        {
+          "id": "relief",
+          "label": "Municipal meal chit",
+          "rect": [
+            0.03,
+            0.32,
+            0.26,
+            0.14
+          ]
+        },
+        {
+          "id": "exit",
+          "label": "Street",
+          "rect": [
+            0.58,
+            0.8,
+            0.37,
+            0.16
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    },
+    {
+      "id": "street",
+      "version": 1,
+      "file": "assets/scenes/street-v1.png",
+      "source": "/home/commander/.codex/generated_images/01a119be-e4c3-7203-9980-390c615fe317/exec-d2b038c8-00b3-428e-ae00-65c1f1df6b98.png",
+      "tool": "image_gen.imagegen / built-in",
+      "sha256": "e57ce667590804f450294f406c70039cbd365733298c16810f7eff50aac2a92e",
+      "prompt": "art/prompts/street-v1.txt",
+      "prompt_sha256": "d6ef5045b5f024e7dbbd3391c018f5a9979c3c0bbdc8ce6883fa19289741117a",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGB",
+      "alpha_range": null,
+      "composition": "The train ends here.",
+      "hotspots": [
+        {
+          "id": "hall",
+          "label": "Block C",
+          "rect": [
+            0.01,
+            0.37,
+            0.23,
+            0.3
+          ]
+        },
+        {
+          "id": "bureau",
+          "label": "Labor bureau",
+          "rect": [
+            0.29,
+            0.36,
+            0.34,
+            0.23
+          ]
+        },
+        {
+          "id": "laundry",
+          "label": "Laundromat",
+          "rect": [
+            0.69,
+            0.37,
+            0.3,
+            0.23
+          ]
+        },
+        {
+          "id": "shop",
+          "label": "Food stall",
+          "rect": [
+            0.77,
+            0.59,
+            0.22,
+            0.21
+          ]
+        },
+        {
+          "id": "cleaning",
+          "label": "Civic annex",
+          "rect": [
+            0.02,
+            0.12,
+            0.26,
+            0.13
+          ]
+        },
+        {
+          "id": "freight",
+          "label": "Freight depot",
+          "rect": [
+            0.67,
+            0.12,
+            0.29,
+            0.13
+          ]
+        },
+        {
+          "id": "tap",
+          "label": "Public tap",
+          "rect": [
+            0.07,
+            0.77,
+            0.2,
+            0.15
+          ]
+        }
+      ],
+      "review": "Visually inspected: angular geometry, muted palette, readable silhouettes; original output retained without raster edits."
+    }
+  ]
+}

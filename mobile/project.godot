@@ -1,0 +1,35 @@
+config_version=5
+
+[application]
+config/name="SCHISM"
+config/description="An ordinary life in District IX."
+run/main_scene="res://scenes/main.tscn"
+config/features=PackedStringArray("4.7", "GL Compatibility")
+config/icon="res://assets/icons/schism.svg"
+config/version="0.1.0"
+
+[autoload]
+Session="*res://src/session.gd"
+
+[display]
+window/size/viewport_width=480
+window/size/viewport_height=900
+window/size/window_width_override=480
+window/size/window_height_override=900
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+window/handheld/orientation=1
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true
+textures/default_filters/use_nearest_mipmap_filter=false
+environment/defaults/default_clear_color=Color(0.025,0.032,0.029,1)
+
+[input_devices]
+pointing/emulate_touch_from_mouse=true
+pointing/emulate_mouse_from_touch=true
+
+[audio]
+driver/enable_input=false
