@@ -135,6 +135,18 @@ func _initialize() -> void:
    freight = act(freight,{"action":"found_choice","id":freight.shift.found,"choice":"return"})
   freight = act(freight,{"action":"route_crate","index":n,"destination":freight.shift.crates[n].destination})
  freight = act(freight,{"action":"settle_shift"}); check(freight.last_receipt.gross==9 and freight.last_receipt.withholding==1 and freight.last_receipt.quality==100,"freight labels, manifest, ownership and wages")
+ var eaten = resident("freight"); eaten.rng = 1
+ eaten = act(eaten,{"action":"begin_shift"}); eaten = act(eaten,{"action":"manifest"})
+ for n in range(4):
+  eaten = act(eaten,{"action":"inspect_crate","index":n})
+  if n==3:
+   eaten = act(eaten,{"action":"open_crate","index":n})
+   var parcel = eaten.shift.found
+   eaten = act(eaten,{"action":"found_choice","id":parcel,"choice":"keep"})
+   eaten = act(eaten,{"action":"consume","id":parcel})
+  eaten = act(eaten,{"action":"route_crate","index":n,"destination":eaten.shift.crates[n].destination})
+ eaten = act(eaten,{"action":"settle_shift"})
+ check(eaten.legal.offenses==1 and eaten.items[0].owner=="consumed" and eaten.items[0].history[-1].custody=="evidence_counted","consuming stolen goods cannot erase manifest evidence or fines")
  var camp = resident(); camp.legal.offenses = 2; camp.rng = 1; camp.housing.rent = 2
  camp = laundry(camp,"keep")
  check(camp.location=="camp" and camp.legal.camp.active,"repeated detected theft enters playable camp")
@@ -164,6 +176,7 @@ func _initialize() -> void:
  check(store.load_state().revision==inspect.revision,"interrupted pending write cannot replace good state")
  var migrated = Sim.migrate({"schema":1,"revision":9,"identity":{"name":"Old"},"items":[{"id":"history","metadata":{"unknown":"keep me"}}]})
  check(migrated.schema==3 and migrated.identity.name=="Old" and migrated.items[0].metadata.unknown=="keep me" and migrated.jobs.has("freight"),"migration preserves old identity and unknown item metadata")
+ check(migrated.items[0].owner=="player" and migrated.items[0].serial=="history" and migrated.items[0].history is Array,"older item records gain inspectable custody fields without losing identity")
  check(Sim.migrate({"schema":99}).has("error"),"future saves reject without wiping")
  var future = s.duplicate(true); future.schema = 99
  var payload = JSON.stringify(future)

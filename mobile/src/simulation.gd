@@ -34,6 +34,12 @@ static func migrate(old: Dictionary) -> Dictionary:
  var s = old.duplicate(true)
  var defaults = initial()
  _defaults(s, defaults)
+ for index in range(s.items.size()):
+  var item = s.items[index]
+  if not item is Dictionary: return {"error":"An item record needs recovery. Your files have been preserved."}
+  var legacy_id = str(item.get("id","LEGACY-%s-%d"%[s.identity.civic_id,index]))
+  _defaults(item,{"id":legacy_id,"kind":"unknown","label":"Recovered possession","owner":"player","rightful_owner":"player","serial":legacy_id,"origin":"Earlier residency record","condition":"worn","legal":"ordinary","acquired_minute":s.minute,"expiry_minute":0,"metadata":{},"history":[]})
+  s.serial = maxi(int(s.serial),index+1)
  s.schema = SCHEMA
  return s
 
@@ -47,10 +53,11 @@ static func apply(before: Dictionary, cmd: Dictionary) -> Dictionary:
  var events: Array = []
  var error = _execute(s,cmd,events)
  if error != "": return {"ok":false,"error":error,"state":before}
+ s.illicit_credits = clampi(int(s.illicit_credits),0,int(s.credits))
  s.revision = int(before.revision)+1
  s.sequence = int(before.sequence)+1
  for e in events:
-  e["id"] = str(s.identity.civic_id)+":"+str(s.sequence)+":"+str(s.events.size())
+  e["event_id"] = str(s.identity.civic_id)+":"+str(s.sequence)+":"+str(s.events.size())
   e["minute"] = s.minute
   s.events.append(e)
  if s.events.size()>120: s.events = s.events.slice(-120)
@@ -145,7 +152,7 @@ static func _execute(s: Dictionary, c: Dictionary, e: Array) -> String:
   "sleep":
    if s.location!="room" or not s.shift.is_empty(): return "I need to go home first."
    _advance(s,480,true)
-   s.needs.energy = minf(100,s.needs.energy+(80 if "blanket" in s.room_upgrades else 68)+(8 if s.housing.tier!="municipal" else 0))
+   s.needs.energy = minf(100,s.needs.energy+(80 if "blanket" in s.room_upgrades else 68)+(16 if s.housing.tier=="apartment" else 8 if s.housing.tier=="private" else 0))
    if s.needs.hunger>20 and s.needs.thirst>20: s.needs.health = minf(100,s.needs.health+4)
    e.append({"type":"thought","text":"I'm done."})
   "relief":
@@ -242,7 +249,7 @@ static func _laundry(s: Dictionary,c: Dictionary,e: Array) -> String:
   return ""
  match action:
   "open_hatch":
-   if w.stage!="inspect": return "The hatch is locked during this cycle."
+   if w.stage not in ["inspect","prepare"]: return "The hatch is locked during this cycle."
    w.hatch_open = true
   "load_washer":
    if w.stage!="inspect" or not w.hatch_open: return "Open the washer hatch."
@@ -372,15 +379,17 @@ static func _settle(s: Dictionary,e: Array) -> String:
  s.shift = {}
  for risk in detected:
   var item = _find(s,risk.id)
-  if item.owner in ["player","room"]:
-   item.owner = "confiscated"; item.history.append({"minute":s.minute,"custody":"confiscated"})
+  if item.owner in ["player","room","consumed"]:
+   var consumed = item.owner=="consumed"
+   if not consumed: item.owner = "confiscated"
+   item.history.append({"minute":s.minute,"custody":"evidence_counted" if consumed else "confiscated"})
    if item.kind=="credits":
     var recover = mini(int(item.metadata.amount),int(s.credits)); s.credits -= recover; s.illicit_credits = maxi(0,int(s.illicit_credits)-recover)
    var fine = mini(2,int(s.credits)); s.credits -= fine
    s.legal.offenses += 1; s.legal.suspicion += 15
    var incident = {"evidence":risk.evidence,"fine":fine,"item":item.id,"minute":s.minute}
    s.legal.record.append(incident)
-   e.append({"type":"notice","text":"Inventory inspection: %s\nObject confiscated. %d CR fine. Your civic record is marked."%[risk.evidence,fine]})
+   e.append({"type":"notice","text":"Inventory inspection: %s\n%s %d CR fine. Your civic record is marked."%[risk.evidence,"Missing goods recorded." if consumed else "Object confiscated.",fine]})
  if s.legal.offenses>=3 and not detected.is_empty(): _enter_camp(s,e)
  return ""
 

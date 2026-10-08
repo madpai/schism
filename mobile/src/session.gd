@@ -18,8 +18,16 @@ func _ready() -> void:
  var loaded = store.load_state()
  if loaded.has("error"):
   recovery_error = loaded.error; state = Sim.initial()
- else: state = loaded
+ else:
+  state = loaded
+  if state.revision==0 and not FileAccess.file_exists(path+"/slot0.json") and not FileAccess.file_exists(path+"/slot1.json"):
+   var bytes = Crypto.new().generate_random_bytes(4)
+   if bytes.size()==4:
+    state.rng = int(bytes.decode_u32(0)%2147483646)+1
+    state.identity.civic_id = str(10000+state.rng%90000)
+   if not store.save_state(state): recovery_error = store.last_error
  get_tree().auto_accept_quit = false
+ get_tree().quit_on_go_back = false
 
 func command(cmd: Dictionary) -> bool:
  if recovery_error!="": rejected.emit(recovery_error); return false

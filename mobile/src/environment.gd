@@ -22,6 +22,16 @@ func _draw() -> void:
     draw_line(Vector2(x,y),Vector2(x-2,y+12),Color(.66,.76,.7,.14),1)
  if enabled and location not in ["street","shop"]:
   draw_rect(Rect2(Vector2.ZERO,size),Color(.72,.8,.6,0.018+sin(clock*1.7)*.009))
+ if location=="street":
+  var tap = Vector2(w*.15,h*.83)
+  draw_line(tap+Vector2(0,h*.055),tap+Vector2(0,-h*.025),Color("707d6b"),7)
+  draw_line(tap+Vector2(0,-h*.025),tap+Vector2(w*.035,-h*.025),Color("889082"),7)
+  draw_line(tap+Vector2(-w*.018,-h*.04),tap+Vector2(w*.018,-h*.04),Color("adab86"),4)
+ if location=="cleaning":
+  if state.get("shift",{}).is_empty() or "floor" not in state.shift.get("cleaned",[]):
+   for n in range(5):
+    var mark = Vector2(w*(.34+n*.065),h*(.74+float(n%2)*.04))
+    draw_circle(mark,w*.016,Color(.25,.2,.14,.6))
  if location=="laundry" and not state.get("shift",{}).is_empty():
   var shift = state.shift
   if shift.get("hatch_open",false):

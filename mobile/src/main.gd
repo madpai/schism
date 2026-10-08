@@ -65,13 +65,14 @@ func _render_world() -> void:
  if content:
   remove_child(content); content.queue_free()
  content = Control.new(); content.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); add_child(content); move_child(content,0)
- var s = Session.state; var location = s.location; var data = scene_data[location]
+ var s = Session.state; var location = s.location; var data = scene_data[location].duplicate(true)
+ if location=="room": data.title = s.housing.address.to_upper()
  var backdrop = ColorRect.new(); backdrop.color = Color("101913"); backdrop.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); content.add_child(backdrop)
  var header = VBoxContainer.new(); header.position = Vector2(18,12); header.size = Vector2(size.x-36,86); content.add_child(header)
  var top = HBoxContainer.new(); header.add_child(top)
- var brand = _label("S C H I S M",30); brand.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(brand)
- var time_label = _label("DAY %02d  %02d:%02d"%[int(s.minute/1440)+1,int(s.minute/60)%24,int(s.minute)%60],18); time_label.modulate = MUTED; top.add_child(time_label)
- header.add_child(_label(data.title,20))
+ var brand = _label("S C H I S M",30); brand.autowrap_mode = TextServer.AUTOWRAP_OFF; brand.size_flags_horizontal = Control.SIZE_EXPAND_FILL; top.add_child(brand)
+ var time_label = _label("DAY %02d  %02d:%02d"%[int(s.minute/1440)+1,int(s.minute/60)%24,int(s.minute)%60],18); time_label.autowrap_mode = TextServer.AUTOWRAP_OFF; time_label.modulate = MUTED; top.add_child(time_label)
+ var location_label = _label(data.title,20); location_label.autowrap_mode = TextServer.AUTOWRAP_OFF; header.add_child(location_label)
  var area = Control.new(); area.position = Vector2(0,100); area.size = Vector2(size.x,maxf(400,size.y-222)); content.add_child(area)
  area.clip_contents = true
  var texture = TextureRect.new(); texture.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); texture.expand_mode = TextureRect.EXPAND_IGNORE_SIZE; texture.stretch_mode = TextureRect.STRETCH_SCALE
@@ -82,23 +83,28 @@ func _render_world() -> void:
  if not s.settings.effects: material.set_shader_parameter("instability",0); material.set_shader_parameter("tracking",0)
  texture.material = material; area.add_child(texture)
  var environment = Atmosphere.new(); environment.location = location; environment.state = s; environment.enabled = s.settings.effects; environment.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT); area.add_child(environment)
- _room_props(area,s)
  for hotspot in data.hotspots:
   var rect = hotspot.rect
   var button = Button.new(); button.name = "hotspot_"+hotspot.id
   button.position = Vector2(rect[0]*area.size.x,rect[1]*area.size.y)
   button.size = Vector2(maxf(64,rect[2]*area.size.x),maxf(64,rect[3]*area.size.y))
+  button.position.x = minf(button.position.x,area.size.x-button.size.x)
+  button.position.y = minf(button.position.y,area.size.y-button.size.y)
   button.add_theme_stylebox_override("normal",StyleBoxEmpty.new())
   button.add_theme_stylebox_override("hover",_box(Color(.72,.75,.49,.035),Color(.8,.8,.55,.35)))
   button.add_theme_stylebox_override("pressed",_box(Color(.72,.75,.49,.13),ACCENT))
+  button.custom_minimum_size = Vector2(64,64)
   button.focus_mode = Control.FOCUS_NONE
   button.pressed.connect(func(): if not busy: _hotspot(hotspot.id))
   area.add_child(button)
   if s.settings.hints:
    var badge = PanelContainer.new(); badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
    badge.add_theme_stylebox_override("panel",_box(Color(.035,.07,.045,.8),Color(.64,.67,.51,.4)))
-   var label = _label("· "+hotspot.label,18); label.mouse_filter = Control.MOUSE_FILTER_IGNORE; badge.add_child(label)
-   badge.position = Vector2(4,maxf(0,button.size.y-37)); button.add_child(badge)
+   var label = _label("· "+hotspot.label,18); label.autowrap_mode = TextServer.AUTOWRAP_OFF; label.mouse_filter = Control.MOUSE_FILTER_IGNORE; badge.add_child(label)
+   badge.size = Vector2(label.get_minimum_size().x+28,37)
+   badge.position = Vector2(clampf(4,-button.position.x,area.size.x-button.position.x-badge.size.x),maxf(0,button.size.y-37)); button.add_child(badge)
+ _scene_objects(area,s)
+ _room_props(area,s)
  var bottom = VBoxContainer.new(); bottom.position = Vector2(16,size.y-114); bottom.size = Vector2(size.x-32,108); content.add_child(bottom)
  var caption = _label(_context(s,data.subtitle),19); caption.modulate = MUTED; caption.custom_minimum_size.y = 31; bottom.add_child(caption)
  var dock = HBoxContainer.new(); dock.add_theme_constant_override("separation",10); bottom.add_child(dock)
@@ -119,6 +125,24 @@ func _room_props(area: Control,s: Dictionary) -> void:
   if kind in s.room_upgrades:
    var p = Prop.new(); p.kind = kind; p.position = positions[kind]*area.size; p.size = area.size*Vector2(.16,.13); area.add_child(p)
    var click = Button.new(); click.position = p.position; click.size = Vector2(maxf(p.size.x,64),maxf(p.size.y,64)); click.add_theme_stylebox_override("normal",StyleBoxEmpty.new()); click.pressed.connect(func(): _possession(kind)); area.add_child(click)
+
+func _scene_objects(area: Control,s: Dictionary) -> void:
+ if s.location=="room":
+  var paper = Prop.new(); paper.kind = "paper"; paper.position = Vector2(.56,.8)*area.size; paper.size = Vector2(.14,.11)*area.size; area.add_child(paper)
+ if s.location=="bureau" and s.ticket:
+  var display = PanelContainer.new(); display.position = Vector2(.35,.15)*area.size; display.size = Vector2(.22,.1)*area.size
+  display.mouse_filter = Control.MOUSE_FILTER_IGNORE; display.add_theme_stylebox_override("panel",_box(Color("11170f"),Color("525744")))
+  var number = _label("C-184\nWINDOW 3",19); number.autowrap_mode = TextServer.AUTOWRAP_OFF; number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER; number.mouse_filter = Control.MOUSE_FILTER_IGNORE; display.add_child(number); area.add_child(display)
+ if s.location=="freight" and not s.shift.is_empty():
+  for n in range(s.shift.crates.size()):
+   var box = s.shift.crates[n]
+   var button = Button.new(); button.position = Vector2(.22+.175*n,.45)*area.size; button.size = Vector2(.16,.13)*area.size; button.custom_minimum_size = Vector2(64,64)
+   button.add_theme_font_size_override("font_size",18)
+   if box.routed:
+    button.text = "SENT"; button.disabled = true; button.add_theme_stylebox_override("disabled",_box(Color("272f23"),Color("717053")))
+   else:
+    button.text = box.serial; button.add_theme_stylebox_override("normal",_box(Color(.45,.41,.3,.22),Color(.65,.64,.45,.45))); button.pressed.connect(func(): _crate(n))
+   area.add_child(button)
 
 func _context(s: Dictionary,fallback: String) -> String:
  if s.location=="bureau" and s.ticket: return "C-184  /  WINDOW 3     •     %d CR"%int(s.credits)
@@ -196,6 +220,7 @@ func _message(title: String,text: String) -> void:
 
 func _registration() -> void:
  _sheet("TEMPORARY CIVIC RESIDENCY")
+ modal.find_child("close_sheet",true,false).disabled = true
  _body("DISTRICT IX\nHousing: Block C / Room 17\nBalance: 4 CR\nEmployment: UNASSIGNED",25)
  _body("Name for the registry",19)
  var name_input = LineEdit.new(); name_input.name = "resident_name"; name_input.text = "William"; name_input.max_length = 24; name_input.custom_minimum_size.y = 64; sheet_body.add_child(name_input)
@@ -280,7 +305,12 @@ func _status() -> void:
  var tint = Color(.8,.85,.75) if s.needs.hygiene<35 else Color.WHITE
  if s.identity.appearance=="umber": tint *= Color(.69,.63,.52)
  if s.identity.appearance=="sand": tint *= Color(1.08,1.02,.92)
- portrait.modulate = tint; row.add_child(portrait)
+ portrait.modulate = tint
+ var condition_shader = ShaderMaterial.new(); condition_shader.shader = load("res://shaders/condition.gdshader")
+ condition_shader.set_shader_parameter("grime",clampf((65.0-s.needs.hygiene)/65.0,0,1))
+ condition_shader.set_shader_parameter("fatigue",clampf((55.0-s.needs.energy)/55.0,0,1))
+ condition_shader.set_shader_parameter("injury",clampf((75.0-s.needs.health)/75.0,0,1))
+ portrait.material = condition_shader; row.add_child(portrait)
  var stats = VBoxContainer.new(); stats.size_flags_horizontal = Control.SIZE_EXPAND_FILL; row.add_child(stats)
  for pair in [["hunger","Hunger / fed"],["thirst","Thirst / hydrated"],["energy","Energy"],["hygiene","Hygiene"],["health","Health"]]:
   stats.add_child(_label("%s  %d%%"%[pair[1],int(s.needs[pair[0]])],22))
@@ -297,8 +327,6 @@ func _status() -> void:
  if not s.employment.is_empty():
   var record = s.jobs[s.employment]; _body("Completed shifts: %d\nEmployer trust: %d\nWarnings: %d"%[int(record.shifts),int(record.trust),int(record.warnings)],20)
  if s.legal.offenses>0: _body("Civic record: %d inventory offenses"%int(s.legal.offenses),20)
- if s.needs.energy<40:
-  var eyes = ColorRect.new(); eyes.color = Color(.1,.05,.025,.18); eyes.position = Vector2(48,37); eyes.size = Vector2(48,7); eyes.mouse_filter = Control.MOUSE_FILTER_IGNORE; portrait.add_child(eyes)
 
 func _inventory() -> Array:
  return Session.state.items.filter(func(item): return item.owner=="player")
@@ -328,6 +356,15 @@ func _item_sheet(id: String) -> void:
 
 func _prop(kind: String,height: int=160,caption: String="") -> Control:
  var prop = Prop.new(); prop.kind = kind; prop.caption = caption; prop.custom_minimum_size = Vector2(0,height); sheet_body.add_child(prop); return prop
+
+func _touch_prop(prop: Control,zone: Rect2,label: String,cmd: Dictionary,next: Callable=Callable()) -> void:
+ var button = Button.new(); button.text = label; button.add_theme_font_size_override("font_size",18)
+ button.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+ button.anchor_left = zone.position.x; button.anchor_top = zone.position.y
+ button.anchor_right = zone.end.x; button.anchor_bottom = zone.end.y
+ button.custom_minimum_size = Vector2(64,64)
+ button.add_theme_stylebox_override("normal",_box(Color(.06,.1,.065,.68),Color(.7,.72,.5,.5)))
+ button.pressed.connect(func(): _do(cmd,next)); prop.add_child(button)
 
 func _possession(kind: String) -> void:
  _sheet(kind.to_upper()+"  /  YOUR ROOM")
@@ -382,6 +419,8 @@ func _uniform(index: int) -> void:
  var s = Session.state; var u = s.shift.uniforms[index]
  _sheet("INSPECTION BENCH  /  UNIFORM %02d"%(index+1))
  var prop = _prop("uniform",230); prop.condition = u.stain
+ if not u.inspected: _touch_prop(prop,Rect2(.57,.15,.32,.29),"SERVICE LABEL",{"action":"inspect_uniform","index":index},func(): _uniform(index))
+ elif not u.pocket_checked: _touch_prop(prop,Rect2(.53,.3,.22,.28),"POCKET",{"action":"inspect_pocket","index":index},func(): _uniform(index))
  if not u.inspected:
   _body("A heavy municipal jacket. The service label is folded inside.")
   _action("Unfold and read the label",{"action":"inspect_uniform","index":index},func(): _uniform(index)); return
@@ -414,6 +453,11 @@ func _washer() -> void:
  var prop = _prop("washer",270)
  if s.shift.is_empty(): _body("The machine is quiet. Today's uniforms are in the incoming cart."); return
  var w = s.shift; prop.hatch_open = w.get("hatch_open",false); prop.active = w.stage=="washed"
+ if w.stage=="inspect": _touch_prop(prop,Rect2(.22,.35,.56,.49),"HATCH",{"action":"open_hatch"},_washer)
+ if w.stage=="prepare":
+  if w.hatch_open: _touch_prop(prop,Rect2(.04,.05,.23,.22),"DOSE",{"action":"dose"},_washer)
+  else: _touch_prop(prop,Rect2(.23,.4,.55,.39),"START",{"action":"start_wash"},_wash_animation)
+ if w.stage=="washed": _touch_prop(prop,Rect2(.23,.4,.55,.39),"HANDLE",{"action":"unload"},_washer)
  match w.stage:
   "inspect":
    _body("CAPACITY: 4 UNIFORMS\nTwo measured doses. Oil: hot wash. Blood: sanitize. Ordinary dirt: standard.",22)
@@ -555,6 +599,12 @@ func _settings() -> void:
  var save = _button("Save and put the phone down",func(): Session.flush(); _close_sheet()); sheet_body.add_child(save)
 
 func _notification(what: int) -> void:
+ if audio and audio.is_node_ready():
+  if what in [NOTIFICATION_APPLICATION_PAUSED,NOTIFICATION_APPLICATION_FOCUS_OUT]:
+   audio.ambient.stream_paused = true; audio.effects.stream_paused = true
+  if what in [NOTIFICATION_APPLICATION_RESUMED,NOTIFICATION_APPLICATION_FOCUS_IN]:
+   audio.ambient.stream_paused = false; audio.effects.stream_paused = false
  if what==NOTIFICATION_WM_GO_BACK_REQUEST:
+  if not Session.state.identity.registered: return
   if modal and is_instance_valid(modal): _close_sheet()
   else: _settings()

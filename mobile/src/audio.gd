@@ -22,3 +22,7 @@ func play(id: String) -> void:
  if not enabled: return
  var path = "res://assets/audio/"+id+".wav"
  if ResourceLoader.exists(path): effects.stream = load(path); effects.play()
+
+func _exit_tree() -> void:
+ if ambient: ambient.stop(); ambient.stream = null
+ if effects: effects.stop(); effects.stream = null

@@ -13,3 +13,7 @@ builds/
 *.apk
 *.aab
 *.log
+
+# Python verification caches
+__pycache__/
+*.pyc

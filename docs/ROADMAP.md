@@ -2,6 +2,8 @@
 
 > DO NOT TURN SCHISM BACK INTO A MENU-HEAVY DASHBOARD GAME. The player interacts with places and objects.
 
+Implemented foundations (playable development slice; see evidence and release gates below):
+
 0 Audit: preserve browser v0.10, source/asset inventory and baseline tests.
 1 Vision: native portrait Godot, commands, saves, authored hotspots, asset provenance, future authority boundaries.
 2 Visual: room/hall/street/bureau/laundry, transitions, ambient sound, legible shaders and typography.

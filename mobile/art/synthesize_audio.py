@@ -12,7 +12,7 @@ def write(name,samples,description):
  with wave.open(str(path),'wb') as f:
   f.setnchannels(1);f.setsampwidth(2);f.setframerate(RATE)
   f.writeframes(b''.join(struct.pack('<h',int(max(-1,min(1,x))*32700)) for x in samples))
- manifest.append({'id':name,'file':str(path.relative_to(OUT.parent.parent)),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'license':'CC0-1.0','source':'Original deterministic oscillator/noise synthesis; no third-party samples','description':description,'rate':RATE,'duration':len(samples)/RATE})
+ manifest.append({'id':name,'file':str(path.relative_to(OUT.parent.parent)),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'license':'Original project asset; repository owner controls distribution','source':'Original deterministic oscillator/noise synthesis; no third-party samples','description':description,'rate':RATE,'duration':len(samples)/RATE})
 for n,(hz,volume,rain) in SCENES.items():
  rng=random.Random(48193+sum(map(ord,n)));low=0;s=[]
  for i in range(RATE*8):
