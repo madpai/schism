@@ -4,7 +4,7 @@
 
 ## Active project and preserved research
 
-`mobile/` is the active Godot 4.7.2 portrait Android game, version 0.1.0. The rebuild branch is `rebuild/android-district-ix`. The browser v0.10 at `0ba675e` was audited before implementation; its source, migrations, assets and tests remain intact. Its former README, architecture, gameplay and handoff are in `docs/legacy/`. `docs/AUDIT.md` maps lessons to the new implementation and records the inventory snapshot.
+`mobile/` is the active Godot 4.7.2 portrait Android game, version 0.2.0. The rebuild branch is `rebuild/android-district-ix`. The browser v0.10 at `0ba675e` was audited before implementation; its source, migrations, assets and tests remain intact. Its former README, architecture, gameplay and handoff are in `docs/legacy/`. `docs/AUDIT.md` maps lessons to the new implementation and records the inventory snapshot.
 
 Do not modify the separate `/home/commander/ashfall` live city, deploy the legacy `.openai` Site, reset existing citizens or reinterpret browser wallets as native saves. Native local persistence is in a separate Android application namespace.
 
@@ -20,7 +20,7 @@ Three caught offenses trigger a playable correction hall: three unpaid scrap-sor
 
 ## Architecture and invariants
 
-`src/simulation.gd` is a pure deterministic command reducer, with validated locations, custody, work stages, expected revisions, integer money, stored random rolls and exactly one wage settlement. `src/session.gd` is the local authority: save before committing visible state. `src/save_store.gd` writes checksum-verified JSON through a flushed temporary file, replacing the older of two save slots. Invalid newest records fall back to the previous verified generation. Unreadable pairs and future schemas are preserved and block writes. Schema v3 defaults migrate earlier fields and preserve unknown metadata.
+`src/simulation.gd` is a pure deterministic command reducer, with validated locations, custody, work stages, expected revisions, integer money, stored random rolls and exactly one wage settlement. `src/session.gd` is the local authority: save before committing visible state. `src/save_store.gd` writes checksum-verified JSON through a flushed temporary file, replacing the older of two save slots. Invalid newest records fall back to the previous verified generation. Unreadable pairs and future schemas are preserved and block writes. Schema v4 defaults migrate earlier fields and preserve unknown metadata.
 
 `src/main.gd` owns the scene and contextual sheets; `prop.gd` and `environment.gd` draw independent interactive/animated objects. Authored catalogs and normalized zones are under `data/`. UI text bypasses the analogue shader. Every physical work control has a large tap alternative. Android Back closes the current sheet; sound pauses on background; no wall-clock needs/rent penalty applies while absent.
 
@@ -36,10 +36,16 @@ Build artifacts live in ignored `builds/`. Never commit engine caches, release k
 
 ## Evidence and remaining release gates
 
-Simulation: 405 passing checks. Native UI: 101 passing checks, including a complete laundry sequence and minimum hotspot/horizontal-hint layout at three sizes. A separate ordinary-life balance test uses only valid commands and no injected money/needs. All 584 retained browser rule checks still pass. Asset provenance verification passes.
+Simulation: 405 passing checks. Native UI: 109 passing checks, including a complete laundry sequence and minimum hotspot/horizontal-hint layout at three sizes. Storage: 75 passing checks for placement, ownership, cooling, spoilage, utility interruption, camp custody and migration. A separate ordinary-life balance test uses only valid commands and no injected money/needs. All 584 retained browser rule checks still pass. Asset provenance verification passes.
 
 Android installation, rendering, touch, interruption and resolution evidence is maintained in `docs/playtests/ANDROID.md` and its screenshots/JSON. Read that evidence for the precise tested build and limitations. Automated pass counts prove rules and paths; they do not establish that repetition is compelling to a human.
 
-Remaining: unaided multi-session physical-phone playtests; audible mix and vibration/accessibility review; richer layered garment/machine animation; dedicated private apartment art; broader appearance/clothing art; housing utility failures; job/trust/access content beyond the first vacancy; more authored mystery media; deeper law/camp consequences; production signing and distribution. Cleaning/freight/camp are intentionally smaller than laundry. Backgrounds have baked details that later layered art should replace. Refrigerator currently extends owned food expiry; explicit room storage transfer is a later refinement. Device performance is measured only on the documented emulator; do not claim physical Android GPU coverage.
+Remaining: unaided multi-session physical-phone playtests; audible mix and vibration/accessibility review; richer layered garment/machine animation; dedicated private apartment art; broader appearance/clothing art; housing utility failures; job/trust/access content beyond the first vacancy; more authored mystery media; deeper law/camp consequences; production signing and distribution. Cleaning/freight/camp are intentionally smaller than laundry. Backgrounds have baked details that later layered art should replace. Device performance is measured only on the documented emulator; do not claim physical Android GPU coverage.
 
 The new game is a substantial playable foundation and vertical slice. It still needs those polish and release gates to become the extremely strong small game described in the vision.
+
+## 0.2.0 continuation and sideload preview
+
+Laundry cart rows are now physical garment targets. Home storage is explicit: bag, locker or powered refrigerator, with conserved item identity and bounded earned cooling. v3 saves migrate to v4; old fridge households retain the prior food allowance once. An Android in-place upgrade preserved every original field except added schema/storage defaults, and locker retrieval worked after process death. Version code is 2 and the previous debug signing certificate is retained.
+
+The public APK download and reproducible package/publication steps are in docs/RELEASES.md. Device evidence for this update is in docs/playtests/ANDROID_V020.md and android-v020/. The repository contains source, prompts and evidence; APKs and signing keys stay out of Git. The sideload release is a development prerelease, with the same physical-phone and content-polish gates as before.

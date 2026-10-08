@@ -68,7 +68,7 @@ def interruption():
  old=state();adb('shell','input','keyevent','3');time.sleep(.3);adb('shell','am','force-stop',PACKAGE);time.sleep(.2);launch();new=state()
  check(old==new,'home + force-stop/relaunch preserves every simulation field; no offline decay')
 def laundry(interrupt=False):
- hotspot('cart');click('Pull the cart')
+ hotspot('cart');click('Pull the cart');shot('garment-cart')
  for n in range(4):
   click(f'UNIFORM {n+1:02}');click('Unfold and read');click('Turn out the')
   u=state()['shift']['uniforms'][n]

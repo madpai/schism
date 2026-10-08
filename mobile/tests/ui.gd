@@ -48,6 +48,7 @@ func _run() -> void:
  await click_hotspot("cart")
  await click("Pull the cart")
  check(session.state.shift.job=="laundry","incoming cart opens persistent job")
+ check(game.find_children("uniform_*","Button",true,false).all(func(b): return b.custom_minimum_size.y>=176 and b.get_child_count()>0),"cart contains large physical garment targets")
  for n in range(4):
   await click("UNIFORM %02d"%(n+1))
   await click("Unfold")
@@ -94,6 +95,15 @@ func _run() -> void:
   var timecard = game.find_children("hotspot_receipt","Button",true,false)[0]
   check(timecard.position.x+timecard.size.x<=timecard.get_parent().size.x,"edge timecard keeps its entire touch target on screen "+str(resolution))
   session.state.location = "laundry"
+ session.state.location = "shop"; game._render_world(); game._shop(["bread"])
+ await click("Take Wrapped black")
+ await click("Wrapped black")
+ session.state.location = "room"; game._item_sheet(session.state.items[-1].id)
+ await click("Place on the locker shelf")
+ check(game._inventory().is_empty(),"stored food leaves the carried bag")
+ await click("Wrapped black")
+ await click("Put it in your bag")
+ check(game._inventory().size()==1,"locker food returns through a real contextual touch control")
  game.queue_free(); await process_frame
  await create_timer(.15).timeout
  print("SCHISM UI: %d checks passed; %d failed."%[passed,failed])

@@ -111,7 +111,7 @@ func _initialize() -> void:
  var expired = shop.duplicate(true); expired.location = "shop"; expired.credits = 10
  expired = act(expired,{"action":"buy","kind":"bread"}); var expired_id = expired.items[-1].id
  expired.minute += 5000; check(not Sim.apply(expired,{"action":"consume","id":expired_id}).ok,"food storage life expires on action time")
- expired.room_upgrades.append("fridge"); check(Sim.apply(expired,{"action":"consume","id":expired_id}).ok,"fridge extends storage life")
+ expired.room_upgrades.append("fridge"); check(not Sim.apply(expired,{"action":"consume","id":expired_id}).ok,"owning a fridge cannot revive spoiled food in a bag")
  var housing = shop.duplicate(true); housing.location = "bureau"; housing.credits = 25
  housing = act(housing,{"action":"rent","tier":"private"})
  check(housing.housing.rent==2 and housing.credits==0,"private room deposit and daily rent")
@@ -175,7 +175,7 @@ func _initialize() -> void:
  var partial = FileAccess.open(path+"/slot0.json.pending",FileAccess.WRITE); partial.store_string("half-written"); partial.close()
  check(store.load_state().revision==inspect.revision,"interrupted pending write cannot replace good state")
  var migrated = Sim.migrate({"schema":1,"revision":9,"identity":{"name":"Old"},"items":[{"id":"history","metadata":{"unknown":"keep me"}}]})
- check(migrated.schema==3 and migrated.identity.name=="Old" and migrated.items[0].metadata.unknown=="keep me" and migrated.jobs.has("freight"),"migration preserves old identity and unknown item metadata")
+ check(migrated.schema==4 and migrated.identity.name=="Old" and migrated.items[0].metadata.unknown=="keep me" and migrated.jobs.has("freight"),"migration preserves old identity and unknown item metadata")
  check(migrated.items[0].owner=="player" and migrated.items[0].serial=="history" and migrated.items[0].history is Array,"older item records gain inspectable custody fields without losing identity")
  check(Sim.migrate({"schema":99}).has("error"),"future saves reject without wiping")
  var future = s.duplicate(true); future.schema = 99

@@ -68,6 +68,10 @@ func _draw() -> void:
   draw_rect(Rect2(w*.12,h*.32,w*.75,h*.44),Color("555f4c"))
   for i in range(5): draw_line(Vector2(w*.22,h*(.4+i*.06)),Vector2(w*.49,h*(.4+i*.06)),dark,2)
   draw_circle(Vector2(w*.7,h*.55),h*.1,Color("a7a27a")); draw_line(Vector2(w*.8,h*.34),Vector2(w*.86,h*.06),paper,3)
+ elif kind=="locker":
+  draw_rect(Rect2(w*.2,h*.08,w*.6,h*.84),Color("566052"))
+  draw_rect(Rect2(w*.23,h*.11,w*.54,h*.78),dark,false,3)
+  for y in [.3,.53,.75]: draw_line(Vector2(w*.24,h*y),Vector2(w*.76,h*y),Color("a09e82"),3)
  elif kind=="fridge":
   draw_rect(Rect2(w*.21,h*.06,w*.63,h*.9),gray); draw_line(Vector2(w*.23,h*.35),Vector2(w*.82,h*.35),dark,3)
   draw_line(Vector2(w*.73,h*.5),Vector2(w*.73,h*.67),dark,4)

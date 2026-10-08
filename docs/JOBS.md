@@ -9,3 +9,5 @@ Civic Sanitation Worker: 8 CR gross. Mop/wipe dirty surfaces, replace trash bags
 Each role stores completed shifts, quality, warnings, trust and appointment independently. At 12 completed shifts, a notice offers textile assistant/custodian/inventory clerk, +1 CR and a relevant certification/key. No visible future skill tree. Further career branches are authored vacancies.
 
 Shift IDs, resolved pockets, selected treatment, machine stage, settlement receipt and output events persist. Settlement is idempotent. A future authority verifies commands and issues output once; UI never computes pay.
+
+The incoming laundry cart now shows four large garment targets in two columns. Sorted uniforms become unavailable on the rack. Label and pocket close-ups retain the large contextual tap alternatives; there is no precision drag requirement.

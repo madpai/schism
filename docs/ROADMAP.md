@@ -16,3 +16,5 @@ Implemented foundations (playable development slice; see evidence and release ga
 9 Shared world preparation: authority contract only, no MMO service.
 
 Next polish gates: unaided phone playtests and retention over several sessions; audio mix on physical speakers; dedicated layered object art replacing procedural overlays where it improves legibility; richer garment damage and more authored batches; utility failures with fair recovery; tenancy/career content; ambiguous recorded media; accessible portrait variation; production signing and store packaging. Document measured versus untested behavior in HANDOFF and docs/playtests/ANDROID.md. Do not describe all creative goals as complete merely because an APK exists.
+
+0.2.0 adds physical garment selection, household item storage, powered refrigeration, additive save upgrade and a versioned HTTPS sideload distribution. Next: richer layered work animation, physical-phone playtests and more authored everyday/mystery content. Keep the public preview versioned and preserve update signing compatibility.

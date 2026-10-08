@@ -8,11 +8,13 @@ The active game is [`mobile/`](mobile/), built with **Godot 4.7.2, GDScript and 
 
 ## Play
 
+[Download the Android sideload preview](https://github.com/madpai/schism/releases/download/v0.2.0-alpha/schism-0.2.0.apk). Installation, update and checksum details are in [docs/RELEASES.md](docs/RELEASES.md).
+
 Open `mobile/project.godot` in Godot 4.7.2 and run. On Android, install the debug APK produced below. The package is `org.schism.districtix`. This is a playable development slice, not a production store release.
 
 Tap objects in the current scene. Follow doors through the hallway to the street. At the bureau, take a ticket and present your ID. All three jobs are playable; laundry has the most developed interaction sequence. CIVIC ID opens your body/needs/employment record. BAG contains individual possessions. Settings include sound, reduced effects and object hints.
 
-Nine illustrated locations, five needs, local identity, three jobs, taxes, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. Damaged media remains unexplained. No multiplayer service or monetization is required.
+Nine illustrated locations, five needs, local identity, three jobs, taxes, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. The locker and refrigerator hold individual belongings; carried food earns no refrigerator bonus. Damaged media remains unexplained. No multiplayer service or monetization is required.
 
 ## Check and build
 

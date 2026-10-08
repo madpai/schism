@@ -243,7 +243,7 @@ func _hotspot(id: String) -> void:
      _sheet("METAL BED"); _body("A thin mattress. Industrial noise through the wall.\nEight hours of your time. No cost while the app is closed."); _action("Pull the blanket over you",{"action":"sleep"})
     "sink":
      _sheet("CHIPPED SINK"); _body("Cold water. The pipes knock before it arrives."); _action("Cup your hands and drink",{"action":"drink"}); _action("Wash face and hands",{"action":"wash"})
-    "locker": _bag()
+    "locker": _storage("locker")
     "paper": _tenancy()
   "hall":
    match id:
@@ -329,30 +329,54 @@ func _status() -> void:
  if s.legal.offenses>0: _body("Civic record: %d inventory offenses"%int(s.legal.offenses),20)
 
 func _inventory() -> Array:
- return Session.state.items.filter(func(item): return item.owner=="player")
+ return Session.state.items.filter(func(item): return item.owner=="player" and item.get("storage","bag")=="bag")
 
 func _bag() -> void:
- _sheet("LOCKER & PERSONAL EFFECTS" if Session.state.location=="room" else "WHAT YOU CARRY")
+ _sheet("WHAT YOU CARRY")
  _body("%d CR  /  Each object has a previous life."%int(Session.state.credits),20)
  var items = _inventory()
  if items.is_empty(): _body("Your pockets are empty. Your civic paper and room key are all you came with.")
  for item in items:
   var card = _button(item.label+"  /  "+item.serial,func(): _item_sheet(item.id)); sheet_body.add_child(card)
- for kind in Session.state.room_upgrades:
-  var b = _button(kind.to_upper()+"  /  in your room",func(): _possession(kind)); sheet_body.add_child(b)
+ if Session.state.location=="room":
+  for kind in Session.state.room_upgrades:
+   var b = _button(kind.to_upper()+"  /  in your room",func(): _possession(kind)); sheet_body.add_child(b)
 
 func _item_sheet(id: String) -> void:
  var item = Sim._find(Session.state,id)
  _sheet(item.label.to_upper())
  _prop(item.kind,180)
- _body("Serial: %s\nCondition: %s\nOrigin: %s\nPrevious owner: %s"%[item.serial,item.condition,item.origin,item.rightful_owner],20)
+ _body("Serial: %s\nCondition: %s\nOrigin: %s\nPrevious owner: %s"%[item.serial,"spoiled" if Sim.is_spoiled(item,int(Session.state.minute)) else item.condition,item.origin,item.rightful_owner],20)
+ _body("Kept in: "+str(item.get("storage","bag")).capitalize(),20)
  if item.metadata.has("text"): _body(item.metadata.text)
  if item.metadata.has("label"): _body(item.metadata.label)
  if item.kind=="credits": _body("These loose credits are already in your civic balance. The pocket receipt remains attached to the record.")
  var definition = Sim.catalog().items.get(item.kind,{})
  if definition.has("food") or definition.has("water"): _action("Unwrap and eat" if definition.has("food") else "Open and drink",{"action":"consume","id":id})
+ if Session.state.location=="room":
+  var kept = str(item.get("storage","bag"))
+  if kept!="bag": _action("Put it in your bag",{"action":"store_item","id":id,"storage":"bag"},_bag)
+  if kept!="locker": _action("Place on the locker shelf",{"action":"store_item","id":id,"storage":"locker"},func(): _storage("locker"))
+  if kept!="fridge" and "fridge" in Session.state.room_upgrades and (definition.has("food") or definition.has("water")):
+   _action("Put it in the cold cabinet",{"action":"store_item","id":id,"storage":"fridge"},func(): _storage("fridge"))
  if definition.get("upgrade",false): _action("Place in your room",{"action":"install","id":id})
  if item.kind=="tape": _action("Try the receiver's tape adapter",{"action":"play_tape"})
+
+func _storage(place: String) -> void:
+ _sheet("COLD CABINET / YOUR ROOM" if place=="fridge" else "LOCKER / YOUR ROOM")
+ _prop("fridge" if place=="fridge" else "locker",130)
+ _body("The motor hums. Food ages more slowly here." if place=="fridge" and Session.state.housing.utilities else "The cabinet is warm. The public tap still works." if place=="fridge" else "A shelf behind a door that locks. Things stay here when you leave.",20)
+ var stored = Session.state.items.filter(func(item): return item.owner=="player" and item.get("storage","bag")==place)
+ for item in stored:
+  var card = _button(item.label+"  /  "+("SPOILED" if Sim.is_spoiled(item,int(Session.state.minute)) else item.serial),func(): _item_sheet(item.id)); sheet_body.add_child(card)
+ if stored.is_empty(): _body("Empty. For now.")
+ var carried = _inventory().filter(func(item): return place!="fridge" or Sim.catalog().items.get(item.kind,{}).has("food") or Sim.catalog().items.get(item.kind,{}).has("water"))
+ if not carried.is_empty():
+  _body("IN YOUR BAG",18)
+  for item in carried: _action("Set down "+item.label,{"action":"store_item","id":item.id,"storage":place},func(): _storage(place))
+ if place=="locker":
+  for kind in Session.state.room_upgrades:
+   var installed = _button(kind.to_upper()+" / in your room",func(): _possession(kind)); sheet_body.add_child(installed)
 
 func _prop(kind: String,height: int=160,caption: String="") -> Control:
  var prop = Prop.new(); prop.kind = kind; prop.caption = caption; prop.custom_minimum_size = Vector2(0,height); sheet_body.add_child(prop); return prop
@@ -367,6 +391,7 @@ func _touch_prop(prop: Control,zone: Rect2,label: String,cmd: Dictionary,next: C
  button.pressed.connect(func(): _do(cmd,next)); prop.add_child(button)
 
 func _possession(kind: String) -> void:
+ if kind=="fridge": _storage("fridge"); return
  _sheet(kind.to_upper()+"  /  YOUR ROOM")
  _prop(kind,170); _body(Sim.catalog().items.get(kind,{}).get("description","It belongs here now."))
  if kind=="radio": _action("Fit the damaged tape",{"action":"play_tape"})
@@ -410,9 +435,18 @@ func _cart() -> void:
   _action("Pull the cart up to the inspection bench",{"action":"begin_shift"},_cart); return
  if s.shift.job!="laundry": return
  if s.shift.stage!="inspect": _body("The incoming cart is empty. The bundle is at the machine."); return
+ var rack = GridContainer.new(); rack.columns = 2; rack.add_theme_constant_override("h_separation",10); rack.add_theme_constant_override("v_separation",12); sheet_body.add_child(rack)
  for i in range(s.shift.uniforms.size()):
   var u = s.shift.uniforms[i]
-  var card = _button("UNIFORM %02d   /   %s"%[i+1,"IN BIN" if u.sorted else "UNINSPECTED" if not u.inspected else u.type.to_upper()],func(): _uniform(i)); card.name = "uniform_%d"%i; sheet_body.add_child(card)
+  var card = _button("UNIFORM %02d"%[i+1],func(): _uniform(i)); card.name = "uniform_%d"%i; card.custom_minimum_size = Vector2(0,176); card.size_flags_horizontal = Control.SIZE_EXPAND_FILL; card.alignment = HORIZONTAL_ALIGNMENT_LEFT
+  card.add_theme_font_size_override("font_size",18)
+  var style = _box(Color("202a21"),Color("606c55")); style.content_margin_top = 136; card.add_theme_stylebox_override("normal",style)
+  for state_name in ["hover","pressed","disabled"]:
+   var state_style = style.duplicate(); state_style.bg_color = Color("2c372c") if state_name=="hover" else Color("1a211a"); card.add_theme_stylebox_override(state_name,state_style)
+  var coat = Prop.new(); coat.kind = "uniform"; coat.condition = u.stain; coat.set_anchors_and_offsets_preset(Control.PRESET_TOP_WIDE); coat.offset_left = 10; coat.offset_right = -10; coat.offset_top = 8; coat.offset_bottom = 133; coat.modulate = Color(.55,.55,.5) if u.sorted else Color.WHITE; card.add_child(coat)
+  card.disabled = u.sorted
+  if u.sorted: card.text = "IN BIN / %02d"%[i+1]
+  rack.add_child(card)
  _body("Sort by service label. Tap a uniform to unfold it and inspect its pockets.",20)
 
 func _uniform(index: int) -> void:
@@ -595,7 +629,7 @@ func _settings() -> void:
  _body("Your life is saved after every action. Pausing or closing SCHISM freezes personal time.",21)
  for pair in [["sound","Machine soundscape"],["effects","Analog instability"],["hints","Object labels"]]:
   _action(pair[1]+" / "+("ON" if Session.state.settings[pair[0]] else "OFF"),{"action":"setting","key":pair[0],"value":not Session.state.settings[pair[0]]},_settings)
- _body("SCHISM 0.1 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
+ _body("SCHISM 0.2 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
  var save = _button("Save and put the phone down",func(): Session.flush(); _close_sheet()); sheet_body.add_child(save)
 
 func _notification(what: int) -> void:

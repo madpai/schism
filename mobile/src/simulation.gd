@@ -1,7 +1,8 @@
 class_name SchismSimulation
 extends RefCounted
 
-const SCHEMA = 3
+const SCHEMA = 4
+const COLD_ALLOWANCE = 3 * 1440
 const JOB_SCENES = {"laundry":"laundry", "cleaning":"cleaning", "freight":"freight"}
 const ROUTES = {
  "room":["hall"], "hall":["room","street"],
@@ -31,6 +32,7 @@ static func initial() -> Dictionary:
 static func migrate(old: Dictionary) -> Dictionary:
  if int(old.get("schema",1)) > SCHEMA:
   return {"error":"This save needs a newer SCHISM version. Your files have been preserved."}
+ var old_schema = int(old.get("schema",1))
  var s = old.duplicate(true)
  var defaults = initial()
  _defaults(s, defaults)
@@ -38,8 +40,13 @@ static func migrate(old: Dictionary) -> Dictionary:
   var item = s.items[index]
   if not item is Dictionary: return {"error":"An item record needs recovery. Your files have been preserved."}
   var legacy_id = str(item.get("id","LEGACY-%s-%d"%[s.identity.civic_id,index]))
-  _defaults(item,{"id":legacy_id,"kind":"unknown","label":"Recovered possession","owner":"player","rightful_owner":"player","serial":legacy_id,"origin":"Earlier residency record","condition":"worn","legal":"ordinary","acquired_minute":s.minute,"expiry_minute":0,"metadata":{},"history":[]})
+  _defaults(item,{"id":legacy_id,"kind":"unknown","label":"Recovered possession","owner":"player","rightful_owner":"player","serial":legacy_id,"origin":"Earlier residency record","condition":"worn","legal":"ordinary","acquired_minute":s.minute,"expiry_minute":0,"storage":"bag","cold_minutes":0,"metadata":{},"history":[]})
   s.serial = maxi(int(s.serial),index+1)
+  var serial_text = str(item.serial).trim_prefix("R-")
+  if str(item.serial).begins_with("R-") and serial_text.is_valid_int(): s.serial = maxi(int(s.serial),int(serial_text))
+  # Preserve the former global fridge allowance for existing food exactly once.
+  if old_schema<4 and "fridge" in s.room_upgrades and item.owner=="player" and item.expiry_minute>0:
+   item.cold_minutes = COLD_ALLOWANCE
  s.schema = SCHEMA
  return s
 
@@ -120,11 +127,12 @@ static func _execute(s: Dictionary, c: Dictionary, e: Array) -> String:
    if s.location!="shop" or not s.shift.is_empty(): return "The vendor is at the food kiosk."
    var kind = str(c.get("kind","")); var goods = catalog().items
    if not goods.has(kind): return "The vendor doesn't stock that."
-   if goods[kind].get("upgrade",false) and (kind in s.room_upgrades or not _owned(s,kind).is_empty()): return "I already have one."
+   if goods[kind].get("upgrade",false) and (kind in s.room_upgrades or s.items.any(func(item): return item.kind==kind and item.owner=="player")): return "I already have one."
    if s.credits<int(goods[kind].price): return "Not enough credits."
    s.credits -= int(goods[kind].price)
    _item(s,kind,goods[kind].label,"player","Food kiosk",goods[kind])
    e.append({"type":"sound","name":"coin"})
+  "store_item": return _store_item(s,c,e)
   "consume": return _consume(s,str(c.get("id","")),e)
   "install":
    if s.location!="room" or not s.shift.is_empty(): return "Put it in your room when you're home."
@@ -395,7 +403,7 @@ static func _settle(s: Dictionary,e: Array) -> String:
 
 static func _enter_camp(s: Dictionary,e: Array) -> void:
  for item in s.items:
-  if item.owner=="player": item.owner = "held"; item.history.append({"minute":s.minute,"custody":"held"})
+  if item.owner=="player" and item.get("storage","bag")=="bag": item.owner = "held"; item.history.append({"minute":s.minute,"custody":"held"})
  s.legal.camp = {"active":true,"orders":0,"sorted":[],"started":s.minute,"address":s.housing.address}
  s.location = "camp"
  e.append({"type":"notice","text":"DETAINEE 91-447\nThree compulsory work orders. Outside tenancy and employment paused. Personal effects held at intake."})
@@ -428,12 +436,33 @@ static func _camp(s: Dictionary,c: Dictionary,e: Array) -> String:
    e.append({"type":"thought","text":"My door. Still here."})
  return ""
 
+static func is_spoiled(item: Dictionary,minute: int) -> bool:
+ return int(item.get("expiry_minute",0))>0 and minute>=int(item.expiry_minute)+int(item.get("cold_minutes",0))
+
+static func _store_item(s: Dictionary,c: Dictionary,e: Array) -> String:
+ if s.location!="room" or not s.shift.is_empty(): return "My storage is at home."
+ var item = _find(s,str(c.get("id","")))
+ if item.is_empty() or item.owner!="player": return "That isn't mine to move."
+ var destination = str(c.get("storage",""))
+ if destination not in ["bag","locker","fridge"]: return "There is no storage there."
+ if destination==item.get("storage","bag"): return "It's already there."
+ if destination=="fridge":
+  if not "fridge" in s.room_upgrades: return "I don't have a refrigerator."
+  var definition = catalog().items.get(item.kind,{})
+  if not definition.has("food") and not definition.has("water"): return "That doesn't belong in the cold cabinet."
+  if is_spoiled(item,int(s.minute)): return "Cold won't fix spoiled food."
+ item.storage = destination
+ item.history.append({"minute":s.minute,"storage":destination})
+ e.append({"type":"sound","name":"cloth"})
+ return ""
+
 static func _consume(s: Dictionary,id: String,e: Array) -> String:
  var item = _find(s,id)
  if item.is_empty() or item.owner!="player": return "I don't have that."
  var def = catalog().items.get(item.kind,{})
  if not def.has("food") and not def.has("water"): return "That isn't something to eat or drink."
- if item.get("expiry_minute",0)>0 and s.minute>=item.expiry_minute+(4320 if "fridge" in s.room_upgrades else 0): return "It's spoiled. I shouldn't eat it."
+ if item.get("storage","bag")!="bag" and s.location!="room": return "I left that at home."
+ if is_spoiled(item,int(s.minute)): return "It's spoiled. I shouldn't eat it."
  if def.get("requires","")!="" and def.requires not in s.room_upgrades: return "I need a kettle in my room."
  if item.kind=="tea" and s.location!="room": return "The kettle is at home."
  var thirsty = s.needs.thirst<25
@@ -446,13 +475,13 @@ static func _consume(s: Dictionary,id: String,e: Array) -> String:
 
 static func _item(s: Dictionary,kind: String,label: String,owner: String,origin: String,metadata: Dictionary) -> Dictionary:
  s.serial = int(s.serial)+1
- var item = {"id":"IX-%s-%05d"%[s.identity.civic_id,int(s.serial)],"kind":kind,"label":label,"owner":owner,"rightful_owner":"player" if owner=="player" else origin,"serial":"R-%05d"%int(s.serial),"origin":origin,"condition":"worn" if metadata.get("upgrade",false) else "intact","legal":"ordinary","acquired_minute":s.minute,"expiry_minute":s.minute+int(metadata.get("shelf_days",0))*1440 if metadata.has("shelf_days") else 0,"metadata":metadata.duplicate(true),"history":[{"minute":s.minute,"custody":owner}]}
+ var item = {"id":"IX-%s-%05d"%[s.identity.civic_id,int(s.serial)],"kind":kind,"label":label,"owner":owner,"rightful_owner":"player" if owner=="player" else origin,"serial":"R-%05d"%int(s.serial),"origin":origin,"condition":"worn" if metadata.get("upgrade",false) else "intact","legal":"ordinary","acquired_minute":s.minute,"expiry_minute":s.minute+int(metadata.get("shelf_days",0))*1440 if metadata.has("shelf_days") else 0,"storage":"bag","cold_minutes":0,"metadata":metadata.duplicate(true),"history":[{"minute":s.minute,"custody":owner}]}
  s.items.append(item)
  return item
 
 static func _owned(s: Dictionary,kind: String) -> Dictionary:
  for item in s.items:
-  if item.kind==kind and item.owner=="player": return item
+  if item.kind==kind and item.owner=="player" and (item.get("storage","bag")=="bag" or s.location=="room"): return item
  return {}
 
 static func _find(s: Dictionary,id: String) -> Dictionary:
@@ -468,6 +497,9 @@ static func _work_time(s: Dictionary,minutes: int) -> void:
 static func _advance(s: Dictionary,minutes: int,sleeping: bool=false) -> void:
  var hours = float(minutes)/60.0
  var camp = not s.legal.camp.is_empty() and s.legal.camp.get("active",false)
+ for item in s.items:
+  if item.owner=="player" and item.get("storage","bag")=="fridge" and "fridge" in s.room_upgrades and s.housing.utilities and not is_spoiled(item,int(s.minute)):
+   item.cold_minutes = mini(COLD_ALLOWANCE,int(item.get("cold_minutes",0))+minutes)
  s.minute += minutes
  s.needs.hunger = maxf(0,s.needs.hunger-hours*(1.5 if sleeping or camp else 4.0))
  s.needs.thirst = maxf(0,s.needs.thirst-hours*(2.0 if sleeping or camp else 6.0))
