@@ -10,7 +10,7 @@ Implemented foundations (playable development slice; see evidence and release ga
 3 Life: identity, five needs, owned items, buying/consuming, taps/washing/sleep, taxes, recovery.
 4 Laundry: inspect/sort/treat/load/wash/dry/fold/dispatch, resumable stages, quality and wage slip.
 5 Crime: lost property choices, evidence-driven deterministic detection and records.
-6 Other jobs: smaller but complete cleaning and freight shifts with discoveries and pay.
+6 Other jobs: animated individual cleaning motions and freight inspection/lifting/stamping/routing, resumable progress, discoveries and pay.
 7 Home/progression: visible possessions, appliances, played-day rent/deposits, earned vacancy/certification.
 8 Camp: playable finite unpaid orders, custody, paused outside bills, release.
 9 Shared world preparation: authority contract only, no MMO service.

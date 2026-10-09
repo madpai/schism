@@ -12,9 +12,9 @@ The active game is [`mobile/`](mobile/), built with **Godot 4.7.2, GDScript and 
 
 Open `mobile/project.godot` in Godot 4.7.2 and run. On Android, install the debug APK produced below. The package is `org.schism.districtix`. This is a playable development slice, not a production store release.
 
-Tap objects in the current scene. Follow doors through the hallway to the street. At the bureau, take a ticket and present your ID. All three jobs are playable; laundry has the most developed interaction sequence. CIVIC ID opens your body/needs/employment record. BAG looks inside a worn backpack; tap the actual possessions inside it. Settings include sound, reduced effects and object hints.
+Tap objects in the current scene. Follow doors through the hallway to the street. At the bureau, take a ticket and present your ID. All three jobs have individual physical work: handle laundry garments, mop/wipe surfaces and replace bags, or turn/lift/stamp/route freight parcels. Gestures have full-size tap alternatives, animated feedback and saved progress. CIVIC ID opens your body/needs/employment record. BAG looks inside a worn backpack; tap the actual possessions inside it. Settings include sound, reduced effects and object hints.
 
-Ten illustrated locations, five civilian backgrounds, persistent contextual encounters, five needs, local identity, three jobs, manual bureau tax payments, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. The locker and refrigerator hold individual belongings; carried food earns no refrigerator bonus. The incoming laundry cart empties as garments are sorted; individual loading, collection and sleeve/hem folds stay saved. An open hatch and tumbling cloth follow the saved machine state. Experienced workers can choose quicker bundle actions. A guarded service corridor rewards player-chosen repairs and immediate investigation; neighbors, coworkers and inspection officers vary the routine. Close-ups use consistent raster art. Bureau sheets scroll inside fixed phone bounds. Travel cues are brief and quiet. Damaged media remains unexplained. No multiplayer service or monetization is required.
+Ten illustrated locations, five civilian backgrounds, persistent contextual encounters, five needs, local identity, three jobs, manual bureau tax payments, petty theft and evidence, playable labor-camp orders, earned vacancies, rent and room possessions are implemented. The locker and refrigerator hold individual belongings; carried food earns no refrigerator bonus. The incoming laundry cart empties as garments are sorted; individual loading, collection and sleeve/hem folds stay saved. An open hatch and tumbling cloth follow the saved machine state. Experienced workers continue handling each object. A guarded service corridor rewards player-chosen repairs and immediate investigation; neighbors, coworkers and inspection officers vary the routine. Close-ups use consistent raster art. Bureau sheets scroll inside fixed phone bounds. Travel cues are brief and quiet. Damaged media remains unexplained. No multiplayer service or monetization is required.
 
 ## Check and build
 
@@ -32,9 +32,11 @@ For Android touch, interrupted-work and resolution testing on a **fresh, isolate
 ```sh
 adb -s emulator-5584 install --no-incremental builds/schism-android-debug.apk
 python3 scripts/android-paperwork-playtest.py --device emulator-5584 --adb /path/to/adb
+adb -s emulator-5586 install --no-incremental builds/schism-android-debug.apk
+python3 scripts/android-jobs-playtest.py --device emulator-5586 --adb /path/to/adb
 ```
 
-The playtest uses Python 3, Pillow, `tesseract` and real Android taps. The paperwork runner tests unsigned drafts, checkbox selection, signing, garment dragging without sheet movement, interrupted individual work and the survival loop. It refuses an existing unmarked citizen; `--resume` requires its own isolated QA checkpoint. Living City and earlier runners remain for historical APKs. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID_V050.md`](docs/playtests/ANDROID_V050.md) for measured evidence and limits.
+The playtests use Python 3, Pillow, `tesseract` and real Android input. The paperwork runner tests signing, garment dragging and the survival loop. The jobs runner uses a separate fresh emulator for cleaning/freight gestures, interrupted work, custody and wages. Each refuses an existing unmarked citizen; `--resume` requires its own isolated QA checkpoint. Living City and earlier runners remain for historical APKs. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID_V050.md`](docs/playtests/ANDROID_V050.md) and [`docs/playtests/ANDROID_V060.md`](docs/playtests/ANDROID_V060.md) for measured evidence and limits.
 
 ## Design and handoff
 

@@ -1,0 +1,989 @@
+{
+  "status": "passed",
+  "version": "0.6.0",
+  "package": "org.schism.districtix",
+  "apk_sha256": "aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d",
+  "device": "emulator-5586",
+  "done": [
+    "registered",
+    "floor-final-drag",
+    "cleaning-partial",
+    "cleaning-sizes",
+    "cleaning",
+    "freight-partial",
+    "freight"
+  ],
+  "steps": [
+    {
+      "touch": "Sign the residency",
+      "point": [
+        156,
+        552
+      ]
+    },
+    {
+      "touch": "Fold the paper",
+      "point": [
+        134,
+        479
+      ]
+    },
+    {
+      "touch": "Got it",
+      "point": [
+        276,
+        238
+      ]
+    },
+    {
+      "hotspot": "door",
+      "location": "room",
+      "point": [
+        181,
+        264
+      ]
+    },
+    {
+      "hotspot": "stairs",
+      "location": "hall",
+      "point": [
+        320,
+        411
+      ]
+    },
+    {
+      "hotspot": "bureau",
+      "location": "street",
+      "point": [
+        165,
+        299
+      ]
+    },
+    {
+      "hotspot": "ticket",
+      "location": "bureau",
+      "point": [
+        57,
+        423
+      ]
+    },
+    {
+      "touch": "Put the paper",
+      "point": [
+        160,
+        389
+      ]
+    },
+    {
+      "hotspot": "clerk",
+      "location": "bureau",
+      "point": [
+        300,
+        307
+      ]
+    },
+    {
+      "touch": "Slide your civic",
+      "point": [
+        117,
+        343
+      ]
+    },
+    {
+      "touch": "Civic Sanitation Worker",
+      "point": [
+        157,
+        529
+      ]
+    },
+    {
+      "touch": "Sign here",
+      "point": [
+        138,
+        437
+      ]
+    },
+    {
+      "touch": "Fold the authorization",
+      "point": [
+        179,
+        528
+      ]
+    },
+    {
+      "assertion": "cleaning authorization signed through physical paperwork",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "location": "bureau",
+      "point": [
+        55,
+        510
+      ]
+    },
+    {
+      "hotspot": "cleaning",
+      "location": "street",
+      "point": [
+        54,
+        162
+      ]
+    },
+    {
+      "hotspot": "supplies",
+      "location": "cleaning",
+      "point": [
+        46,
+        456
+      ]
+    },
+    {
+      "touch": "Take the sanitation order",
+      "point": [
+        149,
+        334
+      ]
+    },
+    {
+      "hotspot": "supplies",
+      "location": "cleaning",
+      "point": [
+        46,
+        456
+      ]
+    },
+    {
+      "touch": "Take the workplace supplies",
+      "point": [
+        180,
+        339
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "assertion": "floor real drag commits exactly one saved step",
+      "ok": true
+    },
+    {
+      "measurement": "floor actual1800ms Android swipe",
+      "from": [
+        108,
+        171
+      ],
+      "to": [
+        237,
+        171
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "assertion": "floor real drag commits exactly one saved step",
+      "ok": true
+    },
+    {
+      "measurement": "floor actual1800ms Android swipe",
+      "from": [
+        108,
+        232
+      ],
+      "to": [
+        237,
+        232
+      ]
+    },
+    {
+      "assertion": "cleaning-partial: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "cleaning-partial",
+      "revision": 14,
+      "payload_sha256": "a26ec2e375b0fb177c99d0814cc2f1c1d08d992922475d0ebf65dbfc1338166b"
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "assertion": "cleaning-floor 360x640: inspecting/scaling changes no saved field",
+      "ok": true
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        195,
+        615
+      ]
+    },
+    {
+      "assertion": "cleaning-floor 390x844: inspecting/scaling changes no saved field",
+      "ok": true
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        540,
+        1754
+      ]
+    },
+    {
+      "assertion": "cleaning-floor 1080x2400: inspecting/scaling changes no saved field",
+      "ok": true
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        540,
+        1754
+      ]
+    },
+    {
+      "touch": "Mop muddy band 3",
+      "point": [
+        492,
+        1270
+      ]
+    },
+    {
+      "hotspot": "desk",
+      "location": "cleaning",
+      "point": [
+        804,
+        1384
+      ]
+    },
+    {
+      "touch": "Inspect the forgotten paper",
+      "point": [
+        541,
+        1524
+      ]
+    },
+    {
+      "touch": "Place in Lost Property",
+      "point": [
+        494,
+        1423
+      ]
+    },
+    {
+      "hotspot": "desk",
+      "location": "cleaning",
+      "point": [
+        804,
+        1384
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "hotspot": "desk",
+      "location": "cleaning",
+      "point": [
+        268,
+        363
+      ]
+    },
+    {
+      "touch": "Wipe dirty patch 1",
+      "point": [
+        179,
+        384
+      ]
+    },
+    {
+      "touch": "Wipe dirty patch 2",
+      "point": [
+        164,
+        384
+      ]
+    },
+    {
+      "touch": "Wipe dirty patch 3",
+      "point": [
+        164,
+        384
+      ]
+    },
+    {
+      "hotspot": "bin",
+      "location": "cleaning",
+      "point": [
+        322,
+        475
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "hotspot": "desk",
+      "location": "cleaning",
+      "point": [
+        268,
+        363
+      ]
+    },
+    {
+      "hotspot": "bin",
+      "location": "cleaning",
+      "point": [
+        322,
+        475
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "hotspot": "floor",
+      "location": "cleaning",
+      "point": [
+        180,
+        456
+      ]
+    },
+    {
+      "hotspot": "desk",
+      "location": "cleaning",
+      "point": [
+        268,
+        363
+      ]
+    },
+    {
+      "hotspot": "bin",
+      "location": "cleaning",
+      "point": [
+        322,
+        475
+      ]
+    },
+    {
+      "touch": "Tie the bag closed",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "OUTLINED AREA",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Tie the bag closed alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Lift the heavy bag out",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PULL UPWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Lift the heavy bag out alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Fit a fresh bag",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PUSH DOWNWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Fit a fresh bag alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "hotspot": "receipt",
+      "location": "cleaning",
+      "point": [
+        336,
+        247
+      ]
+    },
+    {
+      "assertion": "nine cleaning actions retain original240-minute work duration",
+      "ok": true
+    },
+    {
+      "touch": "Stamp the sanitation timecard",
+      "point": [
+        179,
+        268
+      ]
+    },
+    {
+      "assertion": "cleaning pays8CR exactly once",
+      "ok": true
+    },
+    {
+      "assertion": "cleaning-paid: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "cleaning-paid",
+      "revision": 24,
+      "payload_sha256": "c1bf3428e04ac0fe15b0d477ff0c2e50859c31bdf0b277f2b8bc92338b6c2c7d"
+    },
+    {
+      "hotspot": "exit",
+      "location": "cleaning",
+      "point": [
+        77,
+        288
+      ]
+    },
+    {
+      "hotspot": "bureau",
+      "location": "street",
+      "point": [
+        165,
+        299
+      ]
+    },
+    {
+      "hotspot": "vacancies",
+      "location": "bureau",
+      "point": [
+        250,
+        394
+      ]
+    },
+    {
+      "touch": "Freight Sorter",
+      "point": [
+        126,
+        247
+      ]
+    },
+    {
+      "touch": "Sign here",
+      "point": [
+        138,
+        412
+      ]
+    },
+    {
+      "touch": "Fold the authorization",
+      "point": [
+        180,
+        505
+      ]
+    },
+    {
+      "assertion": "freight authorization signed through physical paperwork",
+      "ok": true
+    },
+    {
+      "hotspot": "exit",
+      "location": "bureau",
+      "point": [
+        55,
+        510
+      ]
+    },
+    {
+      "hotspot": "freight",
+      "location": "street",
+      "point": [
+        293,
+        162
+      ]
+    },
+    {
+      "hotspot": "manifest",
+      "location": "freight",
+      "point": [
+        36,
+        316
+      ]
+    },
+    {
+      "touch": "Pull the freight manifest",
+      "point": [
+        138,
+        362
+      ]
+    },
+    {
+      "hotspot": "manifest",
+      "location": "freight",
+      "point": [
+        36,
+        316
+      ]
+    },
+    {
+      "touch": "Compare and mark",
+      "point": [
+        136,
+        388
+      ]
+    },
+    {
+      "hotspot": "incoming",
+      "location": "freight",
+      "point": [
+        198,
+        318
+      ]
+    },
+    {
+      "parcel": "IX-1-11",
+      "point": [
+        108,
+        319
+      ],
+      "located_by": "individual scene crate target"
+    },
+    {
+      "assertion": "opening physical parcel is transaction free",
+      "ok": true
+    },
+    {
+      "touch": "Turn the crate",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "OUTLINED AREA",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Turn the crate alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "assertion": "crate-lift real drag commits exactly one saved step",
+      "ok": true
+    },
+    {
+      "measurement": "crate-lift actual1800ms Android swipe",
+      "from": [
+        180,
+        258
+      ],
+      "to": [
+        180,
+        197
+      ]
+    },
+    {
+      "assertion": "freight-partial: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "freight-partial",
+      "revision": 33,
+      "payload_sha256": "3b5844cec4815822afbdba6748efd167e9334ef08c1f78e357de5b99d78dc9ca"
+    },
+    {
+      "parcel": "IX-1-11",
+      "point": [
+        108,
+        319
+      ],
+      "located_by": "individual scene crate target"
+    },
+    {
+      "assertion": "opening physical parcel is transaction free",
+      "ok": true
+    },
+    {
+      "touch": "Press the checked-seal stamp",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PUSH DOWNWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Press the checked-seal stamp alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "assertion": "crate-route real drag commits exactly one saved step",
+      "ok": true
+    },
+    {
+      "measurement": "crate-route actual1800ms Android swipe",
+      "from": [
+        180,
+        214
+      ],
+      "to": [
+        72,
+        294
+      ]
+    },
+    {
+      "parcel": "IX-1-12",
+      "point": [
+        171,
+        319
+      ],
+      "located_by": "individual scene crate target"
+    },
+    {
+      "assertion": "opening physical parcel is transaction free",
+      "ok": true
+    },
+    {
+      "touch": "Turn the crate",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "OUTLINED AREA",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Turn the crate alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Lift the crate onto the trolley",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PULL UPWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Lift the crate onto the trolley alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Press the checked-seal stamp",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PUSH DOWNWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Press the checked-seal stamp alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Route into CLINIC",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "DRAG CRATE TO A LANE",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Route into CLINIC alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "parcel": "IX-1-13",
+      "point": [
+        233,
+        319
+      ],
+      "located_by": "individual scene crate target"
+    },
+    {
+      "assertion": "opening physical parcel is transaction free",
+      "ok": true
+    },
+    {
+      "touch": "Turn the crate",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "OUTLINED AREA",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Turn the crate alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Lift the crate onto the trolley",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PULL UPWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Lift the crate onto the trolley alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Press the checked-seal stamp",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PUSH DOWNWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Press the checked-seal stamp alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Route into TEXTILES",
+      "point": [
+        288,
+        384
+      ],
+      "instruction": "DRAG CRATE TO A LANE",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Route into TEXTILES alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "parcel": "IX-1-14",
+      "point": [
+        297,
+        319
+      ],
+      "located_by": "individual scene crate target"
+    },
+    {
+      "assertion": "opening physical parcel is transaction free",
+      "ok": true
+    },
+    {
+      "touch": "Turn the crate",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "OUTLINED AREA",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Turn the crate alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Lift the damaged lid",
+      "point": [
+        105,
+        465
+      ]
+    },
+    {
+      "touch": "Place in Lost Property",
+      "point": [
+        165,
+        430
+      ]
+    },
+    {
+      "parcel": "IX-1-14",
+      "point": [
+        297,
+        319
+      ],
+      "located_by": "individual scene crate target"
+    },
+    {
+      "assertion": "opening physical parcel is transaction free",
+      "ok": true
+    },
+    {
+      "touch": "Lift the crate onto the trolley",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PULL UPWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Lift the crate onto the trolley alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Press the checked-seal stamp",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "PUSH DOWNWARD",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Press the checked-seal stamp alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "touch": "Route into CLINIC",
+      "point": [
+        180,
+        384
+      ],
+      "instruction": "DRAG CRATE TO A LANE",
+      "located_by": "native alternative layout verified at three sizes"
+    },
+    {
+      "assertion": "Route into CLINIC alternative saves exactly one action",
+      "ok": true
+    },
+    {
+      "hotspot": "receipt",
+      "location": "freight",
+      "point": [
+        340,
+        252
+      ]
+    },
+    {
+      "assertion": "four hand-prepared parcels retain original duration and perfect quality",
+      "ok": true
+    },
+    {
+      "touch": "Stamp the freight timecard",
+      "point": [
+        179,
+        269
+      ]
+    },
+    {
+      "assertion": "freight pays9CR exactly once",
+      "ok": true
+    },
+    {
+      "assertion": "freight-paid: every saved field equals after background/force-stop/relaunch",
+      "ok": true
+    },
+    {
+      "interruption": "freight-paid",
+      "revision": 50,
+      "payload_sha256": "aa4c6c99c69f6614d959c525ad5fe5592c9763224ca7cb06f22a1a3647d40cf0"
+    },
+    {
+      "assertion": "no native script/crash/shader errors",
+      "ok": true
+    }
+  ],
+  "prior_attempts": [
+    {
+      "status": "failed",
+      "apk_sha256": "b464e1ca4ee7fd850ed4ed7ed80765ccea10e5fb8024e86c7bb023e07ba6d19b",
+      "error": "Command '['/home/commander/android/sdk/platform-tools/adb', '-s', 'emulator-5586', 'exec-out', 'screencap', '-p']' returned non-zero exit status 255."
+    },
+    {
+      "status": "failed",
+      "apk_sha256": "aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d",
+      "error": "Cannot find 'Wipe dirty patch 1.0': ['SCHISM', 'CIVIC ANNEX / NIGHT SERVICES', 'CIVIC ANNEX / DESK x', 'SWIPE ACROSS THE OUTLINED AREA', 'Wipe dirty patch 10of 3', 'SCHISM', 'CIVIC ANNEX / NIGHT SERVICES', 'CIVIC ANNEX / DESK', 'SWIPE ACROSS THE OUTLINED AREA', 'Wipe dirty patch 1 of 3']"
+    },
+    {
+      "status": "failed",
+      "apk_sha256": "aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d",
+      "error": "'NoneType' object is not subscriptable"
+    },
+    {
+      "status": "failed",
+      "apk_sha256": "aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d",
+      "error": "Cannot find 'Tie the bag closed': ['SCHISM DAY 01 090', 'CIVIC ANNEX | NIGHT SERVICES', 'CIVIC ANNEX / BIN', '\u2018SWIPE ACROSSTHE OUTLINED AREA', 'SCHISM DAY 01 0920', 'CIVIC ANNEX / NIGHT SERVICES', 'CIVIC ANNEX / BIN', 'SWIPE ACROSSTHE OUTLINED AREA']"
+    },
+    {
+      "status": "failed",
+      "apk_sha256": "aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d",
+      "error": ""
+    },
+    {
+      "status": "failed",
+      "apk_sha256": "aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d",
+      "error": "Cannot find 'IX-1-11': ['SCHISM', 'DISTRICT IX / FREIGHT DEPOT', 'PARCEL IX-1-12', '\u2018SWIPE ACROSSTHE OUTLINED AREA', 'Turn the crate and read its label', 'I', 'SCHISM', 'DISTRICT IX / FREIGHT DEPOT', 'PARCEL 1X-1-12', 'SWIPE ACROSSTHE OUTLINED AREA']"
+    }
+  ],
+  "limits": "Android14 swangle emulator only; no physical-phone comfort/audio/GPU claim.",
+  "final": {
+    "schema": 6,
+    "revision": 50,
+    "minute": 885.0,
+    "credits": 21.0,
+    "employment": "freight",
+    "tax_paid": 0.0,
+    "last_receipt": {
+      "gross": 9,
+      "job": "freight",
+      "net": 9,
+      "quality": 100,
+      "shift_id": "83031-shift-30",
+      "tax_assessed": 2,
+      "withholding": 0
+    }
+  },
+  "shifts": {
+    "laundry": 0.0,
+    "cleaning": 1.0,
+    "freight": 1.0
+  }
+}

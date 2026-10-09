@@ -130,9 +130,19 @@ func _initialize() -> void:
  progress.jobs.laundry.shifts = 12; progress = act(progress,{"action":"promote"})
  check(progress.jobs.laundry.promoted and not Sim._owned(progress,"key").is_empty(),"earned appointment grants a real key")
  var cleaner = resident("cleaning"); cleaner = act(cleaner,{"action":"begin_shift"})
- check(not Sim.apply(cleaner,{"action":"clean","object":"floor"}).ok,"cleaning needs workplace supplies")
+ check(not Sim.apply(cleaner,{"action":"clean_step","object":"floor","step":1}).ok,"cleaning needs workplace supplies")
  cleaner = act(cleaner,{"action":"clean","object":"supplies"})
- for object in ["floor","desk","bin"]: cleaner = act(cleaner,{"action":"clean","object":object})
+ var bulk_clean = Sim.apply(cleaner,{"action":"clean","object":"floor"})
+ check(not bulk_clean.ok and bulk_clean.state==cleaner,"cleaning rejects the legacy bulk shortcut without mutation")
+ for object in ["floor","desk","bin"]:
+  for step in range(1,4): cleaner = act(cleaner,{"action":"clean_step","object":object,"step":step})
+ var cleaning_minute = cleaner.minute
+ cleaner = act(cleaner,{"action":"clean","object":"inspect_desk"})
+ var memorandum = cleaner.shift.found
+ cleaner = act(cleaner,{"action":"found_choice","id":memorandum,"choice":"return"})
+ check(cleaner.shift.stage=="receipt" and cleaner.shift.minutes==240 and cleaner.minute==cleaning_minute and Sim._find(cleaner,memorandum).owner=="lost_property","receipt-stage memorandum inspection and return preserve completed work time")
+ var repeated_desk = Sim.apply(cleaner,{"action":"clean","object":"inspect_desk"})
+ check(not repeated_desk.ok and repeated_desk.state==cleaner,"receipt-stage desk inspection rejects replay without mutation")
  cleaner = act(cleaner,{"action":"settle_shift"}); check(cleaner.last_receipt.gross==8 and cleaner.jobs.cleaning.shifts==1,"cleaning has complete playable wage order")
  var freight = resident("freight"); freight = act(freight,{"action":"begin_shift"}); freight = act(freight,{"action":"manifest"})
  for n in range(4):
@@ -140,6 +150,8 @@ func _initialize() -> void:
   if n==3:
    freight = act(freight,{"action":"open_crate","index":n})
    freight = act(freight,{"action":"found_choice","id":freight.shift.found,"choice":"return"})
+  freight = act(freight,{"action":"lift_crate","index":n})
+  freight = act(freight,{"action":"stamp_crate","index":n})
   freight = act(freight,{"action":"route_crate","index":n,"destination":freight.shift.crates[n].destination})
  freight = act(freight,{"action":"settle_shift"}); check(freight.last_receipt.gross==9 and freight.last_receipt.withholding==0 and freight.last_receipt.tax_assessed==1 and freight.last_receipt.quality==100,"freight labels, manifest, ownership and wages")
  var eaten = resident("freight"); eaten.rng = 1
@@ -151,6 +163,8 @@ func _initialize() -> void:
    var parcel = eaten.shift.found
    eaten = act(eaten,{"action":"found_choice","id":parcel,"choice":"keep"})
    eaten = act(eaten,{"action":"consume","id":parcel})
+  eaten = act(eaten,{"action":"lift_crate","index":n})
+  eaten = act(eaten,{"action":"stamp_crate","index":n})
   eaten = act(eaten,{"action":"route_crate","index":n,"destination":eaten.shift.crates[n].destination})
  eaten = act(eaten,{"action":"settle_shift"})
  check(eaten.legal.offenses==1 and eaten.items[0].owner=="consumed" and eaten.items[0].history[-1].custody=="evidence_counted","consuming stolen goods cannot erase manifest evidence or fines")

@@ -8,6 +8,7 @@ const Prop = preload("res://src/prop.gd")
 const Atmosphere = preload("res://src/environment.gd")
 const Sound = preload("res://src/audio.gd")
 const ClothActivity = preload("res://src/cloth_activity.gd")
+const WorkActivity = preload("res://src/work_activity.gd")
 const INK = Color("d4d0b7")
 const MUTED = Color("a3aa92")
 const ACCENT = Color("c2b476")
@@ -782,6 +783,30 @@ func _shop(kinds: Array) -> void:
   _body(item.label.to_upper(),24); _prop(kind,110); _body(item.description,21)
   _action("Take "+item.label+" / %d CR"%int(item.price),{"action":"buy","kind":kind},_bag)
 
+func _work_activity(kind: String,progress: int,next: Callable,crate: Dictionary={},index: int=0) -> Control:
+ var activity = WorkActivity.new(); activity.name = "work_"+kind
+ activity.work_kind = kind; activity.progress = progress; activity.crate = crate.duplicate(true)
+ activity.index = index; activity.effects = Session.state.settings.effects
+ activity.custom_minimum_size = Vector2(0,284)
+ var revision = int(Session.state.revision)
+ activity.command_requested.connect(func(command):
+  command.expected_revision = revision
+  _do(command,next)
+ )
+ sheet_body.add_child(activity)
+ if activity.next_action()=="": return activity
+ if activity.next_action()=="route_crate":
+  var lanes = HBoxContainer.new(); lanes.add_theme_constant_override("separation",8); sheet_body.add_child(lanes)
+  for destination in ["BLOCK C","CLINIC","TEXTILES"]:
+   var button = _button(destination,func(): activity.perform_step(destination))
+   button.name = "route_"+destination.replace(" ","_").to_lower()
+   button.size_flags_horizontal = Control.SIZE_EXPAND_FILL; button.custom_minimum_size.x = 0
+   button.add_theme_font_size_override("font_size",18); lanes.add_child(button)
+ else:
+  var button = _button(activity.step_text(),func(): activity.perform_step())
+  button.name = "work_step_alternative"; sheet_body.add_child(button)
+ return activity
+
 func _cleaning(id: String) -> void:
  if id=="exit": _travel("street"); return
  var s = Session.state
@@ -794,14 +819,22 @@ func _cleaning(id: String) -> void:
   _paper_sheet("CIVIC ANNEX / TIMECARD")
   if s.shift.stage=="receipt": _action("Stamp the sanitation timecard",{"action":"settle_shift"})
   else: _body("The floor, desk and bin still need to be counted.")
- elif id=="supplies": _prop("cleaning_supplies",180); _body("The bucket holds a mop, cloth and fresh bag."); _action("Take the workplace supplies",{"action":"clean","object":"supplies"})
- elif id=="desk":
-  _prop("cleaning_desk",150)
-  _body("There is a folded memorandum beside the ashtray.")
-  _action("Inspect the forgotten paper",{"action":"clean","object":"inspect_desk"})
-  _action("Wipe around the desk objects",{"action":"clean","object":"desk"})
- elif id=="floor": _prop("cleaning_floor",150); _body("Old muddy footprints. A darker stain beneath the chair."); _action("Push the mop across the floor",{"action":"clean","object":"floor"})
- elif id=="bin": _prop("cleaning_bin",160); _body("A heavy black bag. Something rattles inside."); _action("Tie off the bag and fit a fresh one",{"action":"clean","object":"bin"})
+ elif id=="supplies":
+  _prop("cleaning_supplies",180); _body("The bucket holds a mop, cloth and fresh bag.")
+  if not s.shift.supplies: _action("Take the workplace supplies",{"action":"clean","object":"supplies"},func(): _cleaning("supplies"))
+  else: _body("Mop, cloth and fresh bag collected. Take them to the floor, desk and bin.",20)
+ elif id in ["floor","desk","bin"]:
+  if not s.shift.supplies:
+   _prop("cleaning_"+id,150); _body("Take the mop, cloth and fresh bag from the bucket first.")
+   var supplies = _button("Reach into the supply bucket",func(): _cleaning("supplies")); sheet_body.add_child(supplies)
+  else:
+   _work_activity(id,int(s.shift.get("work_steps",{}).get(id,3 if id in s.shift.cleaned else 0)),func(): _cleaning(id))
+  if id=="desk":
+   if not s.shift.desk_checked:
+    _body("A folded memorandum rests beside the ashtray.",20)
+    _action("Inspect the forgotten paper",{"action":"clean","object":"inspect_desk"},func(): _cleaning("desk"))
+   elif Sim._find(s,s.shift.found).get("owner","")=="found":
+    var paper = _button("Look at the memorandum again",func(): _found(s.shift.found)); sheet_body.add_child(paper)
 
 func _freight(id: String) -> void:
  if id=="exit": _travel("street"); return
@@ -813,15 +846,22 @@ func _freight(id: String) -> void:
  if id=="manifest":
   _paper_sheet("FREIGHT DEPOT / MANIFEST")
   _body("IX freight manifest\n11 → BLOCK C\n12 → CLINIC\n13 → TEXTILES\n14 → CLINIC / damaged seal")
-  _action("Compare and mark the manifest",{"action":"manifest"})
+  if not w.manifest_read: _action("Compare and mark the manifest",{"action":"manifest"},func(): _freight("manifest"))
+  else: _body("The manifest is marked. Turn each parcel to check its own label.",20)
  elif id=="receipt":
   _paper_sheet("FREIGHT DEPOT / TIMECARD")
   if w.stage=="receipt": _action("Stamp the freight timecard",{"action":"settle_shift"})
   else: _body("There are still parcels on the bench.")
  elif id.begins_with("lane_"):
   var destination = {"lane_a":"BLOCK C","lane_b":"CLINIC","lane_c":"TEXTILES"}[id]
-  _body("Outgoing lane: "+destination)
-  _action("Slide the inspected parcel into this lane",{"action":"route_crate","index":w.selected,"destination":destination})
+  # A lane opens the physical parcel; it never bypasses turning/lifting/stamping.
+  var remaining = -1
+  if int(w.selected)>=0 and int(w.selected)<w.crates.size() and not w.crates[int(w.selected)].routed: remaining = int(w.selected)
+  else:
+   for n in range(w.crates.size()):
+    if not w.crates[n].routed: remaining = n; break
+  if remaining>=0: _crate(remaining)
+  else: _body("Outgoing lane: "+destination+"\nEvery parcel is sent. Collect the timecard.")
  else:
   for n in range(w.crates.size()):
    var box = w.crates[n]
@@ -831,11 +871,13 @@ func _freight(id: String) -> void:
 func _crate(index: int) -> void:
  var box = Session.state.shift.crates[index]
  _sheet("PARCEL "+box.serial)
- _prop("crate",230)
- if not box.inspected: _action("Turn the crate and read its label",{"action":"inspect_crate","index":index},func(): _crate(index)); return
- _body("DESTINATION: "+box.destination+"\nSEAL: "+("DAMAGED" if box.damaged else "INTACT"),26)
- if box.damaged and not box.opened: _action("Lift the damaged lid and inspect contents",{"action":"open_crate","index":index})
- for destination in ["BLOCK C","CLINIC","TEXTILES"]: _action("Slide into "+destination+" lane",{"action":"route_crate","index":index,"destination":destination})
+ _work_activity("crate",0,func(): _crate(index),box,index)
+ if not box.inspected: return
+ _body("DESTINATION: "+box.destination+"  /  SEAL: "+("DAMAGED" if box.damaged else "INTACT"),20)
+ if box.damaged and not box.opened and not box.routed:
+  _action("Lift the damaged lid and inspect contents",{"action":"open_crate","index":index},func(): _crate(index))
+ elif box.opened and Sim._find(Session.state,Session.state.shift.found).get("owner","")=="found":
+  var found = _button("Look inside the opened parcel again",func(): _found(Session.state.shift.found)); sheet_body.add_child(found)
 
 func _camp(id: String) -> void:
  var s = Session.state; var camp = s.legal.camp

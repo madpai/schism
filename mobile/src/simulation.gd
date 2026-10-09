@@ -103,6 +103,31 @@ static func migrate(old: Dictionary) -> Dictionary:
    var stage = s.shift.get("stage","inspect")
    _defaults(garment,{"loaded":stage!="inspect","unloaded":stage in ["wet","dry","folded","receipt"],"folds":fold_steps(garment) if stage in ["folded","receipt"] else 0})
    if not garment.loaded is bool or not garment.unloaded is bool or not _whole_number(garment.folds) or int(garment.folds)<0 or int(garment.folds)>fold_steps(garment): return {"error":"A garment progress record needs recovery. Your files have been preserved."}
+ if not s.shift.is_empty() and s.shift.get("job")=="cleaning":
+  var w = s.shift
+  if not w.get("cleaned") is Array or w.get("stage") not in ["work","receipt"]: return {"error":"The sanitation record needs recovery. Your files have been preserved."}
+  var seen_surfaces = []
+  for object in w.cleaned:
+   if object not in ["floor","desk","bin"] or object in seen_surfaces: return {"error":"The sanitation surfaces need recovery. Your files have been preserved."}
+   seen_surfaces.append(object)
+  if not w.has("work_steps"): w.work_steps = {}
+  if not w.work_steps is Dictionary: return {"error":"The sanitation progress needs recovery. Your files have been preserved."}
+  for object in ["floor","desk","bin"]:
+   if not w.work_steps.has(object): w.work_steps[object] = 3 if object in w.cleaned else 0
+   if not _whole_number(w.work_steps[object]) or int(w.work_steps[object])<0 or int(w.work_steps[object])>3: return {"error":"The sanitation progress needs recovery. Your files have been preserved."}
+   if (int(w.work_steps[object])==3)!=(object in w.cleaned): return {"error":"The sanitation completion needs recovery. Your files have been preserved."}
+  if (w.stage=="receipt")!=(w.cleaned.size()==3): return {"error":"The sanitation stage needs recovery. Your files have been preserved."}
+ if not s.shift.is_empty() and s.shift.get("job")=="freight":
+  var w = s.shift
+  if not w.get("crates") is Array or w.get("stage") not in ["work","receipt"]: return {"error":"The freight record needs recovery. Your files have been preserved."}
+  var all_routed = true
+  for crate in w.crates:
+   if not crate is Dictionary or not crate.get("routed") is bool or not crate.get("inspected") is bool: return {"error":"A freight crate needs recovery. Your files have been preserved."}
+   _defaults(crate,{"lifted":crate.routed,"stamped":crate.routed})
+   if not crate.lifted is bool or not crate.stamped is bool: return {"error":"The freight handling needs recovery. Your files have been preserved."}
+   if (crate.lifted and not crate.inspected) or (crate.stamped and not crate.lifted) or (crate.routed and not crate.stamped): return {"error":"The freight sequence needs recovery. Your files have been preserved."}
+   if not crate.routed: all_routed = false
+  if w.crates.size()!=4 or (w.stage=="receipt")!=all_routed: return {"error":"The freight stage needs recovery. Your files have been preserved."}
  for index in range(s.items.size()):
   var item = s.items[index]
   if not item is Dictionary: return {"error":"An item record needs recovery. Your files have been preserved."}
@@ -201,8 +226,8 @@ static func _execute(s: Dictionary, c: Dictionary, e: Array) -> String:
   "inspect_uniform", "inspect_pocket", "sort_uniform", "open_hatch", "load_garment", "unload_garment", "fold_garment", "dose", "cycle", "close_hatch", "start_wash", "dry", "dispatch":
    return _laundry(s,c,e)
   "found_choice": return _found_choice(s,c,e)
-  "clean": return _cleaning(s,c,e)
-  "inspect_crate", "route_crate", "open_crate", "manifest": return _freight(s,c,e)
+  "clean", "clean_step": return _cleaning(s,c,e)
+  "inspect_crate", "lift_crate", "stamp_crate", "route_crate", "open_crate", "manifest": return _freight(s,c,e)
   "settle_shift": return _settle(s,e)
   "buy":
    if s.location!="shop" or not s.shift.is_empty(): return "The vendor is at the food kiosk."
@@ -304,12 +329,12 @@ static func _begin_shift(s: Dictionary,job: String) -> void:
    object.rightful_owner = "Textile archive"; uniforms[2].found = object.id
   s.shift.uniforms = uniforms; s.shift.hatch_open = false; s.shift.loaded = false; s.shift.doses = 0; s.shift.cycle = "standard"
  elif job=="cleaning":
-  s.shift.cleaned = []; s.shift.supplies = false; s.shift.desk_checked = false
+  s.shift.cleaned = []; s.shift.work_steps = {"floor":0,"desk":0,"bin":0}; s.shift.supplies = false; s.shift.desk_checked = false
   var object = _item(s,"note","Folded office memorandum","found","Civic Annex / desk",{"risk":0.18,"evidence":"The office camera recorded the empty desk drawer.","text":"FLOOR 4 staff list: 17 present / 18 paid. Do not reconcile."})
   object.rightful_owner = "Civic clerk"; s.shift.found = object.id
  else:
   s.shift.manifest_read = false; s.shift.crates = []
-  for n in range(4): s.shift.crates.append({"serial":"IX-%d-%d"%[int(s.jobs.freight.shifts)+1,n+11],"destination":["BLOCK C","CLINIC","TEXTILES","CLINIC"][n],"inspected":false,"routed":false,"damaged":n==3,"opened":false})
+  for n in range(4): s.shift.crates.append({"serial":"IX-%d-%d"%[int(s.jobs.freight.shifts)+1,n+11],"destination":["BLOCK C","CLINIC","TEXTILES","CLINIC"][n],"inspected":false,"lifted":false,"stamped":false,"routed":false,"damaged":n==3,"opened":false})
   var object = _item(s,"bread","Uncounted bread parcel","found","Crate IX / damaged seal",{"risk":0.42,"evidence":"A numbered freight seal was missing at manifest reconciliation.","food":42,"shelf_days":3})
   object.rightful_owner = "Block C communal kitchen"; s.shift.found = object.id
 
@@ -420,35 +445,61 @@ static func _found_choice(s: Dictionary,c: Dictionary,e: Array) -> String:
 static func _cleaning(s: Dictionary,c: Dictionary,e: Array) -> String:
  if s.location!="cleaning" or s.shift.is_empty() or s.shift.job!="cleaning": return "Take a sanitation work order first."
  var w = s.shift; var object = str(c.get("object",""))
- if object=="supplies": w.supplies = true; return ""
- if object=="inspect_desk":
+ if c.action=="clean" and object=="inspect_desk":
+  if w.desk_checked: return "The desk drawer has already been checked."
   w.desk_checked = true
   if _find(s,w.found).owner=="found": e.append({"type":"found","id":w.found})
   return ""
+ if w.stage!="work": return "This sanitation order is already counted. Collect the timecard."
+ if c.action=="clean" and object=="supplies":
+  if w.supplies: return "The mop, cloth and fresh bag are already ready."
+  w.supplies = true
+  return ""
  if object not in ["floor","desk","bin"]: return "That isn't on this cleaning order."
+ if c.action!="clean_step": return "Work each dirty area with the mop, cloth or fresh bag."
  if not w.supplies: return "Take the mop, cloth and fresh bag from the bucket."
  if object in w.cleaned: return "That surface is already clean."
- w.cleaned.append(object); _work_time(s,80)
- if w.cleaned.size()==3: w.stage = "receipt"
+ if not _whole_number(c.get("step")) or int(c.step)<1 or int(c.step)>3: return "Choose the next work step on this object."
+ if int(c.step)!=int(w.work_steps[object])+1: return "Complete the next dirty area before moving on."
+ w.work_steps[object] = int(c.step)
+ if int(c.step)==3:
+  w.cleaned.append(object); _work_time(s,80)
+  if w.cleaned.size()==3: w.stage = "receipt"
  e.append({"type":"sound","name":"mop"})
  return ""
 
 static func _freight(s: Dictionary,c: Dictionary,e: Array) -> String:
  if s.location!="freight" or s.shift.is_empty() or s.shift.job!="freight": return "Take a freight work order first."
  var w = s.shift
- if c.action=="manifest": w.manifest_read = true; return ""
- if c.has("index") and not _whole_number(c.index): return "Choose a garment on this workbench."
+ if w.stage!="work": return "This freight order is already counted. Collect the timecard."
+ if c.action=="manifest":
+  if w.manifest_read: return "The manifest has already been checked."
+  w.manifest_read = true
+  return ""
+ if c.has("index") and not _whole_number(c.index): return "Choose a crate on this workbench."
  var index = int(c.get("index",w.selected))
  if index<0 or index>=w.crates.size(): return "Unknown crate."
- var crate = w.crates[index]; w.selected = index
- if c.action=="inspect_crate": crate.inspected = true
+ var crate = w.crates[index]
+ if crate.routed: return "That crate has already left this bench."
+ if c.action=="inspect_crate":
+  if crate.inspected: return "This crate label has already been read."
+  crate.inspected = true
+ if c.action=="lift_crate":
+  if not crate.inspected: return "Read the label before lifting the crate."
+  if crate.lifted: return "The crate is already on the sorting bench."
+  crate.lifted = true
+ if c.action=="stamp_crate":
+  if not crate.lifted: return "Lift the inspected crate onto the sorting bench first."
+  if crate.stamped: return "This crate already carries its routing stamp."
+  crate.stamped = true
  if c.action=="open_crate":
-  if not crate.inspected or not crate.damaged or crate.routed: return "Inspect the damaged seal before routing the parcel."
+  if not crate.inspected or not crate.damaged: return "Inspect the damaged seal before routing the parcel."
+  if crate.opened: return "This damaged seal has already been opened."
   crate.opened = true
   if _find(s,w.found).owner=="found": e.append({"type":"found","id":w.found})
  if c.action=="route_crate":
-  if crate.routed: return "That crate has already left this bench."
   if not crate.inspected: return "Read the label first."
+  if not crate.lifted or not crate.stamped: return "Lift and stamp the crate before moving it into a lane."
   if str(c.get("destination","")) not in ["BLOCK C","CLINIC","TEXTILES"]: return "Unknown freight lane."
   if c.destination!=crate.destination: w.quality -= 18
   if not w.manifest_read: w.quality -= 5
@@ -457,6 +508,7 @@ static func _freight(s: Dictionary,c: Dictionary,e: Array) -> String:
   for box in w.crates:
    if not box.routed: complete = false
   if complete: w.stage = "receipt"
+ w.selected = index
  return ""
 
 static func _settle(s: Dictionary,e: Array) -> String:

@@ -1,0 +1,14 @@
+{
+  "device": "emulator-5586",
+  "package": "org.schism.districtix",
+  "identity_sha256": "f030a2608bd9289040435bd1847ddb0cae41ea36b7551ac3b8777471bbeea9c3",
+  "done": [
+    "registered",
+    "floor-final-drag",
+    "cleaning-partial",
+    "cleaning-sizes",
+    "cleaning",
+    "freight-partial",
+    "freight"
+  ]
+}
