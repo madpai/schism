@@ -8,7 +8,7 @@ SCHISM development APKs are hosted as versioned prereleases in [GitHub Releases]
 
 [Release notes and checksums](https://github.com/madpai/schism/releases/tag/v0.5.0-alpha)
 
-Individual laundry handling is required on every shift, and clothing drags hold the sheet still. The job clipboard accepts one checked vacancy and a deliberate signature. Residency, tax, tenancy, wage and other records share new painted paperwork; home and sanitation close-ups use the original environments. Install over the existing app to retain progress: package and signer stay fixed, version code is 5 and save schema remains 6. See `docs/playtests/ANDROID_V050.md` for measured checks and emulator coverage. No physical-phone test is claimed.
+Individual laundry handling is required on every shift, and clothing drags hold the sheet still. The job clipboard accepts one checked vacancy and a deliberate signature. Residency, tax, tenancy, wage and other records share new painted paperwork; home and sanitation close-ups use the original environments. Install over the existing app to retain progress: package and signer stay fixed, version code is 5 and save schema remains 6. The public APK was downloaded without authentication and matched the tested artifact byte for byte; `docs/releases/v0.5.0-publication.json` records verification. See `docs/playtests/ANDROID_V050.md` for measured checks and emulator coverage. No physical-phone test is claimed.
 
 ## 0.4.0 Living City preview
 
