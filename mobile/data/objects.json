@@ -106,6 +106,69 @@
         0.13,
         0.18
       ]
+    },
+    "bed": {
+      "asset": "res://assets/scenes/room-v1.png",
+      "rect": [
+        0.0,
+        0.52,
+        0.7,
+        0.45
+      ]
+    },
+    "sink": {
+      "asset": "res://assets/scenes/room-v1.png",
+      "rect": [
+        0.09,
+        0.41,
+        0.2,
+        0.15
+      ]
+    },
+    "cleaning_supplies": {
+      "asset": "res://assets/scenes/cleaning-v1.png",
+      "rect": [
+        0.0,
+        0.4,
+        0.28,
+        0.45
+      ]
+    },
+    "cleaning_floor": {
+      "asset": "res://assets/scenes/cleaning-v1.png",
+      "rect": [
+        0.24,
+        0.61,
+        0.45,
+        0.36
+      ]
+    },
+    "cleaning_desk": {
+      "asset": "res://assets/scenes/cleaning-v1.png",
+      "rect": [
+        0.45,
+        0.49,
+        0.55,
+        0.16
+      ]
+    },
+    "cleaning_bin": {
+      "asset": "res://assets/scenes/cleaning-v1.png",
+      "rect": [
+        0.81,
+        0.69,
+        0.19,
+        0.29
+      ]
+    },
+    "camp_bunk": {
+      "asset": "res://assets/scenes/camp-v1.png",
+      "rect": [
+        0.0,
+        0.47,
+        0.22,
+        0.27
+      ]
     }
   },
   "laundry": {

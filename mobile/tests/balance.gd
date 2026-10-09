@@ -23,9 +23,16 @@ func _initialize() -> void:
    if u.stain=="oil": cycle = "hot"
    if u.stain=="blood": cycle = "sanitize"
    act({"action":"sort_uniform","index":n,"bin":u.type})
-  for action in ["open_hatch","load_washer","dose","dose"]: act({"action":action})
+  act({"action":"open_hatch"})
+  for n in range(4): act({"action":"load_garment","index":n})
+  for action in ["dose","dose"]: act({"action":action})
   act({"action":"cycle","cycle":cycle})
-  for action in ["close_hatch","start_wash","unload","dry","fold","dispatch","settle_shift"]: act({"action":action})
+  for action in ["close_hatch","start_wash"]: act({"action":action})
+  for n in range(4): act({"action":"unload_garment","index":n})
+  act({"action":"dry"})
+  for n in range(4):
+   for step in range(1,Sim.fold_steps(s.shift.uniforms[n])+1): act({"action":"fold_garment","index":n,"step":step})
+  for action in ["dispatch","settle_shift"]: act({"action":action})
   act({"action":"travel","to":"street"})
   var tax = int(Sim.tax_summary(s).total)
   if tax>0:

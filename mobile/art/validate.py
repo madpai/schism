@@ -33,6 +33,11 @@ for asset in living['assets']:
   assert hashlib.sha256((ROOT/reference['file']).read_bytes()).hexdigest()==reference['sha256'],reference
 for path,digest in living['authored_maps'].items():
  assert hashlib.sha256((ROOT/path).read_bytes()).hexdigest()==digest,path
+paperwork=json.loads((ROOT/'art/paperwork-provenance.json').read_text())
+for asset in paperwork['assets']:
+ for key in ['file','prompt']:
+  assert hashlib.sha256((ROOT/asset[key]).read_bytes()).hexdigest()==asset['sha256' if key=='file' else 'prompt_sha256'],asset[key]
+ assert list(struct.unpack('>II',(ROOT/asset['file']).read_bytes()[16:24]))==asset['dimensions']
 objects=json.loads((ROOT/'data/objects.json').read_text())
 assert objects['grid']==[4,4] and sorted(objects['cells'].values())==list(range(16))
 # Inspect actual alpha inside individually authored source regions, not inferred grid cells.
@@ -68,4 +73,4 @@ for crop in objects['crops'].values():
 with wave.open(str(ROOT/'assets/audio/footsteps.wav')) as cue:
  assert cue.getnframes()/cue.getframerate()<=.27,'travel must not replay a multi-step loop'
 for p in ['fonts/FIRA-OFL.txt','fonts/DEJAVU-LICENSE.txt','GODOT-LICENSE.txt','GODOT-THIRD-PARTY.txt']:assert (ROOT/'assets'/p).is_file(),p
-print(f"SCHISM assets: {len(provenance['assets'])+len(living['assets'])} generated images, 10 scene maps, 18 original audio files: hashes, atlas regions and zones verified.")
+print(f"SCHISM assets: {len(provenance['assets'])+len(living['assets'])+len(paperwork['assets'])} generated images, 10 scene maps, 18 original audio files: hashes, atlas regions and zones verified.")

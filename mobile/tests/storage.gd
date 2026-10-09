@@ -67,6 +67,28 @@ func _initialize() -> void:
  check(store.save_state(migrated),"write migrated preservation and item location")
  var loaded = store.load_state()
  check(loaded.items[-1].storage=="bag" and loaded.items[-1].cold_minutes==4320,"save/load preserves storage and accrued cooling")
+ var interrupted = Sim.initial(); interrupted.identity.registered = true
+ interrupted.location = "laundry"; interrupted.employment = "laundry"
+ interrupted = act(interrupted,{"action":"begin_shift"})
+ var found_id = interrupted.shift.uniforms[1].found
+ for item in interrupted.items:
+  if item.id==found_id: item.metadata.custom_custody_note = "Keep this serial with the pocket record"
+ interrupted = act(interrupted,{"action":"inspect_uniform","index":0})
+ interrupted = act(interrupted,{"action":"inspect_pocket","index":0})
+ interrupted = act(interrupted,{"action":"sort_uniform","index":0,"bin":"general"})
+ interrupted = act(interrupted,{"action":"open_hatch"})
+ interrupted = act(interrupted,{"action":"load_garment","index":0})
+ var work_store = Store.new("user://storage-manual-work-"+str(Time.get_ticks_usec()))
+ check(work_store.save_state(interrupted),"save an interrupted manual load with a found-object custody record")
+ var resumed = work_store.load_state()
+ check(resumed.shift.stage=="inspect" and resumed.shift.uniforms[0].loaded and not resumed.shift.uniforms[1].loaded,"reloading preserves exactly one handled garment")
+ var retained_found = resumed.items.filter(func(item): return item.id==found_id)
+ check(retained_found.size()==1 and retained_found[0].owner=="found" and retained_found[0].metadata.custom_custody_note=="Keep this serial with the pocket record","manual work save retains unreconciled found-property metadata and custody")
+ var before_replay = resumed.duplicate(true)
+ var replay = Sim.apply(resumed,{"action":"load_garment","index":0})
+ check(not replay.ok and resumed==before_replay,"replaying an already saved garment load changes no state")
+ var bulk = Sim.apply(resumed,{"action":"load_washer"})
+ check(not bulk.ok and resumed==before_replay,"retired bulk loader cannot finish saved work")
  var future = Sim.migrate({"schema":Sim.SCHEMA+1})
  check(future.has("error"),"unsupported future storage records remain protected")
  print("SCHISM storage: %d checks passed; %d failed."%[passed,failed]); quit(1 if failed else 0)

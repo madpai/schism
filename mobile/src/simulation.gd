@@ -196,7 +196,9 @@ static func _execute(s: Dictionary, c: Dictionary, e: Array) -> String:
    if not s.shift.is_empty(): return "Your work order is already on the bench."
    if s.needs.energy<22 or s.needs.health<20: return "I need some rest before I can work."
    _begin_shift(s,job)
-  "inspect_uniform", "inspect_pocket", "sort_uniform", "open_hatch", "load_washer", "load_garment", "unload_garment", "fold_garment", "dose", "cycle", "close_hatch", "start_wash", "unload", "dry", "fold", "dispatch":
+  "load_washer", "unload", "fold":
+   return "Handle each garment at the workbench."
+  "inspect_uniform", "inspect_pocket", "sort_uniform", "open_hatch", "load_garment", "unload_garment", "fold_garment", "dose", "cycle", "close_hatch", "start_wash", "dry", "dispatch":
    return _laundry(s,c,e)
   "found_choice": return _found_choice(s,c,e)
   "clean": return _cleaning(s,c,e)
@@ -361,12 +363,6 @@ static func _laundry(s: Dictionary,c: Dictionary,e: Array) -> String:
   "open_hatch":
    if w.stage not in ["inspect","prepare"]: return "The hatch is locked during this cycle."
    w.hatch_open = true
-  "load_washer":
-   if w.stage!="inspect" or not w.hatch_open: return "Open the washer hatch."
-   for garment in w.uniforms:
-    if not garment.sorted: return "There are still uniforms on the inspection bench."
-   for garment in w.uniforms: garment.loaded = true
-   w.loaded = true; w.stage = "prepare"; _work_time(s,20)
   "dose":
    if w.stage!="prepare" or not w.hatch_open: return "Add detergent before closing the hatch."
    if w.doses>=3: return "The dispenser is full."
@@ -387,17 +383,9 @@ static func _laundry(s: Dictionary,c: Dictionary,e: Array) -> String:
    if w.cycle!=expected: w.quality -= 22; e.append({"type":"notice","text":"Wrong treatment. The service label calls for %s wash."%expected})
    if w.doses!=2: w.quality -= 12; e.append({"type":"notice","text":"Four uniforms require two measured detergent doses."})
    w.stage = "washed"; _work_time(s,60); e.append({"type":"sound","name":"washer"})
-  "unload":
-   if w.stage!="washed": return "Wait until the wash order is complete."
-   for garment in w.uniforms: garment.unloaded = true
-   w.hatch_open = true; w.stage = "wet"; _work_time(s,10)
   "dry":
    if w.stage!="wet": return "Take the washed bundle out first."
    w.stage = "dry"; _work_time(s,40)
-  "fold":
-   if w.stage!="dry": return "Dry the uniforms before folding."
-   for garment in w.uniforms: garment.folds = fold_steps(garment)
-   w.stage = "folded"; _work_time(s,20); e.append({"type":"sound","name":"cloth"})
   "dispatch":
    if w.stage!="folded": return "The outgoing cart needs folded uniforms."
    w.stage = "receipt"; _work_time(s,10)

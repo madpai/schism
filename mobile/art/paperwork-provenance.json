@@ -1,0 +1,21 @@
+{
+  "assets": [
+    {
+      "id": "clipboard-v1",
+      "file": "assets/ui/clipboard-v1.png",
+      "tool": "image_gen.imagegen / built-in",
+      "source": "/home/commander/.codex/generated_images/01a11c05-e33d-7b12-9a76-241852c2a495/exec-b2799580-db7f-46f6-9b12-5b0759d64545.png",
+      "sha256": "94a662aa6cccaa8922f2324b21a159f8b39fcb20e9274ab3176d6614a800a169",
+      "prompt": "art/prompts/clipboard-v1.txt",
+      "prompt_sha256": "05d2b0bd5d235cbee5cb4e1ba930eab329a3a2b5eda5a026c5d12e38b6c3c379",
+      "dimensions": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "references": [],
+      "license": "Original generated artwork for SCHISM; no third-party artwork.",
+      "composition": "Blank clipboard. Runtime headings, checkboxes and signature ink. Metal clip and board ends retain proportions; only quiet paper center stretches for accessible long forms. Original generated pixels unchanged."
+    }
+  ]
+}

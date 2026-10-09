@@ -7,3 +7,5 @@ Original audio synthesis: ../art/synthesize_audio.py and audio-provenance.json. 
 Fira Sans Condensed (Mozilla Foundation, Telefonica, Carrois and bBox): SIL Open Font License, fonts/FIRA-OFL.txt. DejaVu Serif Italic: Bitstream Vera / DejaVu terms, fonts/DEJAVU-LICENSE.txt. Font binaries unmodified, filenames shortened for runtime.
 
 Godot Engine is MIT licensed; GODOT-LICENSE.txt. Bundled engine component licenses are available in Godot's standard export and at https://godotengine.org/license/.
+
+The original municipal clipboard artwork and generation prompt/hash are recorded in `art/paperwork-provenance.json`. Its source pixels are preserved; live form text, checkmarks and signatures are game presentation.

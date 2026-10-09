@@ -1,0 +1,13 @@
+{
+  "source": "unload-blank-before.png",
+  "after": "unload-blank-after.png",
+  "patch": [
+    237,
+    422,
+    24,
+    24
+  ],
+  "mean_RGB_error": 0.5353009259259259,
+  "vertical_drift_pixels": 204,
+  "method": "best vertical match of painted garment patch after real blank-space swipe"
+}

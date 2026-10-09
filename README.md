@@ -8,7 +8,7 @@ The active game is [`mobile/`](mobile/), built with **Godot 4.7.2, GDScript and 
 
 ## Play
 
-[Download the Android sideload preview](https://github.com/madpai/schism/releases/download/v0.4.0-alpha/schism-0.4.0.apk). Installation, update and checksum details are in [docs/RELEASES.md](docs/RELEASES.md).
+[Download the Android sideload preview](https://github.com/madpai/schism/releases/download/v0.5.0-alpha/schism-0.5.0.apk). Installation, update and checksum details are in [docs/RELEASES.md](docs/RELEASES.md).
 
 Open `mobile/project.godot` in Godot 4.7.2 and run. On Android, install the debug APK produced below. The package is `org.schism.districtix`. This is a playable development slice, not a production store release.
 
@@ -31,10 +31,10 @@ For Android touch, interrupted-work and resolution testing on a **fresh, isolate
 
 ```sh
 adb -s emulator-5584 install --no-incremental builds/schism-android-debug.apk
-python3 scripts/android-living-playtest.py --device emulator-5584 --adb /path/to/adb --extended
+python3 scripts/android-paperwork-playtest.py --device emulator-5584 --adb /path/to/adb
 ```
 
-The playtest uses Python 3, Pillow, `tesseract` and real Android taps. The Living City runner inspects tactile work and the service corridor at three sizes, uses the backpack, measures the rendered washer motion and plays the daily encounters. `--extended` also checks familiar work and Day 2 inspection. It refuses an existing citizen; `--resume` requires its own isolated QA checkpoint. The older runner remains for historical builds. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID_V040.md`](docs/playtests/ANDROID_V040.md) for this milestone’s measured evidence and limits.
+The playtest uses Python 3, Pillow, `tesseract` and real Android taps. The paperwork runner tests unsigned drafts, checkbox selection, signing, garment dragging without sheet movement, interrupted individual work and the survival loop. It refuses an existing unmarked citizen; `--resume` requires its own isolated QA checkpoint. Living City and earlier runners remain for historical APKs. Use the emulator's `swangle` GPU backend if its obsolete SwiftShader GLES backend fails Godot's uniform limits. See [`docs/playtests/ANDROID_V050.md`](docs/playtests/ANDROID_V050.md) for measured evidence and limits.
 
 ## Design and handoff
 

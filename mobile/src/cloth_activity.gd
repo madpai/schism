@@ -18,6 +18,11 @@ var pressed_at = Vector2.ZERO
 var pointer = Vector2.ZERO
 var dragging = false
 var requested = false
+var active_touch = -1
+var active_mouse = false
+var consume_emulated_mouse = false
+var gesture_filter = Control.MOUSE_FILTER_PASS
+var scroll_locks: Array = []
 
 func _ready() -> void:
  mouse_filter = Control.MOUSE_FILTER_PASS
@@ -30,6 +35,92 @@ func _ready() -> void:
  for garment in uniforms:
   garment_textures.append(Visual.object_texture("uniform",garment.stain if mode=="load" else "dirt"))
  resized.connect(queue_redraw)
+ visibility_changed.connect(_visibility_changed)
+
+func _visibility_changed() -> void:
+ if not is_visible_in_tree(): _cancel_gesture()
+
+func _notification(what: int) -> void:
+ if what in [NOTIFICATION_APPLICATION_PAUSED,NOTIFICATION_APPLICATION_FOCUS_OUT,NOTIFICATION_WM_WINDOW_FOCUS_OUT,NOTIFICATION_EXIT_TREE]:
+  _cancel_gesture()
+
+func _lock_scroll() -> void:
+ gesture_filter = mouse_filter
+ mouse_filter = Control.MOUSE_FILTER_STOP
+ var ancestor = get_parent()
+ while ancestor!=null:
+  if ancestor is ScrollContainer:
+   var scroll: ScrollContainer = ancestor
+   # Do not disable scroll modes: that changes the sheet's minimum size.
+   # Native ScrollContainer recognizes Android's emulated mouse stream, so
+   # ignoring only the duplicate in our GUI handler lets it scroll the sheet.
+   var fixed_x: float = scroll.get_h_scroll_bar().value
+   var fixed_y: float = scroll.get_v_scroll_bar().value
+   var lock = {"scroll":ancestor,"filter":ancestor.mouse_filter,"deadzone":ancestor.scroll_deadzone,
+    "x":fixed_x,"y":fixed_y}
+   lock.guard_x = func(_value: float):
+    if is_instance_valid(scroll): scroll.get_h_scroll_bar().set_value_no_signal(fixed_x)
+   lock.guard_y = func(_value: float):
+    if is_instance_valid(scroll): scroll.get_v_scroll_bar().set_value_no_signal(fixed_y)
+   ancestor.get_h_scroll_bar().value_changed.connect(lock.guard_x)
+   ancestor.get_v_scroll_bar().value_changed.connect(lock.guard_y)
+   ancestor.mouse_filter = Control.MOUSE_FILTER_IGNORE
+   ancestor.scroll_deadzone = 2147483647
+   scroll_locks.append(lock)
+  ancestor = ancestor.get_parent()
+
+func _unlock_scroll() -> void:
+ for lock in scroll_locks:
+  var scroll = lock.scroll
+  if not is_instance_valid(scroll): continue
+  scroll.get_h_scroll_bar().value_changed.disconnect(lock.guard_x)
+  scroll.get_v_scroll_bar().value_changed.disconnect(lock.guard_y)
+  scroll.mouse_filter = lock.filter
+  scroll.scroll_deadzone = lock.deadzone
+ scroll_locks.clear()
+ mouse_filter = gesture_filter
+
+func _cancel_gesture() -> void:
+ held = -1; dragging = false; active_touch = -1; active_mouse = false
+ _unlock_scroll()
+ if is_inside_tree(): queue_redraw()
+
+func _move(at: Vector2) -> void:
+ pointer = at; dragging = dragging or pointer.distance_to(pressed_at)>12
+ queue_redraw()
+
+func _input(event: InputEvent) -> void:
+ # Once a garment owns the gesture, consume it before GUI dispatch. This
+ # also keeps a release outside the cloth/scroll viewport from getting lost.
+ if event is InputEventScreenTouch and event.device!=InputEvent.DEVICE_ID_EMULATION:
+  if event.pressed and active_touch<0 and not active_mouse:
+   consume_emulated_mouse = false
+  elif active_touch==event.index:
+   # Let releases reach Viewport as well, so it clears its touch/mouse
+   # focus bookkeeping. Swallowing them globally leaves a stale GUI grab.
+   if event.pressed: get_viewport().set_input_as_handled()
+   if event.canceled: _cancel_gesture()
+   elif not event.pressed: _release(get_global_transform_with_canvas().affine_inverse()*event.position)
+ elif event is InputEventScreenDrag and event.device!=InputEvent.DEVICE_ID_EMULATION and active_touch==event.index:
+  get_viewport().set_input_as_handled()
+  _move(get_global_transform_with_canvas().affine_inverse()*event.position)
+ elif event is InputEventMouseButton:
+  if event.device==InputEvent.DEVICE_ID_EMULATION:
+   # Godot sends this copy before the real touch. A new down must be hit
+   # tested by GUI normally, including blank-space downs after a cloth drag.
+   if event.pressed and event.button_index==MOUSE_BUTTON_LEFT and held<0:
+    consume_emulated_mouse = false
+   elif consume_emulated_mouse and event.pressed:
+    get_viewport().set_input_as_handled()
+  elif active_mouse and event.button_index==MOUSE_BUTTON_LEFT and not event.pressed:
+   if event.canceled: _cancel_gesture()
+   else: _release(get_global_transform_with_canvas().affine_inverse()*event.position)
+ elif event is InputEventMouseMotion:
+  if event.device==InputEvent.DEVICE_ID_EMULATION and consume_emulated_mouse:
+   get_viewport().set_input_as_handled()
+  elif active_mouse:
+   get_viewport().set_input_as_handled()
+   _move(get_global_transform_with_canvas().affine_inverse()*event.position)
 
 func fold_count(index: int) -> int:
  return 2 if uniforms[index].type=="medical" else 3
@@ -70,18 +161,21 @@ func _request(index: int) -> void:
  command_requested.emit(command)
 
 func _press(at: Vector2) -> void:
- if requested: return
+ if requested or held>=0: return
  pressed_at = at; pointer = at; dragging = false
  if mode=="fold":
   if _region_rect().has_point(at): held = selected
-  return
- for index in range(uniforms.size()):
-  if _available(index) and _card_rect(index).has_point(at): held = index; break
+ else:
+  for index in range(uniforms.size()):
+   if _available(index) and _card_rect(index).has_point(at): held = index; break
+ if held>=0: _lock_scroll()
  queue_redraw()
 
 func _release(at: Vector2) -> void:
  if held<0: return
  var index = held; held = -1
+ active_touch = -1; active_mouse = false
+ _unlock_scroll()
  if mode=="fold":
   if _region_rect().has_point(at): _request(index)
  elif not dragging or _target_rect().has_point(at):
@@ -89,25 +183,35 @@ func _release(at: Vector2) -> void:
  dragging = false; queue_redraw()
 
 func _gui_input(event: InputEvent) -> void:
- # Godot emulates touch from mouse: ignore emulated mouse copies on Android.
+ # Either Android's mouse copy or its raw touch may arrive first. Acquire
+ # once, then raw touch owns movement/release and duplicates are swallowed.
  if event is InputEventScreenTouch:
-  if event.index!=0: return
+  if event.index!=0 or event.device==InputEvent.DEVICE_ID_EMULATION: return
   var interacting = held>=0
-  if event.pressed:
+  if event.canceled: _cancel_gesture()
+  elif event.pressed:
    _press(event.position); interacting = held>=0
+   if interacting: active_touch = event.index; consume_emulated_mouse = true
   else: _release(event.position)
   if interacting: accept_event()
  elif event is InputEventScreenDrag:
   if event.index!=0 or held<0: return
-  pointer = event.position; dragging = pointer.distance_to(pressed_at)>12; queue_redraw(); accept_event()
+  _move(event.position); accept_event()
+ elif (event is InputEventMouseButton or event is InputEventMouseMotion) and event.device==InputEvent.DEVICE_ID_EMULATION:
+  if event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT and event.pressed and held<0:
+   _press(event.position)
+   if held>=0: active_touch = 0; consume_emulated_mouse = true
+  if held>=0 or consume_emulated_mouse: accept_event()
  elif event is InputEventMouseButton and event.button_index==MOUSE_BUTTON_LEFT and event.device!=InputEvent.DEVICE_ID_EMULATION:
   var interacting = held>=0
   if event.pressed:
    _press(event.position); interacting = held>=0
+   if interacting: active_mouse = true
+  elif event.canceled: _cancel_gesture()
   else: _release(event.position)
   if interacting: accept_event()
  elif event is InputEventMouseMotion and held>=0 and event.device!=InputEvent.DEVICE_ID_EMULATION:
-  pointer = event.position; dragging = pointer.distance_to(pressed_at)>12; queue_redraw(); accept_event()
+  _move(event.position); accept_event()
 
 func _text(at: Vector2,text: String,points: int=18) -> void:
  if font: draw_string(font,at,text,HORIZONTAL_ALIGNMENT_CENTER,size.x-40,points,INK)

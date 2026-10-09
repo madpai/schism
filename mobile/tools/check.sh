@@ -27,4 +27,9 @@ if rg -q 'SCRIPT ERROR|ERROR:|FAIL' "$log_dir/living.txt"; then exit 1; fi
 "$godot_bin" --headless --path "$root_dir" --script tests/taxes.gd > "$log_dir/taxes.txt" 2>&1
 cat "$log_dir/taxes.txt"
 if rg -q 'SCRIPT ERROR|ERROR:|FAIL' "$log_dir/taxes.txt"; then exit 1; fi
+for suite in manual_work cloth_gestures; do
+ "$godot_bin" --headless --path "$root_dir" --script "tests/$suite.gd" > "$log_dir/$suite.txt" 2>&1
+ cat "$log_dir/$suite.txt"
+ if rg -q 'SCRIPT ERROR|ERROR:|FAIL' "$log_dir/$suite.txt"; then exit 1; fi
+done
 python3 "$root_dir/art/validate.py"

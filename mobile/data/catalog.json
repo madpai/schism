@@ -7,7 +7,7 @@
       "scene": "laundry",
       "advanced": "Textile Services Assistant",
       "key": "Supply Room 4 key",
-      "description": "Uniform washing, drying and folding. Four-hour order. Civic withholding applies."
+      "description": "Uniform washing, drying and folding. Four-hour order. Tax assessed separately; pay at the bureau."
     },
     "cleaning": {
       "name": "Civic Sanitation Worker",
@@ -15,7 +15,7 @@
       "scene": "cleaning",
       "advanced": "Building Custodian",
       "key": "Restricted Floor key",
-      "description": "Floors, bins and office surfaces. Four-hour order. Civic withholding applies."
+      "description": "Floors, bins and office surfaces. Four-hour order. Tax assessed separately; pay at the bureau."
     },
     "freight": {
       "name": "Freight Sorter",
@@ -23,7 +23,7 @@
       "scene": "freight",
       "advanced": "Inventory Clerk",
       "key": "Warehouse cage key",
-      "description": "Inspect labels and route sealed cargo. Four-hour order. Civic withholding applies."
+      "description": "Inspect labels and route sealed cargo. Four-hour order. Tax assessed separately; pay at the bureau."
     }
   },
   "items": {

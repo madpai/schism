@@ -43,7 +43,7 @@
   ],
   "authored_maps": {
     "data/scenes.json": "ecbede6775c4696a21350d6e1ec676523723013df7f30718f46e1686d4c26eb6",
-    "data/objects.json": "5aac56fa7086b47307650ae66941c23dcb8c48926dad735ebd27af730f450939"
+    "data/objects.json": "0bbcc2333fb63d8402b558f4d021f958bd19b0b80ce51282d87f187b022d0512"
   },
   "composition": "Service cabinet, repair-unlocked relay and barred guard gate; original backgrounds unchanged. Item regions are individually authored; low-alpha residue discarded at runtime. Original objects-v1 retained with original provenance."
 }

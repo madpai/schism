@@ -1,0 +1,12 @@
+{
+  "device": "emulator-5584",
+  "package": "org.schism.districtix",
+  "identity_sha256": "d605c2196340b9b9425364a8a2d55da46fb143be40f3c2eb0b56c6965c4bef32",
+  "done": [
+    "registered",
+    "employment",
+    "laundry",
+    "survival",
+    "known-manual"
+  ]
+}

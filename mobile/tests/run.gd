@@ -38,9 +38,16 @@ func laundry(s: Dictionary,choice: String="return",correct: bool=true) -> Dictio
   if u.stain=="blood": cycle = "sanitize"
   elif u.stain=="oil" and cycle!="sanitize": cycle = "hot"
   s = act(s,{"action":"sort_uniform","index":i,"bin":u.type if correct else "medical"})
- for a in ["open_hatch","load_washer","dose","dose"]: s = act(s,{"action":a})
+ s = act(s,{"action":"open_hatch"})
+ for i in range(4): s = act(s,{"action":"load_garment","index":i})
+ for a in ["dose","dose"]: s = act(s,{"action":a})
  s = act(s,{"action":"cycle","cycle":cycle if correct else "sanitize"})
- for a in ["close_hatch","start_wash","unload","dry","fold","dispatch","settle_shift"]: s = act(s,{"action":a})
+ for a in ["close_hatch","start_wash"]: s = act(s,{"action":a})
+ for i in range(4): s = act(s,{"action":"unload_garment","index":i})
+ s = act(s,{"action":"dry"})
+ for i in range(4):
+  for step in range(1,Sim.fold_steps(s.shift.uniforms[i])+1): s = act(s,{"action":"fold_garment","index":i,"step":step})
+ for a in ["dispatch","settle_shift"]: s = act(s,{"action":a})
  return s
 
 func _initialize() -> void:

@@ -13,6 +13,22 @@ func check(ok: bool,label: String) -> void:
 func buttons() -> Array:
  return game.find_children("*","Button",true,false)
 
+func paper_present(context: String) -> void:
+ var paper = game.find_child("paperwork_art",true,false) as Control
+ check(paper!=null,"physical clipboard is visible for "+context)
+ if paper!=null:
+  check(paper.get("artwork") is Texture2D,"clipboard raster loads for "+context)
+
+func job_choice(id: String) -> CheckBox:
+ return game.find_child("job_choice_"+id,true,false) as CheckBox
+
+func select_job(id: String) -> void:
+ var choice = job_choice(id)
+ check(choice!=null,"vacancy checkbox exists for "+id)
+ if choice==null: return
+ choice.button_pressed = true
+ await process_frame; await process_frame
+
 func click(prefix: String) -> void:
  var selected = buttons().filter(func(b): return b.text.begins_with(prefix))
  check(not selected.is_empty(),"control present: "+prefix)
@@ -31,6 +47,7 @@ func _run() -> void:
  game = load("res://scenes/main.tscn").instantiate(); root.add_child(game)
  await process_frame; await process_frame
  check(game.modal!=null,"arrival registration visible")
+ paper_present("residency registration")
  check(not quit_on_go_back,"Android Back is handled by the scene instead of quitting")
  var background = game.find_child("resident_background",true,false)
  check(background!=null and background.item_count==5,"five civilian histories appear on the residency paper")
@@ -38,6 +55,7 @@ func _run() -> void:
  await click("Sign the residency")
  check(session.state.identity.registered,"registration real control commits")
  check(session.state.identity.background=="technical_apprentice" and session.state.items.size()==1 and session.state.items[0].metadata.background=="technical_apprentice","selected background and personal memento persist in authority")
+ paper_present("arrival document")
  await click("Fold the paper")
  for target in ["hall","street","bureau"]:
   game._travel(target); await create_timer(.4).timeout
@@ -45,9 +63,31 @@ func _run() -> void:
  await click("Put the paper down")
  await click_hotspot("clerk")
  await click("Slide your civic")
- check(buttons().any(func(b): return b.text.contains("Laundry")),"all three vacancy papers present")
- await click("Sign Municipal Laundry")
- check(session.state.employment=="laundry","job paper assigns native employment")
+ paper_present("work authorization")
+ for id in ["laundry","cleaning","freight"]:
+  check(job_choice(id)!=null,"vacancy form lists "+id+" as a checkable field")
+ var initial_job_state = session.state.duplicate(true)
+ var sign_job = game.find_child("sign_job_authorization",true,false)
+ check(sign_job!=null and sign_job.disabled,"unsigned work authorization requires a chosen vacancy")
+ await select_job("cleaning")
+ check(session.state==initial_job_state,"checking a vacancy does not spend time or change authority state")
+ await select_job("laundry")
+ check(job_choice("laundry").button_pressed and not job_choice("cleaning").button_pressed and not job_choice("freight").button_pressed,"vacancy form has exactly one checked field")
+ check(session.state==initial_job_state,"changing a checked vacancy remains an unsaved local draft")
+ game._close_sheet(); await process_frame; await process_frame
+ check(session.state==initial_job_state,"closing an unsigned form does not assign employment")
+ game._vacancies(); await process_frame; await process_frame
+ check(game.find_child("sign_job_authorization",true,false).disabled,"reopened form needs a fresh deliberate choice")
+ await select_job("laundry")
+ sign_job = game.find_child("sign_job_authorization",true,false)
+ check(not sign_job.disabled and sign_job.custom_minimum_size.y>=64,"signature target becomes touch sized after checking a vacancy")
+ sign_job.pressed.emit()
+ sign_job.pressed.emit() # The stale paper must not sign a second authorization.
+ await process_frame; await process_frame
+ check(session.state.employment=="laundry","signed job paper assigns native employment")
+ check(int(session.state.revision)==int(initial_job_state.revision)+1,"repeated signature signal commits one authority transaction")
+ paper_present("signed authorization")
+ check(game.sheet_body.find_children("*","Label",true,false).any(func(label): return label.text.contains("SIGNED") and label.text.contains("Laundry")),"signed paper shows the authorized work")
  for target in ["street","laundry"]:
   game._travel(target); await create_timer(.4).timeout
  await click_hotspot("cart")
@@ -75,10 +115,20 @@ func _run() -> void:
  check(cloth!=null and cloth.size.x>=200 and cloth.size.y>=400,"physical loading surface is touch sized")
  if cloth!=null:
   check(cloth._card_rect(0).size.x>=64 and cloth._card_rect(0).size.y>=64 and cloth._target_rect().size.x>=64,"garment and drum have readable touch targets")
+  var washer_scroll = game.find_child("sheet_scroll",true,false) as ScrollContainer
+  var scroll_filter = washer_scroll.mouse_filter
+  var scroll_deadzone = washer_scroll.scroll_deadzone
+  var blank_touch = InputEventScreenTouch.new(); blank_touch.index = 0; blank_touch.pressed = true; blank_touch.position = Vector2(2,2)
+  cloth._gui_input(blank_touch)
+  check(washer_scroll.mouse_filter==scroll_filter and cloth.mouse_filter==Control.MOUSE_FILTER_PASS,"touching empty clothing space leaves normal sheet scrolling available")
+  blank_touch.pressed = false; cloth._gui_input(blank_touch)
   var down = InputEventScreenTouch.new(); down.index = 0; down.pressed = true; down.position = cloth._card_rect(0).get_center()
   var drag = InputEventScreenDrag.new(); drag.index = 0; drag.position = cloth._target_rect().get_center()
   var up = InputEventScreenTouch.new(); up.index = 0; up.pressed = false; up.position = drag.position
-  cloth._gui_input(down); cloth._gui_input(drag); cloth._gui_input(up)
+  cloth._gui_input(down)
+  check(washer_scroll.mouse_filter==Control.MOUSE_FILTER_IGNORE and washer_scroll.scroll_deadzone>1000000,"held garment prevents the sheet from interpreting the same drag as scrolling")
+  cloth._gui_input(drag); cloth._gui_input(up)
+  check(washer_scroll.mouse_filter==scroll_filter and washer_scroll.scroll_deadzone==scroll_deadzone,"releasing garment restores ordinary sheet scrolling")
   await process_frame; await process_frame
  check(session.state.shift.uniforms[0].loaded and session.state.shift.stage=="inspect","dragging first garment into drum commits only that garment")
  for index in range(1,4): await click("Load uniform %02d"%(index+1))
@@ -119,7 +169,9 @@ func _run() -> void:
  await click("Slide your timecard")
  check(session.state.credits==11 and session.state.shift.is_empty(),"native GUI shift settles once")
  if not session.state.shift.is_empty(): quit(1); return
+ paper_present("wage receipt")
  await click("Fold the wage")
+ await known_work_has_no_shortcuts()
  await click_hotspot("coworker")
  check(buttons().any(func(b): return b.text.begins_with("Help clear the station")),"postshift coworker offers a playable choice at the physical rota")
  await click("Help clear the station")
@@ -159,8 +211,14 @@ func _run() -> void:
   check(game.sheet_body.size.x<=resolution.x,"machine overlay fits width "+str(resolution))
   game._close_sheet()
   game._vacancies(); await layout_check("bureau "+str(resolution))
-  check(buttons().filter(func(b): return b.text.begins_with("Sign ")).size()==3,"three starting job papers remain accessible "+str(resolution))
+  paper_present("bureau "+str(resolution))
+  for id in ["laundry","cleaning","freight"]:
+   check(job_choice(id)!=null,"vacancy form retains "+id+" checkbox at "+str(resolution))
+  check(game.find_child("sign_job_authorization",true,false)!=null,"vacancy form retains one signature control at "+str(resolution))
   game._registration(); await layout_check("registration "+str(resolution))
+  paper_present("registration "+str(resolution))
+  game._tenancy(); await layout_check("tenancy "+str(resolution))
+  paper_present("tenancy "+str(resolution))
   game._settings(); await layout_check("settings "+str(resolution))
   game._bag(); await layout_check("empty bag "+str(resolution))
   game._close_sheet()
@@ -226,6 +284,36 @@ func layout_check(context: String) -> void:
  check(bounds.encloses(close.get_global_rect()),"close target always stays onscreen: "+context)
  for b in game.sheet_body.find_children("*","Button",true,false):
   check(b.get_global_rect().position.x>=panel.get_global_rect().position.x and b.get_global_rect().end.x<=panel.get_global_rect().end.x,"button width fits: "+context+" / "+b.text)
+ var paper = game.find_child("paperwork_art",true,false) as Control
+ if paper!=null:
+  check(paper.get("artwork") is Texture2D,"clipboard has loaded raster artwork: "+context)
+  check(paper.get_theme_constant("margin_top")==int(paper.size.x*.29),"metal clip keeps width-based top space: "+context)
+  check(paper.is_ancestor_of(game.sheet_body),"live writing sits on the physical paper: "+context)
+  check(paper.get_global_rect().position.x>=scroll.get_global_rect().position.x-1 and paper.get_global_rect().end.x<=scroll.get_global_rect().end.x+1,"paper stays inside the horizontal scroll viewport: "+context)
+  var writing = paper.get_global_rect().grow_individual(-paper.size.x*.06,0,-paper.size.x*.06,0)
+  for label in game.sheet_body.find_children("*","Label",true,false):
+   check(label.get_global_rect().position.x>=writing.position.x-1 and label.get_global_rect().end.x<=writing.end.x+1,"writing stays over parchment: "+context)
+  for b in game.sheet_body.find_children("*","Button",true,false):
+   check(b.get_global_rect().position.x>=writing.position.x-1 and b.get_global_rect().end.x<=writing.end.x+1,"paper touch control stays over parchment: "+context)
+
+func known_work_has_no_shortcuts() -> void:
+ var retained = session.state.duplicate(true)
+ var fixture = retained.duplicate(true)
+ fixture.location = "laundry"; fixture.jobs.laundry.shifts = 1
+ Sim._begin_shift(fixture,"laundry")
+ fixture.shift.hatch_open = true; fixture.shift.uniforms[0].sorted = true
+ session.state = fixture; game._washer(); await process_frame; await process_frame
+ check(not buttons().any(func(b): return b.text.begins_with("Familiar work")),"experienced worker has no bulk load control")
+ check(buttons().any(func(b): return b.text.begins_with("Load uniform 01")),"experienced worker keeps individual load alternative")
+ fixture.shift.stage = "washed"
+ game._washer(); await process_frame; await process_frame
+ check(not buttons().any(func(b): return b.text.begins_with("Familiar work")),"experienced worker has no bulk collection control")
+ check(buttons().any(func(b): return b.text.begins_with("Collect wet uniform 01")),"experienced worker keeps individual collection alternative")
+ fixture.shift.stage = "dry"
+ game._washer(); await process_frame; await process_frame
+ check(not buttons().any(func(b): return b.text.begins_with("Familiar work")),"experienced worker has no bulk folding control")
+ check(game.find_child("cloth_fold",true,false)!=null and buttons().any(func(b): return b.text.begins_with("Fold the left sleeve")),"experienced worker still folds cloth manually")
+ session.state = retained; game._close_sheet(); game._render_world(); await process_frame; await process_frame
 
 
 func tax_ui_checks() -> void:
@@ -238,6 +326,7 @@ func tax_ui_checks() -> void:
  session.state.taxes.flagged = true
  game._render_world(); await process_frame; await process_frame
  await click_hotspot("tax")
+ paper_present("bureau tax payment")
  check(game.sheet_title.contains("CIVIC TAX"),"physical bureau counter opens the payment slip")
  check(game.sheet_body.find_children("*","Label",true,false).any(func(label): return label.text.contains("One played day") and label.text.contains("until Day")),"payment slip shows one-day grace and an exact played deadline")
  check(game.find_child("tax_pay_full",true,false)!=null and game.find_child("tax_pay_partial",true,false)!=null,"counter offers full and affordable partial payments")
@@ -268,10 +357,12 @@ func tax_ui_checks() -> void:
  for resolution in [Vector2i(360,640),Vector2i(390,844),Vector2i(480,900)]:
   root.size = resolution; game.size = resolution; game._render_world(); game._tax_counter()
   await layout_check("long tax payment labels "+str(resolution))
+  paper_present("tax payment "+str(resolution))
   for payment in game.find_children("tax_pay_*","Button",true,false):
    check(payment.custom_minimum_size.y>=64 and payment.autowrap_mode==TextServer.AUTOWRAP_WORD_SMART,"tax action remains touch sized and wrapped "+str(resolution))
   game._receipt({"job":"laundry","gross":7,"net":7,"withholding":0,"tax_assessed":1,"quality":100})
   await layout_check("full wage and assessed tax "+str(resolution))
+  paper_present("wage slip "+str(resolution))
   check(game.sheet_body.find_children("*","Label",true,false).any(func(label): return label.text.contains("Paid in full: 7 CR") and label.text.contains("Tax assessed: 1 CR")),"wage slip distinguishes full cash paid from unpaid assessed tax")
  session.state.location = "camp"
  session.state.legal.camp = {"active":true,"orders":3,"minimum_orders":3,"reason":"tax","sorted":[],"worked_off":3}
@@ -279,6 +370,7 @@ func tax_ui_checks() -> void:
  for resolution in [Vector2i(360,640),Vector2i(390,844),Vector2i(480,900)]:
   root.size = resolution; game.size = resolution; game._render_world(); game._camp("clerk")
   await layout_check("tax correction release "+str(resolution))
+  paper_present("detention clerk "+str(resolution))
   check(game.find_child("camp_request_release",true,false).disabled,"three orders with unpaid tax keep release guarded "+str(resolution))
  game._camp("scrap"); await process_frame; await process_frame
  check(buttons().any(func(button): return button.text=="▤ METAL"),"additional tax work remains available after minimum three orders")

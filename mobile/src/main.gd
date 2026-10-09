@@ -1,4 +1,6 @@
 extends Control
+const PaperDocument = preload("res://src/paper_document.gd")
+var job_selection = ""
 
 const Sim = preload("res://src/simulation.gd")
 const Visual = preload("res://src/presentation.gd")
@@ -199,6 +201,14 @@ func _sheet(title: String,style: String="") -> void:
  var scroll = ScrollContainer.new(); scroll.name = "sheet_scroll"; scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL; scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED; outer.add_child(scroll)
  sheet_body = VBoxContainer.new(); sheet_body.name = "sheet_body"; sheet_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL; sheet_body.add_theme_constant_override("separation",12); scroll.add_child(sheet_body)
 
+func _paper_sheet(title: String) -> void:
+ _sheet(title)
+ var holder = sheet_body; holder.name = "paperwork_holder"
+ var paper = PaperDocument.new(); paper.name = "paperwork_art"; holder.add_child(paper)
+ var writing = VBoxContainer.new(); writing.name = "sheet_body"
+ writing.size_flags_horizontal = Control.SIZE_EXPAND_FILL; writing.add_theme_constant_override("separation",12)
+ paper.add_child(writing); sheet_body = writing
+
 func _close_sheet() -> void:
  if modal and is_instance_valid(modal): remove_child(modal); modal.queue_free()
  modal = null
@@ -234,11 +244,13 @@ func _rejected(message: String) -> void:
  audio.play("buzzer"); _message("THE OBJECT DOESN'T MOVE",message)
 
 func _message(title: String,text: String) -> void:
- _sheet(title); _body(text)
+ if title.begins_with("CIVIC") or title.begins_with("MUNICIPAL") or title.begins_with("C-184"): _paper_sheet(title)
+ else: _sheet(title)
+ _body(text)
  var close = _button("Put the paper down",_close_sheet); sheet_body.add_child(close)
 
 func _registration() -> void:
- _sheet("TEMPORARY CIVIC RESIDENCY")
+ _paper_sheet("TEMPORARY CIVIC RESIDENCY")
  modal.find_child("close_sheet",true,false).disabled = true
  _body("DISTRICT IX\nHousing: Block C / Room 17\nBalance: 4 CR\nEmployment: UNASSIGNED",25)
  _body("Name for the registry",19)
@@ -257,7 +269,7 @@ func _registration() -> void:
  var submit = _button("Sign the residency paper",func(): _do({"action":"register","name":name_input.text,"appearance":["olive","umber","sand"][appearance.selected],"background":origins[background.selected]},_arrival)); submit.name = "register"; sheet_body.add_child(submit)
 
 func _arrival() -> void:
- _sheet("BLOCK C  /  ROOM 17")
+ _paper_sheet("BLOCK C  /  ROOM 17")
  _body("One key. A bed. A sink that runs cold.\n\nYour civic paper says you are expected to support yourself.\n\nThe labor bureau is across the courtyard. A free public tap and emergency meal chit remain available when you're broke.")
  _action("Fold the paper. Look around.",{"action":"arrival"})
 
@@ -270,9 +282,9 @@ func _hotspot(id: String) -> void:
    match id:
     "door": _travel("hall")
     "bed":
-     _sheet("METAL BED"); _body("A thin mattress. Industrial noise through the wall.\nEight hours of your time. No cost while the app is closed."); _action("Pull the blanket over you",{"action":"sleep"})
+     _sheet("METAL BED"); _prop("bed",180); _body("A thin mattress. Industrial noise through the wall.\nEight hours of your time. No cost while the app is closed."); _action("Pull the blanket over you",{"action":"sleep"})
     "sink":
-     _sheet("CHIPPED SINK"); _body("Cold water. The pipes knock before it arrives."); _action("Cup your hands and drink",{"action":"drink"}); _action("Wash face and hands",{"action":"wash"})
+     _sheet("CHIPPED SINK"); _prop("sink",150); _body("Cold water. The pipes knock before it arrives."); _action("Cup your hands and drink",{"action":"drink"}); _action("Wash face and hands",{"action":"wash"})
     "locker": _storage("locker")
     "paper": _tenancy()
   "hall":
@@ -292,7 +304,7 @@ func _hotspot(id: String) -> void:
     "clerk":
      if not s.ticket: _thought("I suppose I need a ticket.")
      elif not s.id_shown:
-      _sheet("WINDOW 3"); _body('The clerk holds out a hand.\n\n“Identification.”'); _action("Slide your civic ID under the glass",{"action":"show_id"},_vacancies)
+      _paper_sheet("WINDOW 3 / CIVIC IDENTIFICATION"); _body('The clerk holds out a hand.\n\n“Identification.”'); _action("Slide your civic ID under the glass",{"action":"show_id"},_vacancies)
      else: _bureau_counter()
     "vacancies": _vacancies()
     "tax": _tax_counter()
@@ -419,8 +431,8 @@ func _bag() -> void:
 
 func _item_sheet(id: String) -> void:
  var item = Sim._find(Session.state,id)
- _sheet(item.label.to_upper())
- _prop(item.kind,180)
+ if item.kind=="note": _paper_sheet(item.label.to_upper())
+ else: _sheet(item.label.to_upper()); _prop(item.kind,180)
  _body("Serial: %s\nCondition: %s\nOrigin: %s\nPrevious owner: %s"%[item.serial,"spoiled" if Sim.is_spoiled(item,int(Session.state.minute)) else item.condition,item.origin,item.rightful_owner],20)
  _body("Kept in: "+str(item.get("storage","bag")).capitalize(),20)
  if item.metadata.has("text"): _body(item.metadata.text)
@@ -486,8 +498,8 @@ func _played_date(minute: int) -> String:
  return "Day %d / %02d:%02d"%[int(minute/1440)+1,int(minute/60)%24,minute%60]
 
 func _bureau_counter() -> void:
- _sheet("WINDOW 3 / ADMINISTRATIVE COUNTER")
- _prop("paper",145,"CIVIC PAPER / PAYMENT SLIP")
+ _paper_sheet("WINDOW 3 / ADMINISTRATIVE COUNTER")
+ _body("MUNICIPAL ADMINISTRATION / DISTRICT IX",20)
  _body('The clerk points to two stacks of papers. “Work authorization. Civic taxes.”',22)
  var work = _button("Read the work authorization papers",_vacancies); sheet_body.add_child(work)
  var tax = _button("Present tax payment slip at the counter",_tax_counter); tax.name = "open_tax_counter"; sheet_body.add_child(tax)
@@ -496,8 +508,8 @@ func _tax_counter() -> void:
  var s = Session.state; var taxes = s.taxes
  var accrued = int(taxes.accrued); var due = int(taxes.due); var total = accrued+due
  var overdue = maxi(0,due-int(taxes.grace_due))
- _sheet("WINDOW 3 / CIVIC TAX PAYMENT")
- _prop("paper",145,"ASSESSMENT / CIVIC NUMBER "+s.identity.civic_id)
+ _paper_sheet("WINDOW 3 / CIVIC TAX PAYMENT")
+ _body("ASSESSMENT / CIVIC NUMBER "+s.identity.civic_id,20)
  _body("Unpaid balance: %d CR\nInvoiced: %d CR\nNew assessments: %d CR\nOverdue: %d CR\nYour wallet: %d CR"%[total,due,accrued,overdue,int(s.credits)],24)
  if total==0:
   _body("PAID / NO TAX DEBT\nThe clerk stamps the slip. No payment is required.",22)
@@ -524,24 +536,66 @@ func _tax_counter() -> void:
   var entry = taxes.ledger.back()
   _body("LAST LEDGER STAMP\n%s / %d CR\n%s"%[str(entry.type).to_upper(),int(entry.amount),_played_date(int(entry.minute))],19)
 
+func _form_check(marked: bool) -> Texture2D:
+ var ink = Color("30291c")
+ var image = Image.create(32,32,false,Image.FORMAT_RGBA8); image.fill(Color.TRANSPARENT)
+ for side in [Rect2i(3,3,26,2),Rect2i(3,27,26,2),Rect2i(3,3,2,26),Rect2i(27,3,2,26)]: image.fill_rect(side,ink)
+ if marked:
+  for n in range(7): image.fill_rect(Rect2i(7+n,14+n,3,3),ink)
+  for n in range(13): image.fill_rect(Rect2i(12+n,20-n,3,3),ink)
+ return ImageTexture.create_from_image(image)
+
 func _vacancies() -> void:
- _sheet("WINDOW 3 / WORK AUTHORIZATION")
+ job_selection = ""
+ _paper_sheet("WINDOW 3 / WORK AUTHORIZATION")
  if not Session.state.id_shown:
   _body("The papers are behind glass. The clerk wants a ticket and your civic identification first."); return
- _body('“Three vacancies. All temporary.”',22)
+ _body("MUNICIPAL LABOR ALLOCATION\nTEMPORARY PLACEMENT FORM",24)
+ _body("Civic number: "+Session.state.identity.civic_id+"\nApplicant: "+Session.state.identity.name,20)
+ _body("Mark one vacancy. Your selection is a draft until you sign the authorization.",20)
  for id in ["laundry","cleaning","freight"]:
   var job = Sim.catalog().jobs[id]
-  _body(job.name.to_upper(),24); _body("%d CR GROSS  /  %s"%[int(job.gross),job.description],20)
-  _action("Sign "+job.name+" authorization",{"action":"apply_job","job":id})
+  var field = CheckBox.new(); field.name = "job_choice_"+id
+  field.text = job.name+" / %d CR gross"%int(job.gross); field.custom_minimum_size.y = 64
+  field.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+  field.add_theme_icon_override("checked",_form_check(true)); field.add_theme_icon_override("unchecked",_form_check(false))
+  field.toggled.connect(func(marked):
+   job_selection = id if marked else ""
+   for other in ["laundry","cleaning","freight"]:
+    if other!=id: modal.find_child("job_choice_"+other,true,false).set_pressed_no_signal(false)
+   var signature = modal.find_child("sign_job_authorization",true,false)
+   signature.disabled = job_selection.is_empty() or not Session.state.shift.is_empty()
+  )
+  sheet_body.add_child(field); _body(job.description,19)
+ _body("APPLICANT SIGNATURE\n________________________________",20)
+ var revision = int(Session.state.revision)
+ var submission = {"done":false}
+ var sign = _button("Sign here / "+Session.state.identity.name,func():
+  if job_selection.is_empty() or submission.done: return
+  submission.done = true
+  _do({"action":"apply_job","job":job_selection,"expected_revision":revision},_signed_authorization)
+ )
+ sign.name = "sign_job_authorization"; sign.disabled = true; sign.add_theme_font_override("font",human); sheet_body.add_child(sign)
+ if not Session.state.employment.is_empty(): _body("Current authorization: "+Sim.catalog().jobs[Session.state.employment].name,19)
  if not Session.state.employment.is_empty() and Session.state.jobs[Session.state.employment].shifts>=12:
   _body("NOTICE OF INTERNAL VACANCY\n"+Sim.catalog().jobs[Session.state.employment].advanced+"\nTwelve completed shifts. One more credit. A supply key.")
   _action("Present your completed shift record",{"action":"promote"})
  var tax = _button("Present tax payment slip at the counter",_tax_counter); tax.name = "open_tax_counter"; sheet_body.add_child(tax)
  var tenancy = _button("Inspect the tenancy papers",_tenancy); sheet_body.add_child(tenancy)
 
+func _signed_authorization() -> void:
+ var s = Session.state
+ _paper_sheet("SIGNED / WORK AUTHORIZATION")
+ _body("MUNICIPAL LABOR ALLOCATION\nAUTHORIZED / "+Sim.catalog().jobs[s.employment].name,24)
+ _body("Civic number: "+s.identity.civic_id,20)
+ _body("SIGNED / "+s.identity.name+"\n"+Sim.catalog().jobs[s.employment].name,24)
+ var signature = _body(s.identity.name,36); signature.name = "authorization_signature"; signature.add_theme_font_override("font",human)
+ _body("The clerk countersigns the checked vacancy. Your work record and belongings stay with you.",20)
+ var done = _button("Fold the authorization",_close_sheet); sheet_body.add_child(done)
+
 func _tenancy() -> void:
  var h = Session.state.housing
- _sheet("MUNICIPAL TENANCY RECORD")
+ _paper_sheet("MUNICIPAL TENANCY RECORD")
  _body("%s\nRent: %d CR / played day\nArrears: %d CR\nUtilities: %s"%[h.address,int(h.rent),int(h.arrears),"working" if h.utilities else "interrupted"])
  if h.rent>0: _body("Next bill: Day %d\nDeposit on record: %d CR"%[int(h.next_bill/1440)+1,int(h.deposit)],20)
  _body("Your obligations advance with your actions. Closing the app does not add debt.",20)
@@ -621,7 +675,6 @@ func _washer() -> void:
   _prop("washer",270); _body("The machine is quiet. Today's uniforms are in the incoming cart."); return
  if s.shift.job!="laundry": _body("This machine needs a textile work order."); return
  var w = s.shift
- var familiar = int(s.jobs.laundry.shifts)>0
  var tactile = w.stage in ["washed","dry"] or (w.stage=="inspect" and w.hatch_open)
  if not tactile:
   var prop = _prop("washer",270); prop.hatch_open = w.get("hatch_open",false); prop.active = w.stage=="washed"
@@ -636,7 +689,6 @@ func _washer() -> void:
     _action("Pull the hatch handle",{"action":"open_hatch"},_washer)
    else:
     _body("Lift each sorted garment from the basket into the open drum. Drag it, or tap its picture or label.",20)
-    if familiar: _action("Familiar work / lift the remaining bundle",{"action":"load_washer"},_washer)
     _cloth_activity("load")
     var loaded = 0
     for index in range(w.uniforms.size()):
@@ -658,7 +710,6 @@ func _washer() -> void:
    # Keep the established running shader visible until the short visual cycle finishes.
    var running = _prop("washer",230); running.active = not w.get("hatch_open",false); running.hatch_open = w.get("hatch_open",false)
    _body("The drain knocks. Lift the damp garments into the basket. Drag down, or tap each garment.",20)
-   if familiar: _action("Familiar work / collect the remaining bundle",{"action":"unload"},_washer)
    _cloth_activity("unload")
    for index in range(w.uniforms.size()):
     if not w.uniforms[index].get("unloaded",false): _action("Collect wet uniform %02d"%[index+1],{"action":"unload_garment","index":index},_washer)
@@ -674,7 +725,6 @@ func _washer() -> void:
     elif next_index<0: next_index = index
    _body("FOLDING BENCH / %d OF %d STACKED"%[complete,w.uniforms.size()],20)
    if complete>0: _prop("folded",90,"CLEAN / FOLDED")
-   if familiar: _action("Familiar work / fold the remaining load",{"action":"fold"},_outgoing)
    if next_index>=0:
     var garment = w.uniforms[next_index]
     _body("Uniform %02d / %s"%[next_index+1,str(garment.type).to_upper()],23)
@@ -705,13 +755,13 @@ func _outgoing() -> void:
  else: _body("Wet or unfolded uniforms are not accepted.")
 
 func _lost_property() -> void:
- _sheet("LOST PROPERTY / MUNICIPAL CUSTODY")
+ _paper_sheet("LOST PROPERTY / MUNICIPAL CUSTODY")
  var returned = Session.state.items.filter(func(item): return item.owner=="lost_property")
  if returned.is_empty(): _body("An empty steel tray. Pockets are to be checked before washing.")
  for item in returned: _body(item.label+"\nReceipt: "+item.serial,21)
 
 func _receipt(data: Dictionary) -> void:
- _sheet("SHIFT WAGE SLIP")
+ _paper_sheet("SHIFT WAGE SLIP")
  _body("MUNICIPAL PAYROLL / DISTRICT IX\n"+Sim.catalog().jobs[data.job].name.to_upper(),22)
  _body("Gross: %d CR\nPaid in full: %d CR\nTax assessed: %d CR / unpaid\n\nService quality: %d%%"%[int(data.gross),int(data.net),int(data.get("tax_assessed",0)),int(data.quality)],27)
  var taxes = Session.state.taxes
@@ -737,18 +787,21 @@ func _cleaning(id: String) -> void:
  var s = Session.state
  _sheet("CIVIC ANNEX / "+id.to_upper())
  if s.shift.is_empty():
+  _paper_sheet("CIVIC ANNEX / WORK ORDER")
   _body("A mop, a cloth, a fresh bin bag. Three surfaces on the order.\n8 CR gross.")
   _action("Take the sanitation order from the clipboard",{"action":"begin_shift"}); return
  if id=="receipt":
+  _paper_sheet("CIVIC ANNEX / TIMECARD")
   if s.shift.stage=="receipt": _action("Stamp the sanitation timecard",{"action":"settle_shift"})
   else: _body("The floor, desk and bin still need to be counted.")
- elif id=="supplies": _body("The bucket holds a mop, cloth and fresh bag."); _action("Take the workplace supplies",{"action":"clean","object":"supplies"})
+ elif id=="supplies": _prop("cleaning_supplies",180); _body("The bucket holds a mop, cloth and fresh bag."); _action("Take the workplace supplies",{"action":"clean","object":"supplies"})
  elif id=="desk":
+  _prop("cleaning_desk",150)
   _body("There is a folded memorandum beside the ashtray.")
   _action("Inspect the forgotten paper",{"action":"clean","object":"inspect_desk"})
   _action("Wipe around the desk objects",{"action":"clean","object":"desk"})
- elif id=="floor": _body("Old muddy footprints. A darker stain beneath the chair."); _action("Push the mop across the floor",{"action":"clean","object":"floor"})
- elif id=="bin": _body("A heavy black bag. Something rattles inside."); _action("Tie off the bag and fit a fresh one",{"action":"clean","object":"bin"})
+ elif id=="floor": _prop("cleaning_floor",150); _body("Old muddy footprints. A darker stain beneath the chair."); _action("Push the mop across the floor",{"action":"clean","object":"floor"})
+ elif id=="bin": _prop("cleaning_bin",160); _body("A heavy black bag. Something rattles inside."); _action("Tie off the bag and fit a fresh one",{"action":"clean","object":"bin"})
 
 func _freight(id: String) -> void:
  if id=="exit": _travel("street"); return
@@ -758,9 +811,11 @@ func _freight(id: String) -> void:
   _prop("crate",180); _body("Four parcels. Three outgoing lanes.\n9 CR gross. Every seal is counted."); _action("Pull the freight manifest from its clip",{"action":"begin_shift"}); return
  var w = s.shift
  if id=="manifest":
+  _paper_sheet("FREIGHT DEPOT / MANIFEST")
   _body("IX freight manifest\n11 → BLOCK C\n12 → CLINIC\n13 → TEXTILES\n14 → CLINIC / damaged seal")
   _action("Compare and mark the manifest",{"action":"manifest"})
  elif id=="receipt":
+  _paper_sheet("FREIGHT DEPOT / TIMECARD")
   if w.stage=="receipt": _action("Stamp the freight timecard",{"action":"settle_shift"})
   else: _body("There are still parcels on the bench.")
  elif id.begins_with("lane_"):
@@ -787,13 +842,14 @@ func _camp(id: String) -> void:
  var minimum = int(camp.get("minimum_orders",3)); var reason = str(camp.get("reason","crime"))
  var debt = int(s.taxes.due)+int(s.taxes.accrued)
  var remaining = maxi(0,minimum-int(camp.orders))
- _sheet("DETAINEE 91-447 / %d ORDERS REMAINING"%remaining)
+ if id=="clerk": _paper_sheet("DETAINEE 91-447 / %d ORDERS REMAINING"%remaining)
+ else: _sheet("DETAINEE 91-447 / %d ORDERS REMAINING"%remaining)
  _body("INTAKE: "+{"crime":"Inventory offenses","tax":"Unpaid civic tax","mixed":"Inventory offenses and unpaid civic tax"}.get(reason,reason),20)
  match id:
-  "bunk": _body("The blanket smells of the last occupant."); _action("Lie down on the camp bunk",{"action":"camp_sleep"})
+  "bunk": _prop("camp_bunk",170); _body("The blanket smells of the last occupant."); _action("Lie down on the camp bunk",{"action":"camp_sleep"})
   "meal": _prop("stew",160); _body("Thin paste. Metal cup. No charge and no comfort."); _action("Eat the camp ration",{"action":"camp_meal"})
   "clerk":
-   _prop("paper",120,"CORRECTION / WORK RECORD")
+   _body("CORRECTION / WORK RECORD",20)
    _body("Orders counted: %d / %d minimum\nTax debt remaining: %d CR\nTax worked off here: %d CR"%[int(camp.orders),minimum,debt,int(camp.get("worked_off",0))],23)
    _body("Each completed order supplies the city with 2 metal pieces and 1 fabric piece. It earns no wages and works off up to 1 CR of tax debt. Outside bills and employment remain paused.",20)
    if reason in ["tax","mixed"]:
@@ -803,6 +859,7 @@ func _camp(id: String) -> void:
    release.name = "camp_request_release"; release.disabled = remaining>0 or (reason in ["tax","mixed"] and debt>0)
    if release.disabled: _body("The release window stays shut until the recorded requirements are met.",20)
   "scrap":
+   _prop("scrap",150)
    _body("Sort three pieces. Metal to the steel bin; fabric to the cloth bin.")
    _body("CITY SUPPLIES: %d metal / %d fabric\nTax balance: %d CR / each counted order works off up to 1 CR."%[int(s.city.supplies.metal),int(s.city.supplies.fabric),debt],20)
    var finished = int(camp.orders)>=minimum and (reason=="crime" or debt==0)
@@ -821,7 +878,7 @@ func _settings() -> void:
  _body("Your life is saved after every action. Pausing or closing SCHISM freezes personal time.",21)
  for pair in [["sound","Machine soundscape"],["effects","Analog instability"],["hints","Object labels"]]:
   _action(pair[1]+" / "+("ON" if Session.state.settings[pair[0]] else "OFF"),{"action":"setting","key":pair[0],"value":not Session.state.settings[pair[0]]},_settings)
- _body("SCHISM 0.4 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
+ _body("SCHISM 0.5 / District IX\nLocal single-player residency.\nNo account or connection needed.",19)
  var save = _button("Save and put the phone down",func(): Session.flush(); _close_sheet()); sheet_body.add_child(save)
 
 func _notification(what: int) -> void:
