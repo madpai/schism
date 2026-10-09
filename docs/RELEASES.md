@@ -2,6 +2,14 @@
 
 SCHISM development APKs are hosted as versioned prereleases in [GitHub Releases](https://github.com/madpai/schism/releases). This repository is public; no account is needed to download a published APK. This serves the Android package and is independent of the legacy browser city and its hosting.
 
+## 0.6.0 hands-on sanitation and freight
+
+[Download SCHISM 0.6.0 APK](https://github.com/madpai/schism/releases/download/v0.6.0-alpha/schism-0.6.0.apk)
+
+[Release notes and checksums](https://github.com/madpai/schism/releases/tag/v0.6.0-alpha)
+
+Mop and wipe individual areas, tie/lift/replace bin bags, and turn/lift/stamp/route every freight parcel. Short animations, saved steps and large tap alternatives support both jobs. Original wages, four-hour shifts, tax, custody and quality rules remain. Install over the existing app to retain progress: package and signer stay fixed, version code is 6 and save schema remains 6. All three draft assets matched local bytes, and an unauthenticated public APK download returned HTTP 200 with the tested SHA-256; `docs/releases/v0.6.0-publication.json` records verification. See `docs/playtests/ANDROID_V060.md` for 3,073 passing checks and exact emulator evidence/limits. No physical-phone test is claimed.
+
 ## 0.5.0 manual work and painted paperwork
 
 [Download SCHISM 0.5.0 APK](https://github.com/madpai/schism/releases/download/v0.5.0-alpha/schism-0.5.0.apk)

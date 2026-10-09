@@ -1,0 +1,21 @@
+{
+  "tag": "v0.6.0-alpha",
+  "published_at": "2026-10-09T13:54:36Z",
+  "release_url": "https://github.com/madpai/schism/releases/tag/v0.6.0-alpha",
+  "apk_url": "https://github.com/madpai/schism/releases/download/v0.6.0-alpha/schism-0.6.0.apk",
+  "source_commit": "93990c427fd86890daa23b524a0edb17da890357",
+  "public_download": {
+    "authentication": false,
+    "http_status": 200,
+    "bytes": 85146442,
+    "sha256": "aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d",
+    "matches_tested_artifact": true
+  },
+  "draft_download_checksums": {
+    "apk": "OK",
+    "manifest": "OK",
+    "all_three_assets_match_local_bytes": true
+  },
+  "channel": "development prerelease",
+  "signer_certificate_sha256": "9977fa443d50a847973a2031409cad7978b93846e1bc9ae4eb31f35b64072c07"
+}

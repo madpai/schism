@@ -1,6 +1,6 @@
 # Tactile sanitation and freight 0.6.0 validation
 
-Godot 4.7.2 Compatibility; package `org.schism.districtix`, version code 6, schema 6. Final APK SHA-256: `aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d`. Android signature verification passed with the retained certificate SHA-256 `9977fa443d50a847973a2031409cad7978b93846e1bc9ae4eb31f35b64072c07`. Local artifact: `builds/schism-android-debug.apk`; this milestone has not been published.
+Godot 4.7.2 Compatibility; package `org.schism.districtix`, version code 6, schema 6. Final APK SHA-256: `aead4fe954f7e51a8a7ea669e0f8610d25e190a0ec826f3c321bcc240dca5a8d`. Android signature verification passed with the retained certificate SHA-256 `9977fa443d50a847973a2031409cad7978b93846e1bc9ae4eb31f35b64072c07`. Local artifact: `builds/schism-android-debug.apk`. The [0.6.0 prerelease](https://github.com/madpai/schism/releases/tag/v0.6.0-alpha) is published from tested source commit `93990c427fd86890daa23b524a0edb17da890357`; all draft assets matched local bytes, and an unauthenticated public APK download returned HTTP 200 and matched this hash. See [publication receipt](../releases/v0.6.0-publication.json).
 
 ## Integrated checks
 
